@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class AmmoDragSlot : MonoBehaviour, IDropHandler
+public class AmmoDragSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField, Self] private RectTransform rectTransform;
     [SerializeField] Image ammoIcon;
     [field: SerializeField] public bool IsUpperCannon { get; private set; }
 
     private AmmoData _loadedAmmo = null;
-    
+    private Color _originalColor;
     
     void OnValidate() {
         this.ValidateRefs();
@@ -19,6 +19,10 @@ public class AmmoDragSlot : MonoBehaviour, IDropHandler
 
     void OnEnable() {
         SetLoadedAmmo(_loadedAmmo);
+    }
+
+    void Start() {
+        _originalColor = GetComponent<Image>().color;
     }
 
     public void OnDrop(PointerEventData eventData) {
@@ -44,4 +48,13 @@ public class AmmoDragSlot : MonoBehaviour, IDropHandler
         ammoIcon.sprite = ammoData.Icon;
     }
 
+    public void OnPointerEnter(PointerEventData eventData) {
+        print("Pointer enter " + (IsUpperCannon ? "Upper Cannon" : "Lower Cannon"));
+        GetComponent<Image>().color = Color.white;
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        print("Pointer exit" + (IsUpperCannon ? "Upper Cannon" : "Lower Cannon"));
+        GetComponent<Image>().color = _originalColor;
+    }
 }
