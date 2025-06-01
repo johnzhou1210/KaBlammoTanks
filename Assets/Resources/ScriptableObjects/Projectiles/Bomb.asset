@@ -17,5 +17,5 @@ MonoBehaviour:
   Damage: 28
   Speed: 0.25
   ProjectilePrefab: {fileID: 1896137933994655150, guid: dcb036cdefbf44e10800ba5d10361db3, type: 3}
-  Cost: 9
+  Cost: 11
   LoadingTime: 4
