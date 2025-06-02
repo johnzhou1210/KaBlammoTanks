@@ -35,10 +35,10 @@ public class AmmoDragSlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, I
         print("Ammo dropped onto slot");
         dragDropHandler.SetSuccessfulDrop(true);
         
-        AmmoData ammoData = dragDropHandler.AmmoData;
+        // AmmoData ammoData = dragDropHandler.AmmoData;
         // SetLoadedAmmo(ammoData);
         
-        TankDelegates.InvokeOnProjectileFire(ammoData, IsUpperCannon, 0);
+        // TankDelegates.InvokeOnProjectileFire(ammoData, IsUpperCannon, 0);
         
     }
 
