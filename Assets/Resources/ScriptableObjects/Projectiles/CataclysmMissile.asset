@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd524b99e1d6d4638bfe889e4f8b1399, type: 3}
-  m_Name: Bomb
+  m_Name: CataclysmMissile
   m_EditorClassIdentifier: 
-  AmmoName: Bomb
-  Icon: {fileID: 6099099293644316688, guid: e08b573bf2d280e47bc2cc8095887202, type: 3}
-  Damage: 28
-  Speed: 0.25
-  ProjectilePrefab: {fileID: 1896137933994655150, guid: dcb036cdefbf44e10800ba5d10361db3, type: 3}
-  Cost: 4
-  LoadingTime: 2
+  AmmoName: Cataclysm Missile
+  Icon: {fileID: 21300000, guid: c93ea626cbf4449dc87dc8256cb46f82, type: 3}
+  Damage: 256
+  Speed: 0.5
+  ProjectilePrefab: {fileID: 1896137933994655150, guid: 62c56ca802bec47e5af10e2874c9ddf1, type: 3}
+  Cost: 64
+  LoadingTime: 5
   UpgradeRecipe:
     CombineWith: {fileID: 0}
     UpgradesTo: {fileID: 0}

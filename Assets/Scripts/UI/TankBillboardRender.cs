@@ -8,9 +8,6 @@ public class TankBillboardRender : MonoBehaviour {
     [SerializeField] TextMeshProUGUI playerHealthText, enemyHealthText;
     [SerializeField] Slider playerHealthSlider, enemyHealthSlider;
 
-    void OnValidate() {
-        this.ValidateRefs();
-    }
 
     void OnEnable() {
         TankDelegates.OnUpdateTankHealthUI += UpdateHealth;

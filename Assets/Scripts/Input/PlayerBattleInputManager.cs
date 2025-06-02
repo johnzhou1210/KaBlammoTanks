@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerBattleInputManager : MonoBehaviour {
     AmmoTapHandler _activeAmmoShopItem;
@@ -14,6 +15,16 @@ public class PlayerBattleInputManager : MonoBehaviour {
         PlayerBattleInputDelegates.OnShopAmmoTap -= SetActiveAmmoShopItem;
         
         PlayerBattleInputDelegates.GetSelectedAmmoShopItem = null;
+    }
+
+    void Start() {
+        // Get all ammo
+        AmmoData[] allAmmo = Resources.LoadAll<AmmoData>("ScriptableObjects/Projectiles");
+        // Assign all slots random ammo
+        foreach (Transform child in AmmoTapHandlerContainer) {
+            AmmoTapHandler tapHandler = child.GetComponent<AmmoTapHandler>();
+            tapHandler.SetSlotData(allAmmo[Random.Range(0, allAmmo.Length)]);
+        }
     }
     private void SetActiveAmmoShopItem(AmmoTapHandler ammoTapHandler) {
         _activeAmmoShopItem = ammoTapHandler;

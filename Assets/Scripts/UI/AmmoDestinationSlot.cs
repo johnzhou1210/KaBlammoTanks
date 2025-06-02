@@ -10,7 +10,7 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
    [SerializeField] Image slotImage, slotBackgroundImage, loadingFill;
    AmmoData _ammoData;
    Color originalSlotBackgroundColor;
-   [SerializeField] float fireLoadingTime = 0.25f;
+   float _currentFireLoadingTime = 0.25f;
 
    AmmoData _loadedAmmoData;
    bool _firingInProgress = false;
@@ -21,7 +21,7 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
    }
 
    void OnEnable() {
-      _loadingTimer = fireLoadingTime;
+      _loadingTimer = -1;
       PlayerBattleUIDelegates.OnSetAmmoDestinationSlot += SetAmmoData;
    }
 
@@ -43,9 +43,11 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
          // Check if player can afford before firing
          bool canAfford = true;
          if (canAfford) {
+            AmmoData currAmmoData = selectedTapHandler.AmmoData;
+            _currentFireLoadingTime = currAmmoData.LoadingTime;
             _loadingTimer = 0f;
             _firingInProgress = true;
-            _loadedAmmoData = selectedTapHandler.AmmoData;
+            _loadedAmmoData = currAmmoData;
          }
       }
       slotBackgroundImage.color = originalSlotBackgroundColor;
@@ -57,6 +59,7 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
    }
 
    void Update() {
+      if (Mathf.Approximately(-1f, _loadingTimer)) return;
       if (GetIsReadyForInput()) {
          loadingFill.fillAmount = 0f;
          if (_firingInProgress) {
@@ -67,11 +70,11 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
          return;  
       }
       _loadingTimer += Time.deltaTime;
-      loadingFill.fillAmount = _loadingTimer / fireLoadingTime;
+      loadingFill.fillAmount = _loadingTimer / _currentFireLoadingTime;
    }
 
    private bool GetIsReadyForInput() {
-      return _loadingTimer >= fireLoadingTime;
+      return Mathf.Approximately(-1f, _loadingTimer) || _loadingTimer >= _currentFireLoadingTime;
    }
 
    private void InitiateFire(AmmoData ammoData) {

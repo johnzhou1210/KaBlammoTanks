@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd524b99e1d6d4638bfe889e4f8b1399, type: 3}
-  m_Name: Missile
+  m_Name: BlazeMissile
   m_EditorClassIdentifier: 
-  AmmoName: Missile
-  Icon: {fileID: -611968435153394152, guid: e08b573bf2d280e47bc2cc8095887202, type: 3}
-  Damage: 16
+  AmmoName: Blaze Missile
+  Icon: {fileID: 21300000, guid: af6db21d54eac43949d8da1e508ff687, type: 3}
+  Damage: 40
   Speed: 1
   ProjectilePrefab: {fileID: 1896137933994655150, guid: 373045c8b7327415389d8feb26e8948a, type: 3}
-  Cost: 16
-  LoadingTime: 2
+  Cost: 12
+  LoadingTime: 1.5
+  UpgradeRecipe:
+    CombineWith: {fileID: 11400000}
+    UpgradesTo: {fileID: 11400000, guid: a993158dd4c364181a7bf7969fdf7ea6, type: 2}

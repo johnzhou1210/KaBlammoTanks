@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public AmmoData AmmoData;
+    public AmmoData AmmoData { get; private set; }
     [SerializeField] Image ammoIcon;
     [SerializeField, Child] TextMeshProUGUI costText;
     
@@ -28,7 +28,8 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         PlayerBattleInputDelegates.InvokeOnShopAmmoTap(this);
     }
 
-    private void SetSlotData(AmmoData ammoData) {
+    public void SetSlotData(AmmoData ammoData) {
+        AmmoData = ammoData;
         ammoIcon.sprite = ammoData.Icon;
         costText.text = ammoData.Cost.ToString();
     }

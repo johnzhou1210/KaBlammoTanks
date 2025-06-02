@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class BezierProjectile : MonoBehaviour {
@@ -81,5 +82,9 @@ public class BezierProjectile : MonoBehaviour {
     }
     public void FlipX() {
         transform.Rotate(0f, 180f, 0f);
+        TextMeshPro tmPro = transform.GetComponentInChildren<TextMeshPro>();
+        if (tmPro!= null) {
+            tmPro.transform.rotation = Quaternion.identity;
+        }
     }
 }

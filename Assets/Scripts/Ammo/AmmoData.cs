@@ -1,5 +1,11 @@
 using UnityEngine;
 
+[System.Serializable]
+public struct UpgradeRecipe {
+   public AmmoData CombineWith;
+   public AmmoData UpgradesTo;
+}
+
 [CreateAssetMenu(fileName = "New Ammo", menuName = "Ammo", order = 1)]
 public class AmmoData : ScriptableObject {
    public string AmmoName;
@@ -9,4 +15,5 @@ public class AmmoData : ScriptableObject {
    public GameObject ProjectilePrefab;
    public int Cost;
    public float LoadingTime;
+   public UpgradeRecipe UpgradeRecipe;
 }
