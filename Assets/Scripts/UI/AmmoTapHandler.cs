@@ -5,11 +5,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler
-{
-    public AmmoData AmmoData { get; private set; }
-    [SerializeField] Image ammoIcon;
-    [SerializeField, Child] TextMeshProUGUI costText;
+[RequireComponent(typeof(AmmoSlot))]
+public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler {
+    [SerializeField, Self] private AmmoSlot ammoSlot;
 
     private bool _pointerInside = true; // Track if pointer is still inside
 
@@ -18,7 +16,7 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     }
 
     void OnEnable() {
-        SetSlotData(AmmoData);
+        ammoSlot.SetSlotData(ammoSlot.AmmoData);
     }
 
     public void OnPointerDown(PointerEventData eventData) {
@@ -34,16 +32,12 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public void OnPointerUp(PointerEventData eventData) {
         if (_pointerInside) {
             print("Item pointer up inside");
-            PlayerBattleInputDelegates.InvokeOnShopAmmoTap(this);
+            PlayerBattleInputDelegates.InvokeOnShopAmmoTap(ammoSlot);
         }
         else {
             print("Item pointer up outside");
         }
     }
 
-    public void SetSlotData(AmmoData ammoData) {
-        AmmoData = ammoData;
-        ammoIcon.sprite = ammoData.Icon;
-        costText.text = ammoData.Cost.ToString();
-    }
+    
 }

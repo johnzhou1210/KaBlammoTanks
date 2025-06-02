@@ -4,16 +4,24 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(AmmoSlot))]
 public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField, Parent] private Canvas canvas; // Main canvas
+    [SerializeField, Self] AmmoSlot ammoSlot;
+    [SerializeField, Parent] private Canvas canvas;
     [SerializeField, Self] private RectTransform rectTransform;
     [SerializeField, Self] private CanvasGroup canvasGroup;
     [SerializeField, Self] private LayoutElement layoutElement;
-    [SerializeField] private RectTransform dragLayer; // <-- Drag Layer in Canvas
+    
+    [SerializeField] private RectTransform dragLayer;
     private Transform originalParent;
     private int originalSiblingIndex;
     private bool _isSuccessfulDrop = false;
+    CanvasGroup _ammoFrameCanvasGroup;
+    
+    void OnEnable() {
+        _ammoFrameCanvasGroup = transform.parent.GetComponent<CanvasGroup>();
+    }
 
     void OnValidate() {
         this.ValidateRefs(); // Optional: use if you have KBCore Refs. If not, remove.
@@ -80,8 +88,21 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
 
     private void SetInteractable(bool isInteractable) {
         canvasGroup.blocksRaycasts = isInteractable;
-        canvasGroup.alpha = isInteractable ? 1 : .6f;
+        // _ammoFrameCanvasGroup.alpha = isInteractable ? 1 : .6f;
         canvasGroup.interactable = isInteractable;
+        
+        // Get ammo data of dragged item
+        AmmoData draggedAmmoData = ammoSlot.AmmoData;
+        
+        // If the ammo is upgradeable, make the ammo that can be combined with opaque
+        foreach (Transform child in _ammoFrameCanvasGroup.transform) {
+            AmmoSlot currAmmoSlotScript = child.GetComponent<AmmoSlot>();
+            if (currAmmoSlotScript == null) { Debug.LogError("An ammo slot does not have an ammo slot script!!"); continue; }
+            AmmoData currAmmoData = currAmmoSlotScript.AmmoData;
+            if (currAmmoData == null) { Debug.LogError("An ammo slot does not have any ammo data!!"); continue; }
+            child.GetComponent<CanvasGroup>().alpha = isInteractable || child == transform ? 1 : draggedAmmoData.UpgradeRecipe.CombineWith == currAmmoData ? 1 : .6f;
+        }
+        
     }
 
     private int FindClosestSiblingIndex(PointerEventData eventData) {
@@ -105,4 +126,9 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
 
         return closestIndex;
     }
+
+   
+
+  
+    
 }

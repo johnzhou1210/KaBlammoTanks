@@ -38,12 +38,12 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
    public void OnPointerUp(PointerEventData eventData) {
       if (!GetIsReadyForInput()) return;
       // Set ammo only if Player Battle Input Manager has ammo data
-      AmmoTapHandler selectedTapHandler = PlayerBattleInputDelegates.GetSelectedAmmoShopItem?.Invoke();
-      if (selectedTapHandler != null) {
+      AmmoSlot selectedShopSlot = PlayerBattleInputDelegates.GetSelectedAmmoShopItem?.Invoke();
+      if (selectedShopSlot != null) {
          // Check if player can afford before firing
          bool canAfford = true;
          if (canAfford) {
-            AmmoData currAmmoData = selectedTapHandler.AmmoData;
+            AmmoData currAmmoData = selectedShopSlot.AmmoData;
             _currentFireLoadingTime = currAmmoData.LoadingTime;
             _loadingTimer = 0f;
             _firingInProgress = true;

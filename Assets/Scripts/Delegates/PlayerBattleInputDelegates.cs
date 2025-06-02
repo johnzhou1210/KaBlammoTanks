@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerBattleInputDelegates {
     #region Events
-    public static event Action<AmmoTapHandler> OnShopAmmoTap;
+    public static event Action<AmmoSlot> OnShopAmmoTap;
 
-    public static void InvokeOnShopAmmoTap(AmmoTapHandler ammoTapHandler) {
-        OnShopAmmoTap?.Invoke(ammoTapHandler);
+    public static void InvokeOnShopAmmoTap(AmmoSlot ammoSlot) {
+        OnShopAmmoTap?.Invoke(ammoSlot);
     }
     #endregion
     
@@ -15,7 +15,7 @@ public class PlayerBattleInputDelegates {
     
     #region Funcs
 
-    public static Func<AmmoTapHandler> GetSelectedAmmoShopItem;
+    public static Func<AmmoSlot> GetSelectedAmmoShopItem;
 
     #endregion
 

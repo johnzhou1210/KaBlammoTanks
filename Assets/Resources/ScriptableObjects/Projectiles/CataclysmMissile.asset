@@ -18,7 +18,7 @@ MonoBehaviour:
   Speed: 0.5
   ProjectilePrefab: {fileID: 1896137933994655150, guid: 62c56ca802bec47e5af10e2874c9ddf1, type: 3}
   Cost: 64
-  LoadingTime: 5
+  LoadingTime: 0.5
   UpgradeRecipe:
     CombineWith: {fileID: 0}
     UpgradesTo: {fileID: 0}
