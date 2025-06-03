@@ -48,6 +48,7 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
             _loadingTimer = 0f;
             _firingInProgress = true;
             _loadedAmmoData = currAmmoData;
+            PlayerBattleInputDelegates.InvokeOnRemoveActiveAmmoShopItem();
          }
       }
       slotBackgroundImage.color = originalSlotBackgroundColor;

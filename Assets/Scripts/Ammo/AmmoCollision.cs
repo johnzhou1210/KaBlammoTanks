@@ -14,7 +14,7 @@ public class AmmoCollision : MonoBehaviour {
    }
 
    public void Disintegrate() {
-      Instantiate(Resources.Load<GameObject>("VFX/ExplosionEffect"), transform.position, Quaternion.identity);
+      Instantiate(Resources.Load<GameObject>("Prefabs/VFX/ExplosionEffect"), transform.position, Quaternion.identity);
       Destroy(gameObject);
    }
 

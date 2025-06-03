@@ -7,8 +7,7 @@ public class TanksManager : MonoBehaviour
     [SerializeField] private TankController[] tankControllers;
     void OnEnable() {
         TankDelegates.GetTankControllerById = (id) => {
-            return tankControllers.FirstOrDefault(e => {
-               print(e) ;return e.TankId == id; });
+            return tankControllers.FirstOrDefault(e => e.TankId == id);
         };
 
         TankDelegates.GetTankHealthById = (id) => {

@@ -31,7 +31,6 @@ public class TankController : MonoBehaviour {
         while (TankHealth > 0) {
             yield return new WaitForSeconds(Random.Range(0.25f, 6f));
             AmmoData[] allProjectileData = Resources.LoadAll<AmmoData>("ScriptableObjects/Projectiles"); 
-            print(allProjectileData.Length);
             FireProjectile(allProjectileData[Random.Range(0, allProjectileData.Length)], Random.Range(0,2) != 0, 1);
         }
         yield return null;
@@ -42,7 +41,7 @@ public class TankController : MonoBehaviour {
         Vector3 startPos = Barrel.transform.position;
         Vector3 endPos = (TankDelegates.GetTankControllerById?.Invoke(TankId == 0 ? 1 : 0 )!).Barrel.transform.position;
         StartCoroutine(FireCoroutine(ammoData, startPos, endPos, isUpperCannon));
-        Instantiate(Resources.Load<GameObject>("VFX/SmokeEffect"), startPos, Quaternion.identity);
+        Instantiate(Resources.Load<GameObject>("Prefabs/VFX/SmokeEffect"), startPos, Quaternion.identity);
     }
     private IEnumerator FireCoroutine(AmmoData projectileData, Vector3 startPos, Vector3 endPos, bool archedTrajectory) {
         GameObject projectile = Instantiate(projectileData.ProjectilePrefab, startPos, quaternion.identity);
