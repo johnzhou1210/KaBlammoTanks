@@ -4,14 +4,11 @@ using UnityEngine;
 public class PlayerBattleUIDelegates {
 
     #region Events
-
-    public static event Action<TitleDamagePair> OnDescriptionDataChanged;
+    
     public static event Action<bool, AmmoData> OnSetAmmoDestinationSlot;
     public static event Action<bool, AmmoData> OnSetCombinerListenerEnabled;
     public static event Action OnCheckForUpgradesSetIcons, OnResetAllAmmoSlotsCanvasGroupAlpha;
-    public static void InvokeOnShopItemDescriptionChanged(TitleDamagePair descriptionInfo) {
-        OnDescriptionDataChanged?.Invoke(descriptionInfo);
-    }
+   
     public static void InvokeOnSetAmmoDestinationSlot(bool isUpperCannon, AmmoData ammoData) {
         OnSetAmmoDestinationSlot?.Invoke(isUpperCannon, ammoData);
     }

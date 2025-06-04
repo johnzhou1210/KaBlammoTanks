@@ -38,10 +38,11 @@ public class PlayerBattleInputManager : MonoBehaviour {
     }
     private void SetActiveAmmoShopItem(AmmoSlot ammoSlot) {
         _activeAmmoShopItem = ammoSlot;
-        AmmoData newAmmoData = ammoSlot.AmmoData;
         AnimateSelectionChanges();
+        if (ammoSlot == null) return;
+        AmmoData newAmmoData = ammoSlot.AmmoData;
         print("Active ammo shop item set to " + newAmmoData.AmmoName);
-        PlayerBattleUIDelegates.InvokeOnShopItemDescriptionChanged(new(newAmmoData.AmmoName, newAmmoData.Damage.ToString()));
+        
     }
     private void AnimateSelectionChanges() {
         List<AmmoSlot> allShopItems = GetAllAmmoSlots();
