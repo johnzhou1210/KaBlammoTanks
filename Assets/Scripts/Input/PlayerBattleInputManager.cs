@@ -33,16 +33,8 @@ public class PlayerBattleInputManager : MonoBehaviour {
     }
 
     void Start() {
-    
-        // Create a certain amount of slots to start with
-        for (int i = 0; i < 4; i++) {
-            SpawnRandomAmmoSlot();
-        }
-        
-        ToggleCombinerListeners(false);
-        CheckForUpgrades();
 
-        _supplyAmmoCoroutine = StartCoroutine(SupplyAmmoCoroutine());
+        StartCoroutine(InitializeInput());
     }
     private void SetActiveAmmoShopItem(AmmoSlot ammoSlot) {
         _activeAmmoShopItem = ammoSlot;
@@ -221,7 +213,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
     private IEnumerator SupplyAmmoCoroutine() {
         while (true) {
             yield return new WaitForSeconds(Random.Range(2f, 4f));
-            if (GetAllAmmoSlots().Count < 10) {
+            if (GetAllAmmoSlots().Count < 8) {
                 SpawnRandomAmmoSlot();
             }
             
@@ -231,6 +223,19 @@ public class PlayerBattleInputManager : MonoBehaviour {
     private IEnumerator DelayedCheckForUpgrades() {
         yield return null;
         CheckForUpgrades();
+    }
+
+    private IEnumerator InitializeInput() {
+        yield return null;
+        // Create a certain amount of slots to start with
+        for (int i = 0; i < 4; i++) {
+            SpawnRandomAmmoSlot();
+        }
+        
+        ToggleCombinerListeners(false);
+        CheckForUpgrades();
+
+        _supplyAmmoCoroutine = StartCoroutine(SupplyAmmoCoroutine());
     }
     
 }

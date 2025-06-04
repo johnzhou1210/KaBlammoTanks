@@ -6,6 +6,13 @@ public struct UpgradeRecipe {
    public AmmoData UpgradesTo;
 }
 
+public enum Rarity {
+   COMMON,
+   RARE,
+   EPIC,
+   LEGENDARY,
+}
+
 [CreateAssetMenu(fileName = "New Ammo", menuName = "Ammo", order = 1)]
 public class AmmoData : ScriptableObject {
    public string AmmoName;
@@ -16,4 +23,5 @@ public class AmmoData : ScriptableObject {
    public int Cost;
    public float LoadingTime;
    public UpgradeRecipe UpgradeRecipe;
+   public Rarity Rarity;
 }

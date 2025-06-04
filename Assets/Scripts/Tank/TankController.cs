@@ -42,6 +42,7 @@ public class TankController : MonoBehaviour {
         Vector3 endPos = (TankDelegates.GetTankControllerById?.Invoke(TankId == 0 ? 1 : 0 )!).Barrel.transform.position;
         StartCoroutine(FireCoroutine(ammoData, startPos, endPos, isUpperCannon));
         Instantiate(Resources.Load<GameObject>("Prefabs/VFX/SmokeEffect"), startPos, Quaternion.identity);
+        AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/CannonFire"), Random.Range(0.8f, 1.2f));
     }
     private IEnumerator FireCoroutine(AmmoData projectileData, Vector3 startPos, Vector3 endPos, bool archedTrajectory) {
         GameObject projectile = Instantiate(projectileData.ProjectilePrefab, startPos, quaternion.identity);

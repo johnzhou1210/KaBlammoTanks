@@ -22,3 +22,4 @@ MonoBehaviour:
   UpgradeRecipe:
     CombineWith: {fileID: 11400000}
     UpgradesTo: {fileID: 11400000, guid: a993158dd4c364181a7bf7969fdf7ea6, type: 2}
+  Rarity: 2

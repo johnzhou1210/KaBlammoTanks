@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!200 &-1871989095294467698
+ShaderVariantCollection:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShaderVariants
+  m_Shaders:
+  - first: {fileID: 4800000, guid: 96246b1ead49a4c5a996fd477bc5a117, type: 3}
+    second:
+      variants:
+      - keywords: EDGE_PLAIN
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_COLOR2
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_PATTERN UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_SHINY
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_SHINY UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_GRADIENT UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: EDGE_PLAIN TRANSITION_SHINY
+        passType: 0
+      - keywords: EDGE_SHINY GRADATION_COLOR2
+        passType: 0
+      - keywords: EDGE_SHINY GRADATION_GRADIENT UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: GRADATION_COLOR2
+        passType: 0
+      - keywords: GRADATION_GRADIENT
+        passType: 0
+      - keywords: GRADATION_GRADIENT TRANSITION_SHINY
+        passType: 0
+      - keywords: GRADATION_GRADIENT TRANSITION_SHINY UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: GRADATION_GRADIENT UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: GRADATION_RADIAL
+        passType: 0
+  - first: {fileID: 4800000, guid: 935b7be1c88464d2eb87204fdfab5a38, type: 3}
+    second:
+      variants:
+      - keywords: EDGE_PLAIN
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_SHINY
+        passType: 0
+      - keywords: EDGE_PLAIN TRANSITION_SHINY
+        passType: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d43f626d9b5f4d729097092ded48bdb, type: 3}
+  m_Name: UIEffectProjectSettings
+  m_EditorClassIdentifier: 
+  m_RuntimePresets: []
+  m_RuntimePresetsV2:
+  - {fileID: 11400000, guid: 459716c7b2a9245518e569614823e341, type: 2}
+  - {fileID: 11400000, guid: 1b541939544e047e58f1e587b325a5f6, type: 2}
+  - {fileID: 11400000, guid: f3eb295350ccf4d0da6f79c23a74ad24, type: 2}
+  - {fileID: 11400000, guid: 5ba55bd32a32f49ad9792851e8ae4c01, type: 2}
+  - {fileID: 11400000, guid: cf9cda8987d7742858ccf2a4bf8ec0ac, type: 2}
+  - {fileID: 11400000, guid: d0a858f0a2b0e4260a816ff53eaaf594, type: 2}
+  m_UseHDRColorPicker: 1
+  m_ShaderVariantCollection: {fileID: 0}
+  m_ShaderVariantRegistry:
+    m_OptionalShaders:
+    - key: Hidden/UI/Default (SoftMaskable)
+      value: Hidden/UI/Default (UIEffect)
+    - key: Hidden/TextMeshPro/Bitmap (SoftMaskable)
+      value: Hidden/TextMeshPro/Bitmap (UIEffect)
+    - key: Hidden/TextMeshPro/Distance Field (SoftMaskable)
+      value: Hidden/TextMeshPro/Distance Field (UIEffect)
+    - key: Hidden/TextMeshPro/Distance Field Overlay (SoftMaskable)
+      value: Hidden/TextMeshPro/Distance Field Overlay (UIEffect)
+    - key: Hidden/TextMeshPro/Distance Field SSD (SoftMaskable)
+      value: Hidden/TextMeshPro/Distance Field SSD (UIEffect)
+    - key: Hidden/TextMeshPro/Mobile/Bitmap (SoftMaskable)
+      value: Hidden/TextMeshPro/Mobile/Bitmap (UIEffect)
+    - key: Hidden/TextMeshPro/Mobile/Distance Field (SoftMaskable)
+      value: Hidden/TextMeshPro/Mobile/Distance Field (UIEffect)
+    - key: Hidden/TextMeshPro/Mobile/Distance Field Overlay (SoftMaskable)
+      value: Hidden/TextMeshPro/Mobile/Distance Field Overlay (UIEffect)
+    - key: Hidden/TextMeshPro/Mobile/Distance Field SSD (SoftMaskable)
+      value: Hidden/TextMeshPro/Mobile/Distance Field SSD (UIEffect)
+    m_Asset: {fileID: -1871989095294467698}
+    m_ErrorOnUnregisteredVariant: 0
+    m_UnregisteredVariants: []
