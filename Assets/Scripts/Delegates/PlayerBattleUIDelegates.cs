@@ -9,15 +9,13 @@ public class PlayerBattleUIDelegates {
     public static event Action<bool> OnSetDropIndicatorActive;
     public static event Action<int> OnSetDropIndicatorSiblingIndex;
     public static event Action<bool, AmmoData> OnSetAmmoDestinationSlot;
-    public static event Action<bool, AmmoData> OnSetCombinerListenerEnabled;
+
     public static event Action OnCheckForUpgradesSetIcons, OnResetAllAmmoSlotsCanvasGroupAlpha;
    
     public static void InvokeOnSetAmmoDestinationSlot(bool isUpperCannon, AmmoData ammoData) {
         OnSetAmmoDestinationSlot?.Invoke(isUpperCannon, ammoData);
     }
-    public static void InvokeOnSetCombinerListener(bool val, AmmoData ammoData) {
-        OnSetCombinerListenerEnabled?.Invoke(val, ammoData);
-    }
+  
     public static void InvokeOnCheckForUpgradesSetIcons() {
         OnCheckForUpgradesSetIcons?.Invoke();
     }

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(AmmoSlot))]
-public class AmmoUpgradeCombinerListener : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
+public class AmmoUpgradeCombinerHandler : MonoBehaviour {
     [SerializeField, Self] private AmmoSlot ammoSlot;
     
     private Color _originalColor;
@@ -32,7 +32,7 @@ public class AmmoUpgradeCombinerListener : MonoBehaviour, IDropHandler, IPointer
         }
         
         // Attempt to combine
-        AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/AmmoCombine"), GetPitchBasedOnResultRarity(ammoSlot.AmmoData.Rarity));
+        // AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/AmmoCombine"), GetPitchBasedOnResultRarity(ammoSlot.AmmoData.Rarity));
         
         // Remove the dropped ammo slot UI element, and update THIS ammo slot (not the removed one)
         Destroy(droppedAmmoSlot.gameObject);
@@ -65,19 +65,6 @@ public class AmmoUpgradeCombinerListener : MonoBehaviour, IDropHandler, IPointer
         GetComponent<Image>().color = _originalColor;
     }
 
-    private float GetPitchBasedOnResultRarity(Rarity rarity) {
-        switch (rarity) {
-            case Rarity.COMMON:
-                return .8f;
-            case Rarity.RARE:
-                return .9f;
-            case Rarity.EPIC:
-                return 1f;
-            case Rarity.LEGENDARY:
-                return 1.1f;
-            default:
-                return 0f;
-        }
-    }
+   
     
 }

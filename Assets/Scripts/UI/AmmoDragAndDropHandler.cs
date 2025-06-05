@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(AmmoSlot))]
-[RequireComponent(typeof(AmmoUpgradeCombinerListener))]
+[RequireComponent(typeof(AmmoUpgradeCombinerHandler))]
 public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler {
     [SerializeField, Self] AmmoSlot ammoSlot;
     [SerializeField, Parent] private Canvas canvas;
@@ -48,8 +48,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         PlayerBattleUIDelegates.InvokeOnDropIndicatorSetParent(_originalParent, false);
         UpdateDropIndicatorPosition(eventData);
 
-        // Enable combiner listeners for eligible slots
-        PlayerBattleUIDelegates.InvokeOnSetCombinerListener(true, ammoSlot.AmmoData.UpgradeRecipe.CombineWith);
+  
     }
     public void OnDrag(PointerEventData eventData) {
         // Move the object freely under mouse
@@ -63,8 +62,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         }
         UpdateDropIndicatorPosition(eventData);
 
-        // Enable combiner listeners for eligible slots
-        PlayerBattleUIDelegates.InvokeOnSetCombinerListener(true, ammoSlot.AmmoData.UpgradeRecipe.CombineWith);
+    
     }
     public void OnEndDrag(PointerEventData eventData) {
         SetInteractable(true);
@@ -74,9 +72,11 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         rectTransform.SetParent(_originalParent, true);
         rectTransform.SetSiblingIndex(_originalSiblingIndex);
         PlayerBattleUIDelegates.InvokeOnSetDropIndicatorActive(false);
+        
+        // Check for any automatic upgrades
+        PlayerBattleInputDelegates.InvokeOnDoAutoUpgrades();
+        
 
-        // Disable combiner listeners for eligible slots
-        PlayerBattleUIDelegates.InvokeOnSetCombinerListener(false, ammoSlot.AmmoData.UpgradeRecipe.CombineWith);
     }
     private void SetInteractable(bool isInteractable) {
         canvasGroup.blocksRaycasts = isInteractable;
