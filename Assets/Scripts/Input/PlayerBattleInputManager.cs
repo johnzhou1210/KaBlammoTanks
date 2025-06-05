@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class PlayerBattleInputManager : MonoBehaviour {
     private AmmoSlot _activeAmmoShopItem;
     [SerializeField] private Transform AmmoSlotContainer;
+    [SerializeField] private RectTransform DropIndicator;
 
     private Coroutine _supplyAmmoCoroutine;
     
@@ -17,6 +19,9 @@ public class PlayerBattleInputManager : MonoBehaviour {
         PlayerBattleUIDelegates.OnSetCombinerListenerEnabled += ToggleCombinerListeners;
         PlayerBattleUIDelegates.OnCheckForUpgradesSetIcons += CheckForUpgradesPatient;
         PlayerBattleUIDelegates.OnResetAllAmmoSlotsCanvasGroupAlpha += ResetAllAmmoSlotsCanvasGroupAlpha;
+        PlayerBattleUIDelegates.OnSetDropIndicatorSiblingIndex += SetDropIndicatorSiblingIndex;
+        PlayerBattleUIDelegates.OnSetDropIndicatorActive += SetDropIndicatorActive;
+        PlayerBattleUIDelegates.OnDropIndicatorSetParent += SetDropIndicatorParent;
        
 
         PlayerBattleInputDelegates.GetSelectedAmmoShopItem = () => _activeAmmoShopItem;
@@ -28,12 +33,15 @@ public class PlayerBattleInputManager : MonoBehaviour {
         PlayerBattleUIDelegates.OnSetCombinerListenerEnabled -= ToggleCombinerListeners;
         PlayerBattleUIDelegates.OnCheckForUpgradesSetIcons -= CheckForUpgradesPatient;
         PlayerBattleUIDelegates.OnResetAllAmmoSlotsCanvasGroupAlpha -= ResetAllAmmoSlotsCanvasGroupAlpha;
+        PlayerBattleUIDelegates.OnSetDropIndicatorSiblingIndex -= SetDropIndicatorSiblingIndex;
+        PlayerBattleUIDelegates.OnSetDropIndicatorActive -= SetDropIndicatorActive;
+        PlayerBattleUIDelegates.OnDropIndicatorSetParent -= SetDropIndicatorParent;
         
         PlayerBattleInputDelegates.GetSelectedAmmoShopItem = null;
     }
 
     void Start() {
-
+        EventSystem.current.pixelDragThreshold = 15;
         StartCoroutine(InitializeInput());
     }
     private void SetActiveAmmoShopItem(AmmoSlot ammoSlot) {
@@ -69,7 +77,9 @@ public class PlayerBattleInputManager : MonoBehaviour {
     private List<AmmoSlot> GetAllAmmoSlots() {
         List<AmmoSlot> allShopItems = new List<AmmoSlot>();
         foreach (Transform child in AmmoSlotContainer) {
-            allShopItems.Add(child.GetComponent<AmmoSlot>());
+            AmmoSlot ammoSlot = child.GetComponent<AmmoSlot>();
+            if (ammoSlot == null) continue;
+            allShopItems.Add(ammoSlot);
         }
         return allShopItems;
     }
@@ -210,11 +220,23 @@ public class PlayerBattleInputManager : MonoBehaviour {
     private AmmoData[] GetAllAmmo() {
         return Resources.LoadAll<AmmoData>("ScriptableObjects/Projectiles");
     }
+
+    private void SetDropIndicatorSiblingIndex(int index) {
+        DropIndicator.SetSiblingIndex(index);
+    }
+
+    private void SetDropIndicatorActive(bool active) {
+        DropIndicator.gameObject.SetActive(active);
+    }
+
+    private void SetDropIndicatorParent(Transform parent, bool worldPositionStays) {
+        DropIndicator.SetParent(parent, worldPositionStays);
+    }
     
     private IEnumerator SupplyAmmoCoroutine() {
         while (true) {
             yield return new WaitForSeconds(Random.Range(2f, 4f));
-            if (GetAllAmmoSlots().Count < 8) {
+            if (GetAllAmmoSlots().Count < 7) {
                 SpawnRandomAmmoSlot();
             }
             

@@ -169,12 +169,6 @@ MonoBehaviour:
         type: 3}'
     - line: '|   - {fileID: 11400000, guid: f519797609f41458984d6a61a9a29f44, type:
         2}'
-    - line: '|   - {fileID: 3962006718452862873, guid: cf6bee89b2f054aa287a3b86091ee6c0,
-        type: 2}'
-    - line: '|   - {fileID: 11400000, guid: 2bb9e6c90b6564d02b6617fd728679c8, type:
-        2}'
-    - line: '|   - {fileID: 11400000, guid: 351a2b58c96c14644a4d72688144c480, type:
-        2}'
     - line: '|   - {fileID: 11400000, guid: eabf680f0540b438f8e30e25a82a8646, type:
         2}'
     - line: '|   metroInputSource: 0'
