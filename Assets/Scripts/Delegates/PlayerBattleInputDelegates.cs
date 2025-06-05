@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerBattleInputDelegates {
     #region Events
     public static event Action<AmmoSlot> OnShopAmmoTap;
-    public static event Action OnRemoveActiveAmmoShopItem, OnDoAutoUpgrades;
+    public static event Action OnRemoveActiveAmmoShopItem;
 
     public static void InvokeOnShopAmmoTap(AmmoSlot ammoSlot) {
         OnShopAmmoTap?.Invoke(ammoSlot);
@@ -15,9 +15,7 @@ public class PlayerBattleInputDelegates {
         OnRemoveActiveAmmoShopItem?.Invoke();
     }
 
-    public static void InvokeOnDoAutoUpgrades() {
-        OnDoAutoUpgrades?.Invoke();
-    }
+   
     #endregion
     
     
@@ -25,6 +23,7 @@ public class PlayerBattleInputDelegates {
     #region Funcs
 
     public static Func<AmmoSlot> GetSelectedAmmoShopItem;
+    public static Func<List<AmmoSlot>> GetAllAmmoSlots;
 
     #endregion
 

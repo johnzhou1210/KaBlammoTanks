@@ -10,7 +10,7 @@ public class PlayerBattleUIDelegates {
     public static event Action<int> OnSetDropIndicatorSiblingIndex;
     public static event Action<bool, AmmoData> OnSetAmmoDestinationSlot;
 
-    public static event Action OnCheckForUpgradesSetIcons, OnResetAllAmmoSlotsCanvasGroupAlpha;
+    public static event Action OnCheckForUpgradesSetIcons, OnResetAllAmmoSlotsCanvasGroupAlpha, OnDoAutoUpgrades;
    
     public static void InvokeOnSetAmmoDestinationSlot(bool isUpperCannon, AmmoData ammoData) {
         OnSetAmmoDestinationSlot?.Invoke(isUpperCannon, ammoData);
@@ -34,6 +34,10 @@ public class PlayerBattleUIDelegates {
 
     public static void InvokeOnDropIndicatorSetParent(Transform target, bool worldPositionStays) {
         OnDropIndicatorSetParent?.Invoke(target, worldPositionStays);
+    }
+    
+    public static void InvokeOnDoAutoUpgrades() {
+        OnDoAutoUpgrades?.Invoke();
     }
     #endregion
 

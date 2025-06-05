@@ -74,7 +74,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         PlayerBattleUIDelegates.InvokeOnSetDropIndicatorActive(false);
         
         // Check for any automatic upgrades
-        PlayerBattleInputDelegates.InvokeOnDoAutoUpgrades();
+        PlayerBattleUIDelegates.InvokeOnDoAutoUpgrades();
         
 
     }
