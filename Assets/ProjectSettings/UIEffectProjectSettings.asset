@@ -11,6 +11,14 @@ ShaderVariantCollection:
   - first: {fileID: 4800000, guid: 96246b1ead49a4c5a996fd477bc5a117, type: 3}
     second:
       variants:
+      - keywords: COLOR_FILTER EDGE_PLAIN
+        passType: 0
+      - keywords: COLOR_FILTER EDGE_PLAIN GRADATION_GRADIENT TRANSITION_SHINY UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: COLOR_FILTER EDGE_PLAIN GRADATION_GRADIENT UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: COLOR_FILTER EDGE_PLAIN TRANSITION_SHINY
+        passType: 0
       - keywords: COLOR_FILTER GRADATION_RADIAL
         passType: 0
       - keywords: COLOR_FILTER GRADATION_RADIAL TRANSITION_SHINY
@@ -28,6 +36,8 @@ ShaderVariantCollection:
       - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_SHINY UNITY_UI_ALPHACLIP
         passType: 0
       - keywords: EDGE_PLAIN GRADATION_GRADIENT UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_RADIAL
         passType: 0
       - keywords: EDGE_PLAIN TRANSITION_SHINY
         passType: 0
@@ -54,9 +64,15 @@ ShaderVariantCollection:
   - first: {fileID: 4800000, guid: 935b7be1c88464d2eb87204fdfab5a38, type: 3}
     second:
       variants:
+      - keywords: COLOR_FILTER EDGE_PLAIN
+        passType: 0
+      - keywords: COLOR_FILTER EDGE_PLAIN TRANSITION_SHINY
+        passType: 0
       - keywords: EDGE_PLAIN
         passType: 0
       - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_SHINY
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_RADIAL
         passType: 0
       - keywords: EDGE_PLAIN TRANSITION_SHINY
         passType: 0

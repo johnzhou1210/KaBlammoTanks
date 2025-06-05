@@ -13,10 +13,6 @@ public class AmmoSlot : MonoBehaviour
     [SerializeField] private TextMeshProUGUI ammoName, damageText;
     [SerializeField] private GameObject upgradeAvailableIcon;
     [SerializeField] private UIEffect AmmoSlotUIEffect, MainFrameUIEffect;
-
-    private void OnValidate() {
-        this.ValidateRefs();
-    }
     
     public void SetSlotData(AmmoData ammoData) { ;
         if (ammoData == null) return;

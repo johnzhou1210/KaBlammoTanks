@@ -9,15 +9,15 @@ using UnityEngine.UI;
 public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler {
     [SerializeField, Self] AmmoSlot ammoSlot;
     [SerializeField, Parent] private Canvas canvas;
-    [SerializeField, Self] private RectTransform rectTransform;
+    [SerializeField] private RectTransform cardItemRectTransform;
     [SerializeField, Self] private CanvasGroup canvasGroup;
-    [SerializeField, Self] private LayoutElement layoutElement;
+    [SerializeField] private LayoutElement layoutElement;
     private RectTransform _dragLayer;
     private Transform _originalParent;
     private int _originalSiblingIndex;
     CanvasGroup _ammoFrameCanvasGroup;
     void OnEnable() {
-        _ammoFrameCanvasGroup = transform.parent.GetComponent<CanvasGroup>();
+        _ammoFrameCanvasGroup = transform.parent.parent.GetComponent<CanvasGroup>();
         _dragLayer = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
     }
     void OnValidate() {
@@ -29,19 +29,19 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     public void OnBeginDrag(PointerEventData eventData) {
         SetInteractable(false);
         layoutElement.ignoreLayout = true;
-        _originalParent = rectTransform.parent;
-        _originalSiblingIndex = rectTransform.GetSiblingIndex();
+        _originalParent = cardItemRectTransform.parent;
+        _originalSiblingIndex = cardItemRectTransform.GetSiblingIndex();
 
         // Move to drag layer
-        rectTransform.SetParent(_dragLayer, true);
+        cardItemRectTransform.SetParent(_dragLayer, true);
 
         // Reset anchors/pivot to center
-        rectTransform.anchorMin = rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        cardItemRectTransform.anchorMin = cardItemRectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        cardItemRectTransform.pivot = new Vector2(0.5f, 0.5f);
 
         // Position under mouse
         RectTransformUtility.ScreenPointToLocalPointInRectangle(_dragLayer, eventData.position, eventData.pressEventCamera, out Vector2 localMousePos);
-        rectTransform.anchoredPosition = localMousePos;
+        cardItemRectTransform.anchoredPosition = localMousePos;
 
         // Show drop indicator
         PlayerBattleUIDelegates.InvokeOnSetDropIndicatorActive(true);
@@ -53,7 +53,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     public void OnDrag(PointerEventData eventData) {
         // Move the object freely under mouse
         RectTransformUtility.ScreenPointToLocalPointInRectangle(_dragLayer, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
-        rectTransform.anchoredPosition = localPoint;
+        cardItemRectTransform.anchoredPosition = localPoint;
 
         // Find where to reorder in the original layout group
         int newIndex = FindClosestSiblingIndex(eventData);
@@ -69,8 +69,8 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         layoutElement.ignoreLayout = false;
 
         // Reparent back to original layout group
-        rectTransform.SetParent(_originalParent, true);
-        rectTransform.SetSiblingIndex(_originalSiblingIndex);
+        cardItemRectTransform.SetParent(_originalParent, true);
+        cardItemRectTransform.SetSiblingIndex(_originalSiblingIndex);
         PlayerBattleUIDelegates.InvokeOnSetDropIndicatorActive(false);
         
         // Check for any automatic upgrades
@@ -88,7 +88,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
 
         // If the ammo is upgradeable, make the ammo that can be combined with opaque
         foreach (Transform child in _ammoFrameCanvasGroup.transform) {
-            AmmoSlot currAmmoSlotScript = child.GetComponent<AmmoSlot>();
+            AmmoSlot currAmmoSlotScript = child.GetComponentInChildren<AmmoSlot>();
             if (currAmmoSlotScript == null) {
                 continue;
             }
@@ -97,7 +97,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
                 Debug.LogError("An ammo slot does not have any ammo data!!");
                 continue;
             }
-            child.GetComponent<CanvasGroup>().alpha = isInteractable || child == transform ? 1 :
+            child.GetComponentInChildren<CanvasGroup>().alpha = isInteractable || child == transform ? 1 :
                 draggedAmmoData.UpgradeRecipe.CombineWith == currAmmoData ? 1 : .6f;
         }
     }
@@ -127,7 +127,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     private int CountAmmoSlotChildren(Transform ammoSlotContainerTransform) {
         int result = 0;
         foreach (Transform child in ammoSlotContainerTransform) {
-            if (child.GetComponent<AmmoSlot>() != null)
+            if (child.GetComponentInChildren<AmmoSlot>() != null)
                 result++;
         }
         return result;

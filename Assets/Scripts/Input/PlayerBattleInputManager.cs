@@ -80,7 +80,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
     private List<AmmoSlot> GetAllAmmoSlots() {
         List<AmmoSlot> allShopItems = new List<AmmoSlot>();
         foreach (Transform child in AmmoSlotContainer) {
-            AmmoSlot ammoSlot = child.GetComponent<AmmoSlot>();
+            AmmoSlot ammoSlot = child.GetComponentInChildren<AmmoSlot>();
             if (ammoSlot == null) continue;
             allShopItems.Add(ammoSlot);
         }
@@ -105,7 +105,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
         RectTransform dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
         if (dragArea != null) {
             foreach (Transform child in dragArea.transform) {
-                AmmoSlot ammoSlot = child.GetComponent<AmmoSlot>();
+                AmmoSlot ammoSlot = child.GetComponentInChildren<AmmoSlot>();
                 if (ammoSlot == null) {
                     Debug.LogWarning("Current child in drag area has no ammo slot, skipping...");
                     continue;
@@ -139,7 +139,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
         RectTransform dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
         if (dragArea != null) {
             foreach (Transform child in dragArea.transform) {
-                AmmoSlot ammoSlot = child.GetComponent<AmmoSlot>();
+                AmmoSlot ammoSlot = child.GetComponentInChildren<AmmoSlot>();
                 if (ammoSlot != null) {
                     ammoSlot.SetUpgradeIconVisibility(bagOfFreqs.ContainsKey(ammoSlot.AmmoData) && bagOfFreqs[ammoSlot.AmmoData] > 1);
                 }
@@ -159,15 +159,15 @@ public class PlayerBattleInputManager : MonoBehaviour {
     }
 
     public void RemoveActiveAmmoShopItem() {
-        Destroy(_activeAmmoShopItem.gameObject);
+        Destroy(_activeAmmoShopItem.transform.parent.gameObject);
         _activeAmmoShopItem = null;
         StartCoroutine(DelayedCheckForUpgrades());
     }
 
     private void SpawnAmmoSlot(AmmoData ammoData) {
-        GameObject newAmmoSlot = Instantiate(Resources.Load<GameObject>("Prefabs/UI/AmmoSlot"), AmmoSlotContainer);
+        GameObject newAmmoSlot = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CardItem"), AmmoSlotContainer);
         newAmmoSlot.transform.SetSiblingIndex(0);
-        newAmmoSlot.GetComponent<AmmoSlot>().SetSlotData(ammoData);
+        newAmmoSlot.GetComponentInChildren<AmmoSlot>().SetSlotData(ammoData);
         
         // Also account for if user is currently dragging something. If they are, change the alpha of the slot accordingly
         RectTransform dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
@@ -175,7 +175,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
             if (dragArea.childCount > 0) {
                 bool shouldBeInteractable = false;
                 foreach (Transform child in dragArea) {
-                    AmmoSlot ammoSlot = child.GetComponent<AmmoSlot>();
+                    AmmoSlot ammoSlot = child.GetComponentInChildren<AmmoSlot>();
                     if (ammoSlot == null) continue;
                     if (ammoSlot.AmmoData == null) continue;
                     if (ammoSlot.AmmoData.UpgradeRecipe.CombineWith == null) continue;
@@ -183,7 +183,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
                         shouldBeInteractable = true;
                     }
                 }
-                newAmmoSlot.GetComponent<CanvasGroup>().alpha = shouldBeInteractable ? 1 : 0.6f;
+                newAmmoSlot.GetComponentInChildren<CanvasGroup>().alpha = shouldBeInteractable ? 1 : 0.6f;
             }
         }
         

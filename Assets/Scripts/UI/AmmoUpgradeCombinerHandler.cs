@@ -61,7 +61,7 @@ public class AmmoUpgradeCombinerHandler : MonoBehaviour {
                     continue;
                 if (prevAmmoSlot.AmmoData.UpgradeRecipe.CombineWith != currAmmoSlot.AmmoData.UpgradeRecipe.CombineWith)
                     continue;
-                CombineAmmoSlots(prevAmmoSlot, currAmmoSlot);
+                MergeSlotsWithAnimation(prevAmmoSlot, currAmmoSlot);
                 return true;
             }
             if (nextAmmoSlot != null && nextAmmoSlot.AmmoData == neededAmmoToUpgrade) {
@@ -69,41 +69,53 @@ public class AmmoUpgradeCombinerHandler : MonoBehaviour {
                     continue;
                 if (nextAmmoSlot.AmmoData.UpgradeRecipe.CombineWith != currAmmoSlot.AmmoData.UpgradeRecipe.CombineWith)
                     continue;
-                CombineAmmoSlots(currAmmoSlot, nextAmmoSlot);
+                MergeSlotsWithAnimation(currAmmoSlot, nextAmmoSlot);
                 return true;
             }
         }
         return false;
     }
     /* Merges left slot into right slot, effectively removing left slot and storing the result in right slot. */
-    private void CombineAmmoSlots(AmmoSlot left, AmmoSlot right) {
-        Debug.Log("Attempting to merge " + left.AmmoData.AmmoName + " into " + right.AmmoData.AmmoName);
-        if (left == null || right == null) {
-            Debug.LogError("Combine failed because left slot or right slot is null.");
-            return;
-        }
-        if (left.AmmoData.UpgradeRecipe.CombineWith != right.AmmoData.UpgradeRecipe.CombineWith) {
-            Debug.LogError("The two slots cannot be combined because the recipe does not match!");
-            return;
-        }
-
-        // Attempt to combine
-        AmmoData resultAmmo = right.AmmoData.UpgradeRecipe.UpgradesTo;
-        AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/AmmoCombine"), GetPitchBasedOnResultRarity(resultAmmo.Rarity));
-
-        // Remove the left ammo slot, and update the right ammo slot
-        Destroy(left.gameObject);
-        right.SetSlotData(resultAmmo);
-
-        // Reassess upgrade available for all ammo
-        PlayerBattleUIDelegates.InvokeOnCheckForUpgradesSetIcons();
-        PlayerBattleUIDelegates.InvokeOnResetAllAmmoSlotsCanvasGroupAlpha();
+    private void MergeSlotsWithAnimation(AmmoSlot left, AmmoSlot right) {
+        StartCoroutine(MergeSlotCoroutine(left, right));
     }
+    
     private IEnumerator AutoUpgradeCoroutine() {
         while (CanAutoUpgrade()) {
             Debug.Log("Combining ammo");
             yield return null;
         }
+    }
+
+    private IEnumerator MergeSlotCoroutine(AmmoSlot left, AmmoSlot right) {
+        RectTransform dragLayerTransform = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
+        if (dragLayerTransform == null) {
+            Debug.LogError("Drag Layer transform is null!");
+            yield break;
+        }
+        
+        Animator leftAnimator = left.GetComponent<Animator>();
+        Animator rightAnimator = right.GetComponent<Animator>();
+        
+        left.transform.parent.SetParent(dragLayerTransform, true);
+        leftAnimator.Play("AmmoCardMerger");
+        rightAnimator.StopPlayback();
+        rightAnimator.Play("AmmoCardMergee");
+
+        StartCoroutine(WaitAndCompleteMergeCoroutine(left, right));
+        yield return null;
+    }
+
+    private IEnumerator WaitAndCompleteMergeCoroutine(AmmoSlot left, AmmoSlot right) {
+        yield return new WaitForSeconds(0.5f);
+        AmmoData resultAmmo = right.AmmoData.UpgradeRecipe.UpgradesTo;
+        // Remove the left ammo slot, and update the right ammo slot
+        Destroy(left.transform.parent.gameObject);
+        right.SetSlotData(resultAmmo);
+        AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/AmmoCombine"), GetPitchBasedOnResultRarity(resultAmmo.Rarity));
+        // Reassess upgrade available for all ammo
+        PlayerBattleUIDelegates.InvokeOnCheckForUpgradesSetIcons();
+        PlayerBattleUIDelegates.InvokeOnResetAllAmmoSlotsCanvasGroupAlpha();
     }
 
     // public void OnPointerEnter(PointerEventData eventData) {
