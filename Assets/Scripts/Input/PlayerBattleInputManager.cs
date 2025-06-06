@@ -11,11 +11,11 @@ public class PlayerBattleInputManager : MonoBehaviour {
     [SerializeField] private RectTransform DropIndicator;
 
     private Coroutine _supplyAmmoCoroutine;
+    private bool _isDragging = false;
     
     void OnEnable() {
         PlayerBattleInputDelegates.OnShopAmmoTap += SetActiveAmmoShopItem;
         PlayerBattleInputDelegates.OnRemoveActiveAmmoShopItem += RemoveActiveAmmoShopItem;
-        
      
         PlayerBattleUIDelegates.OnCheckForUpgradesSetIcons += CheckForUpgradesPatient;
         PlayerBattleUIDelegates.OnResetAllAmmoSlotsCanvasGroupAlpha += ResetAllAmmoSlotsCanvasGroupAlpha;
@@ -39,10 +39,11 @@ public class PlayerBattleInputManager : MonoBehaviour {
         
         PlayerBattleInputDelegates.GetSelectedAmmoShopItem = null;
         PlayerBattleInputDelegates.GetAllAmmoSlots = null;
+
     }
 
     void Start() {
-        EventSystem.current.pixelDragThreshold = 15;
+        EventSystem.current.pixelDragThreshold = 25;
         StartCoroutine(InitializeInput());
     }
     private void SetActiveAmmoShopItem(AmmoSlot ammoSlot) {

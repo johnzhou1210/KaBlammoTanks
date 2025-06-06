@@ -22,6 +22,7 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     }
 
     public void OnPointerDown(PointerEventData eventData) {
+        // if (!DragLock.TryStartDrag(eventData.pointerId)) return;
         print("Item pointer down");
         _pointerInside = true; // Assume pointer is down inside
         _pointerDownTime = Time.time;

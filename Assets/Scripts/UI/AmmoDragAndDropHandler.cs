@@ -27,6 +27,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     public void OnPointerDown(PointerEventData eventData) { }
 
     public void OnBeginDrag(PointerEventData eventData) {
+        
         SetInteractable(false);
         layoutElement.ignoreLayout = true;
         _originalParent = cardItemRectTransform.parent;
@@ -51,6 +52,8 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
   
     }
     public void OnDrag(PointerEventData eventData) {
+        EventSystem.current.SetSelectedGameObject(gameObject);
+        
         // Move the object freely under mouse
         RectTransformUtility.ScreenPointToLocalPointInRectangle(_dragLayer, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
         cardItemRectTransform.anchoredPosition = localPoint;
@@ -65,6 +68,8 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     
     }
     public void OnEndDrag(PointerEventData eventData) {
+   
+        
         SetInteractable(true);
         layoutElement.ignoreLayout = false;
 
@@ -79,9 +84,11 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
 
     }
     private void SetInteractable(bool isInteractable) {
-        canvasGroup.blocksRaycasts = isInteractable;
-        // _ammoFrameCanvasGroup.alpha = isInteractable ? 1 : .6f;
-        canvasGroup.interactable = isInteractable;
+        // canvasGroup.blocksRaycasts = isInteractable;
+        _ammoFrameCanvasGroup.alpha = isInteractable ? 1 : .6f;
+        _ammoFrameCanvasGroup.interactable = isInteractable;
+        _ammoFrameCanvasGroup.blocksRaycasts = isInteractable;
+        // canvasGroup.interactable = isInteractable;
 
         // Get ammo data of dragged item
         AmmoData draggedAmmoData = ammoSlot.AmmoData;
