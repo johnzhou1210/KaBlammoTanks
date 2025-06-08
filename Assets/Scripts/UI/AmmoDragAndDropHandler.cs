@@ -27,7 +27,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     public void OnPointerDown(PointerEventData eventData) { }
 
     public void OnBeginDrag(PointerEventData eventData) {
-        
+
         SetInteractable(false);
         layoutElement.ignoreLayout = true;
         _originalParent = cardItemRectTransform.parent;
@@ -49,11 +49,11 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         PlayerBattleUIDelegates.InvokeOnDropIndicatorSetParent(_originalParent, false);
         UpdateDropIndicatorPosition(eventData);
 
-  
+
     }
     public void OnDrag(PointerEventData eventData) {
         EventSystem.current.SetSelectedGameObject(gameObject);
-        
+
         // Move the object freely under mouse
         RectTransformUtility.ScreenPointToLocalPointInRectangle(_dragLayer, eventData.position, eventData.pressEventCamera, out Vector2 localPoint);
         cardItemRectTransform.anchoredPosition = localPoint;
@@ -65,11 +65,11 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         }
         UpdateDropIndicatorPosition(eventData);
 
-    
+
     }
     public void OnEndDrag(PointerEventData eventData) {
-   
-        
+
+
         SetInteractable(true);
         layoutElement.ignoreLayout = false;
 
@@ -77,12 +77,15 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         cardItemRectTransform.SetParent(_originalParent, true);
         cardItemRectTransform.SetSiblingIndex(_originalSiblingIndex);
         PlayerBattleUIDelegates.InvokeOnSetDropIndicatorActive(false);
-        
+
         // Check for any automatic upgrades
         PlayerBattleUIDelegates.InvokeOnDoAutoUpgrades();
-        
+
 
     }
+
+
+
     private void SetInteractable(bool isInteractable) {
         // canvasGroup.blocksRaycasts = isInteractable;
         _ammoFrameCanvasGroup.alpha = isInteractable ? 1 : .6f;
@@ -109,7 +112,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         }
     }
     private int FindClosestSiblingIndex(PointerEventData eventData) {
-        
+
         int closestIndex = CountAmmoSlotChildren(_originalParent);
         float closestDistance = float.MaxValue;
         for (int i = 0; i < CountAmmoSlotChildren(_originalParent) + 1; i++) {
