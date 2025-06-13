@@ -8,14 +8,12 @@ public class PlayerBattleInputManager : MonoBehaviour {
     [SerializeField] private Transform AmmoSlotContainer;
     [SerializeField] private RectTransform DropIndicator;
     private AmmoSlot _activeAmmoShopItem;
-    private bool _isDragging = false;
 
     private Coroutine _supplyAmmoCoroutine;
 
     private void Start() {
         EventSystem.current.pixelDragThreshold = 25;
         StartCoroutine(InitializeInput());
-        Debug.Log("IN HERE333");
     }
 
     private void OnEnable() {
