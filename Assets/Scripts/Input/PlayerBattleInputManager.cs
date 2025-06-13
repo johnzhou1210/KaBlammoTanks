@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,189 +5,188 @@ using UnityEngine.EventSystems;
 using Random = UnityEngine.Random;
 
 public class PlayerBattleInputManager : MonoBehaviour {
-    private AmmoSlot _activeAmmoShopItem;
     [SerializeField] private Transform AmmoSlotContainer;
     [SerializeField] private RectTransform DropIndicator;
+    private AmmoSlot _activeAmmoShopItem;
+    private bool _isDragging = false;
 
     private Coroutine _supplyAmmoCoroutine;
-    private bool _isDragging = false;
-    
-    void OnEnable() {
+
+    private void Start() {
+        EventSystem.current.pixelDragThreshold = 25;
+        StartCoroutine(InitializeInput());
+        Debug.Log("IN HERE333");
+    }
+
+    private void OnEnable() {
         PlayerBattleInputDelegates.OnShopAmmoTap += SetActiveAmmoShopItem;
         PlayerBattleInputDelegates.OnRemoveActiveAmmoShopItem += RemoveActiveAmmoShopItem;
-     
+        PlayerBattleInputDelegates.OnDelayedCheckForUpgrades += DelayedCheckForUpgrades;
+
         PlayerBattleUIDelegates.OnCheckForUpgradesSetIcons += CheckForUpgradesPatient;
         PlayerBattleUIDelegates.OnResetAllAmmoSlotsCanvasGroupAlpha += ResetAllAmmoSlotsCanvasGroupAlpha;
         PlayerBattleUIDelegates.OnSetDropIndicatorSiblingIndex += SetDropIndicatorSiblingIndex;
         PlayerBattleUIDelegates.OnSetDropIndicatorActive += SetDropIndicatorActive;
         PlayerBattleUIDelegates.OnDropIndicatorSetParent += SetDropIndicatorParent;
-       
+
 
         PlayerBattleInputDelegates.GetSelectedAmmoShopItem = () => _activeAmmoShopItem;
         PlayerBattleInputDelegates.GetAllAmmoSlots = GetAllAmmoSlots;
     }
-    void OnDisable() {
+
+    private void OnDisable() {
         PlayerBattleInputDelegates.OnShopAmmoTap -= SetActiveAmmoShopItem;
         PlayerBattleInputDelegates.OnRemoveActiveAmmoShopItem -= RemoveActiveAmmoShopItem;
-        
+        PlayerBattleInputDelegates.OnDelayedCheckForUpgrades -= DelayedCheckForUpgrades;
+
         PlayerBattleUIDelegates.OnCheckForUpgradesSetIcons -= CheckForUpgradesPatient;
         PlayerBattleUIDelegates.OnResetAllAmmoSlotsCanvasGroupAlpha -= ResetAllAmmoSlotsCanvasGroupAlpha;
         PlayerBattleUIDelegates.OnSetDropIndicatorSiblingIndex -= SetDropIndicatorSiblingIndex;
         PlayerBattleUIDelegates.OnSetDropIndicatorActive -= SetDropIndicatorActive;
         PlayerBattleUIDelegates.OnDropIndicatorSetParent -= SetDropIndicatorParent;
-        
+
         PlayerBattleInputDelegates.GetSelectedAmmoShopItem = null;
         PlayerBattleInputDelegates.GetAllAmmoSlots = null;
-
     }
 
-    void Start() {
-        EventSystem.current.pixelDragThreshold = 25;
-        StartCoroutine(InitializeInput());
-    }
     private void SetActiveAmmoShopItem(AmmoSlot ammoSlot) {
         _activeAmmoShopItem = ammoSlot;
         AnimateSelectionChanges();
         if (ammoSlot == null) return;
-        AmmoData newAmmoData = ammoSlot.AmmoData;
+        var newAmmoData = ammoSlot.AmmoData;
         print("Active ammo shop item set to " + newAmmoData.AmmoName);
-        
     }
+
     private void AnimateSelectionChanges() {
-        List<AmmoSlot> allShopItems = GetAllAmmoSlots();
-        foreach (AmmoSlot shopItem in allShopItems) {
-            Animator currAnimator = shopItem.GetComponent<Animator>();
+        var allShopItems = GetAllAmmoSlots();
+        foreach (var shopItem in allShopItems) {
+            var currAnimator = shopItem.GetComponent<Animator>();
             if (shopItem != _activeAmmoShopItem) {
                 // Do nothing, except if the item's animator is still playing selected animation
-                if (GetIsSelectionAnimationPlaying(currAnimator)) {
-                    currAnimator.Play("AmmoShopUIDeselect");
-                }
+                if (GetIsSelectionAnimationPlaying(currAnimator)) currAnimator.Play("AmmoShopUIDeselect");
             } else {
                 // Play select animation if ui is not already playing select animation
-                if (!GetIsSelectionAnimationPlaying(currAnimator)) {
-                    currAnimator.Play("AmmoShopUISelect");
-                }
+                if (!GetIsSelectionAnimationPlaying(currAnimator)) currAnimator.Play("AmmoShopUISelect");
             }
         }
     }
 
     private bool GetIsSelectionAnimationPlaying(Animator animator) {
-        return animator.GetCurrentAnimatorStateInfo(0).IsName("AmmoShopUISelected") || animator.GetCurrentAnimatorStateInfo(0).IsName("AmmoShopUISelect");
+        return animator.GetCurrentAnimatorStateInfo(0).IsName("AmmoShopUISelected") ||
+               animator.GetCurrentAnimatorStateInfo(0).IsName("AmmoShopUISelect");
     }
-    
-    
+
+
     /* Excludes ghost slot */
     private List<AmmoSlot> GetAllAmmoSlots() {
-        List<AmmoSlot> allShopItems = new List<AmmoSlot>();
+        var allShopItems = new List<AmmoSlot>();
         foreach (Transform child in AmmoSlotContainer) {
-            AmmoSlot ammoSlot = child.GetComponentInChildren<AmmoSlot>();
+            var ammoSlot = child.GetComponentInChildren<AmmoSlot>();
             if (ammoSlot == null) continue;
             allShopItems.Add(ammoSlot);
         }
+
         return allShopItems;
     }
 
     private Dictionary<AmmoData, int> GetUpgradeWithBagOfFreqs() {
-        Dictionary<AmmoData,int> bagOfFreqs = new();
-        foreach (AmmoSlot ammoSlot in GetAllAmmoSlots()) {
-            AmmoData currAmmoData = ammoSlot.AmmoData;
-            if (currAmmoData == null) {
-                continue;
-            }
+        Dictionary<AmmoData, int> bagOfFreqs = new();
+        foreach (var ammoSlot in GetAllAmmoSlots()) {
+            var currAmmoData = ammoSlot.AmmoData;
+            if (currAmmoData == null) continue;
             if (currAmmoData.UpgradeRecipe.CombineWith != null) {
-                AmmoData entryInQuestion = currAmmoData.UpgradeRecipe.CombineWith;
-                if (!bagOfFreqs.TryAdd(entryInQuestion, 1)) {
-                    bagOfFreqs[entryInQuestion]++;
-                }
+                var entryInQuestion = currAmmoData.UpgradeRecipe.CombineWith;
+                if (!bagOfFreqs.TryAdd(entryInQuestion, 1)) bagOfFreqs[entryInQuestion]++;
             }
         }
+
         // Also count any upgrades slots that are currently in drag area
-        RectTransform dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
-        if (dragArea != null) {
+        var dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
+        if (dragArea != null)
             foreach (Transform child in dragArea.transform) {
-                AmmoSlot ammoSlot = child.GetComponentInChildren<AmmoSlot>();
+                var ammoSlot = child.GetComponentInChildren<AmmoSlot>();
                 if (ammoSlot == null) {
                     Debug.LogWarning("Current child in drag area has no ammo slot, skipping...");
                     continue;
                 }
-                AmmoData currAmmoData = ammoSlot.AmmoData;
+
+                var currAmmoData = ammoSlot.AmmoData;
                 if (currAmmoData == null) {
                     Debug.LogError("Ammo slot has no ammo data!!");
                     continue;
                 }
+
                 if (currAmmoData.UpgradeRecipe.CombineWith != null) {
-                    AmmoData entryInQuestion = currAmmoData.UpgradeRecipe.CombineWith;
+                    var entryInQuestion = currAmmoData.UpgradeRecipe.CombineWith;
                     if (!bagOfFreqs.TryAdd(entryInQuestion, 1)) {
                         print("incremented 1 in drag area");
                         bagOfFreqs[entryInQuestion]++;
                     }
                 }
             }
-        }
+
         return bagOfFreqs;
     }
-    
-    private void CheckForUpgrades() { // Do not use without delaying if you destroyed a gameobject!
+
+    private void CheckForUpgrades() {
+        // Do not use without delaying if you destroyed a gameobject!
         // Record all desired upgradeWith items
-        Dictionary<AmmoData, int> bagOfFreqs = GetUpgradeWithBagOfFreqs();
+        var bagOfFreqs = GetUpgradeWithBagOfFreqs();
         // Label all slots if they exist in the set
-        foreach (AmmoSlot ammoSlot in GetAllAmmoSlots()) {
-            ammoSlot.SetUpgradeIconVisibility(bagOfFreqs.ContainsKey(ammoSlot.AmmoData) && bagOfFreqs[ammoSlot.AmmoData] > 1);
-        }
-        
+        foreach (var ammoSlot in GetAllAmmoSlots())
+            ammoSlot.SetUpgradeIconVisibility(bagOfFreqs.ContainsKey(ammoSlot.AmmoData) &&
+                                              bagOfFreqs[ammoSlot.AmmoData] > 1);
+
         // Also check drag area too
-        RectTransform dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
-        if (dragArea != null) {
+        var dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
+        if (dragArea != null)
             foreach (Transform child in dragArea.transform) {
-                AmmoSlot ammoSlot = child.GetComponentInChildren<AmmoSlot>();
-                if (ammoSlot != null) {
-                    ammoSlot.SetUpgradeIconVisibility(bagOfFreqs.ContainsKey(ammoSlot.AmmoData) && bagOfFreqs[ammoSlot.AmmoData] > 1);
-                }
+                var ammoSlot = child.GetComponentInChildren<AmmoSlot>();
+                if (ammoSlot != null)
+                    ammoSlot.SetUpgradeIconVisibility(bagOfFreqs.ContainsKey(ammoSlot.AmmoData) &&
+                                                      bagOfFreqs[ammoSlot.AmmoData] > 1);
             }
-        }
     }
 
     private void CheckForUpgradesPatient() {
-        StartCoroutine(DelayedCheckForUpgrades());
+        StartCoroutine(DelayedCheckForUpgradesCoroutine());
     }
-    
+
 
     private void ResetAllAmmoSlotsCanvasGroupAlpha() {
-        foreach (AmmoSlot ammoSlot in GetAllAmmoSlots()) {
-            ammoSlot.GetComponent<CanvasGroup>().alpha = 1f;
-        }
+        foreach (var ammoSlot in GetAllAmmoSlots()) ammoSlot.GetComponent<CanvasGroup>().alpha = 1f;
     }
 
-    public void RemoveActiveAmmoShopItem() {
-        Destroy(_activeAmmoShopItem.transform.parent.gameObject);
-        _activeAmmoShopItem = null;
-        StartCoroutine(DelayedCheckForUpgrades());
+    private void RemoveActiveAmmoShopItem() {
+        Debug.Log("IN HERE");
+        _activeAmmoShopItem.GetComponent<Animator>().Play("AmmoCardConsume");
+        Debug.Log("Removed ammo shop item");
+        // _activeAmmoShopItem = null;
     }
 
     private void SpawnAmmoSlot(AmmoData ammoData) {
-        GameObject newAmmoSlot = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CardItem"), AmmoSlotContainer);
+        var newAmmoSlot = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CardItem"), AmmoSlotContainer);
         newAmmoSlot.transform.SetSiblingIndex(0);
         newAmmoSlot.GetComponentInChildren<AmmoSlot>().SetSlotData(ammoData);
-        
+
         // Also account for if user is currently dragging something. If they are, change the alpha of the slot accordingly
-        RectTransform dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
-        if (dragArea != null) {
+        var dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
+        if (dragArea != null)
             if (dragArea.childCount > 0) {
-                bool shouldBeInteractable = false;
+                var shouldBeInteractable = false;
                 foreach (Transform child in dragArea) {
-                    AmmoSlot ammoSlot = child.GetComponentInChildren<AmmoSlot>();
+                    var ammoSlot = child.GetComponentInChildren<AmmoSlot>();
                     if (ammoSlot == null) continue;
                     if (ammoSlot.AmmoData == null) continue;
                     if (ammoSlot.AmmoData.UpgradeRecipe.CombineWith == null) continue;
-                    if (ammoSlot.AmmoData.UpgradeRecipe.CombineWith == ammoData.UpgradeRecipe.CombineWith) {
+                    if (ammoSlot.AmmoData.UpgradeRecipe.CombineWith == ammoData.UpgradeRecipe.CombineWith)
                         shouldBeInteractable = true;
-                    }
                 }
+
                 newAmmoSlot.GetComponentInChildren<CanvasGroup>().alpha = shouldBeInteractable ? 1 : 0.6f;
             }
-        }
-        
-        
+
+
         CheckForUpgrades();
     }
 
@@ -211,19 +209,20 @@ public class PlayerBattleInputManager : MonoBehaviour {
     private void SetDropIndicatorParent(Transform parent, bool worldPositionStays) {
         DropIndicator.SetParent(parent, worldPositionStays);
     }
-    
-    
+
+    private void DelayedCheckForUpgrades() {
+        StartCoroutine(DelayedCheckForUpgradesCoroutine());
+    }
+
+
     private IEnumerator SupplyAmmoCoroutine() {
         while (true) {
             yield return new WaitForSeconds(Random.Range(2f, 4f));
-            if (GetAllAmmoSlots().Count < 7) {
-                SpawnRandomAmmoSlot();
-            }
-            
+            if (GetAllAmmoSlots().Count < 7) SpawnRandomAmmoSlot();
         }
     }
-    
-    private IEnumerator DelayedCheckForUpgrades() {
+
+    private IEnumerator DelayedCheckForUpgradesCoroutine() {
         yield return null;
         CheckForUpgrades();
     }
@@ -231,13 +230,10 @@ public class PlayerBattleInputManager : MonoBehaviour {
     private IEnumerator InitializeInput() {
         yield return null;
         // Create a certain amount of slots to start with
-        for (int i = 0; i < 4; i++) {
-            SpawnRandomAmmoSlot();
-        }
-        
+        for (var i = 0; i < 4; i++) SpawnRandomAmmoSlot();
+
         CheckForUpgrades();
 
         _supplyAmmoCoroutine = StartCoroutine(SupplyAmmoCoroutine());
     }
-    
 }

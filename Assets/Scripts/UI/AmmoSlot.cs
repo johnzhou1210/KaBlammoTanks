@@ -1,20 +1,18 @@
-using System;
 using Coffee.UIEffects;
-using KBCore.Refs;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Animator))]
-public class AmmoSlot : MonoBehaviour
-{
-    public AmmoData AmmoData { get; private set; }
-    [SerializeField] Image ammoIcon;
+public class AmmoSlot : MonoBehaviour {
+    [SerializeField] private Image ammoIcon;
     [SerializeField] private TextMeshProUGUI ammoName, damageText;
     [SerializeField] private GameObject upgradeAvailableIcon;
     [SerializeField] private UIEffect AmmoSlotUIEffect, MainFrameUIEffect;
-    
-    public void SetSlotData(AmmoData ammoData) { ;
+    public AmmoData AmmoData { get; private set; }
+
+    public void SetSlotData(AmmoData ammoData) {
+        ;
         if (ammoData == null) return;
         AmmoData = ammoData;
         ammoIcon.sprite = ammoData.Icon;
@@ -22,17 +20,21 @@ public class AmmoSlot : MonoBehaviour
         damageText.text = ammoData.Damage.ToString();
         LoadUIEffectBasedOnRarity();
     }
-    
+
     public void SetUpgradeIconVisibility(bool val) {
         upgradeAvailableIcon.SetActive(val);
     }
 
+    public void OnConsumeFinish() {
+        Destroy(transform.parent.gameObject);
+        PlayerBattleInputDelegates.InvokeOnDelayedCheckForUpgrades();
+    }
+
     private void LoadUIEffectBasedOnRarity() {
-        if (AmmoData.Rarity != Rarity.LEGENDARY) {
+        if (AmmoData.Rarity != Rarity.LEGENDARY)
             AmmoSlotUIEffect.LoadPreset("NonLegendaryRarityAmmoSlot");
-        } else {
+        else
             AmmoSlotUIEffect.LoadPreset("LegendaryRarityAmmoSlot");
-        }
         switch (AmmoData.Rarity) {
             case Rarity.COMMON:
                 MainFrameUIEffect.LoadPreset("CommonRarityMainFrame");
@@ -50,6 +52,7 @@ public class AmmoSlot : MonoBehaviour
                 Debug.LogError("Unknown Rarity!");
                 break;
         }
+
         Debug.Log("Set frame to stuff of rarity " + AmmoData.Rarity);
     }
 }
