@@ -130,21 +130,7 @@ public class AmmoUpgradeCombinerHandler : MonoBehaviour {
         PlayerBattleUIDelegates.InvokeOnResetAllAmmoSlotsCanvasGroupAlpha();
     }
 
-    // public void OnPointerEnter(PointerEventData eventData) {
-    //     print("Pointer enter ");
-    //     GetComponent<Image>().color = Color.white;
-    //     
-    //     // Disable ghost slot
-    //     PlayerBattleUIDelegates.InvokeOnSetDropIndicatorActive(false);
-    // }
-    //
-    // public void OnPointerExit(PointerEventData eventData) {
-    //     print("Pointer exit");
-    //     RestoreOriginalColor();
-    //     
-    //     // Reenable ghost slot
-    //     PlayerBattleUIDelegates.InvokeOnSetDropIndicatorActive(true);
-    // }
+
     private void RestoreOriginalColor() {
         GetComponent<Image>().color = _originalColor;
     }
