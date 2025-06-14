@@ -7,19 +7,37 @@ using Random = UnityEngine.Random;
 public class PlayerBattleInputManager : MonoBehaviour {
     [SerializeField] private Transform AmmoSlotContainer;
     [SerializeField] private RectTransform DropIndicator;
+    [SerializeField] private float AmmoUpgradeCooldown = 1f;
     private AmmoSlot _activeAmmoShopItem;
+    private float _ammoUpgradeCooldownTimer;
+    private int _autoUpgradeChecksToDo;
 
-    private Coroutine _supplyAmmoCoroutine;
+    private Coroutine _supplyAmmoCoroutine, _ammoUpgradeCoroutine;
+
 
     private void Start() {
         EventSystem.current.pixelDragThreshold = 25;
         StartCoroutine(InitializeInput());
     }
 
+
+    private void Update() {
+        _ammoUpgradeCooldownTimer = Mathf.Clamp(_ammoUpgradeCooldownTimer + Time.deltaTime, 0f, AmmoUpgradeCooldown);
+        if (_autoUpgradeChecksToDo > 0) {
+            if (_ammoUpgradeCooldownTimer < AmmoUpgradeCooldown) return;
+            _ammoUpgradeCooldownTimer = 0f;
+
+            // Do single upgrade
+            var upgradeSuccess = CanAutoUpgrade();
+            _autoUpgradeChecksToDo += upgradeSuccess ? 1 : 0;
+        }
+    }
+
     private void OnEnable() {
         PlayerBattleInputDelegates.OnShopAmmoTap += SetActiveAmmoShopItem;
         PlayerBattleInputDelegates.OnRemoveActiveAmmoShopItem += RemoveActiveAmmoShopItem;
         PlayerBattleInputDelegates.OnDelayedCheckForUpgrades += DelayedCheckForUpgrades;
+        PlayerBattleInputDelegates.OnRequestUpgradeCheck += RequestUpgradeCheck;
 
         PlayerBattleUIDelegates.OnCheckForUpgradesSetIcons += CheckForUpgradesPatient;
         PlayerBattleUIDelegates.OnResetAllAmmoSlotsCanvasGroupAlpha += ResetAllAmmoSlotsCanvasGroupAlpha;
@@ -36,6 +54,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
         PlayerBattleInputDelegates.OnShopAmmoTap -= SetActiveAmmoShopItem;
         PlayerBattleInputDelegates.OnRemoveActiveAmmoShopItem -= RemoveActiveAmmoShopItem;
         PlayerBattleInputDelegates.OnDelayedCheckForUpgrades -= DelayedCheckForUpgrades;
+        PlayerBattleInputDelegates.OnRequestUpgradeCheck -= RequestUpgradeCheck;
 
         PlayerBattleUIDelegates.OnCheckForUpgradesSetIcons -= CheckForUpgradesPatient;
         PlayerBattleUIDelegates.OnResetAllAmmoSlotsCanvasGroupAlpha -= ResetAllAmmoSlotsCanvasGroupAlpha;
@@ -186,6 +205,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
 
 
         CheckForUpgrades();
+        _autoUpgradeChecksToDo += !ammoData.UpgradeRecipe.CombineWith ? 0 : 1;
     }
 
     private void SpawnRandomAmmoSlot() {
@@ -212,6 +232,53 @@ public class PlayerBattleInputManager : MonoBehaviour {
         StartCoroutine(DelayedCheckForUpgradesCoroutine());
     }
 
+    private void RequestUpgradeCheck() {
+        _autoUpgradeChecksToDo += 1;
+    }
+
+    private bool CanAutoUpgrade() {
+        var allAmmoSlots = GetAllAmmoSlots();
+        if (allAmmoSlots == null) {
+            Debug.LogWarning("AllAmmoSlots is null!");
+            return false;
+        }
+
+        if (GetAllAmmoSlots().Count <= 1)
+            return false;
+        for (var i = 0; i < allAmmoSlots.Count; i++) {
+            var currAmmoSlot = allAmmoSlots[i];
+            var prevAmmoSlot = i > 0 ? allAmmoSlots[i - 1] : null;
+            var nextAmmoSlot = i < allAmmoSlots.Count - 1 ? allAmmoSlots[i + 1] : null;
+            var neededAmmoToUpgrade = currAmmoSlot.AmmoData.UpgradeRecipe.CombineWith;
+            if (neededAmmoToUpgrade == null)
+                continue;
+            if (prevAmmoSlot != null && currAmmoSlot.AmmoData == neededAmmoToUpgrade) {
+                if (prevAmmoSlot.AmmoData.UpgradeRecipe.CombineWith == null)
+                    continue;
+                if (prevAmmoSlot.AmmoData.UpgradeRecipe.CombineWith != currAmmoSlot.AmmoData.UpgradeRecipe.CombineWith)
+                    continue;
+                MergeSlotsWithAnimation(prevAmmoSlot, currAmmoSlot);
+                return true;
+            }
+
+            if (nextAmmoSlot != null && nextAmmoSlot.AmmoData == neededAmmoToUpgrade) {
+                if (nextAmmoSlot.AmmoData.UpgradeRecipe.CombineWith == null)
+                    continue;
+                if (nextAmmoSlot.AmmoData.UpgradeRecipe.CombineWith != currAmmoSlot.AmmoData.UpgradeRecipe.CombineWith)
+                    continue;
+                MergeSlotsWithAnimation(currAmmoSlot, nextAmmoSlot);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    private void MergeSlotsWithAnimation(AmmoSlot left, AmmoSlot right) {
+        StartCoroutine(MergeSlotCoroutine(left, right));
+    }
+
 
     private IEnumerator SupplyAmmoCoroutine() {
         while (true) {
@@ -233,5 +300,41 @@ public class PlayerBattleInputManager : MonoBehaviour {
         CheckForUpgrades();
 
         _supplyAmmoCoroutine = StartCoroutine(SupplyAmmoCoroutine());
+    }
+
+    private IEnumerator MergeSlotCoroutine(AmmoSlot left, AmmoSlot right) {
+        var dragLayerTransform = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
+        if (dragLayerTransform == null) {
+            Debug.LogError("Drag Layer transform is null!");
+            yield break;
+        }
+
+        var leftAnimator = left.GetComponent<Animator>();
+        var rightAnimator = right.GetComponent<Animator>();
+
+        left.transform.parent.SetParent(dragLayerTransform, true);
+        leftAnimator.Play("AmmoCardMerger");
+        rightAnimator.StopPlayback();
+        rightAnimator.Play("AmmoCardMergee");
+
+        StartCoroutine(WaitAndCompleteMergeCoroutine(left, right));
+
+        yield return null;
+    }
+
+    private IEnumerator WaitAndCompleteMergeCoroutine(AmmoSlot left, AmmoSlot right) {
+        yield return new WaitForSeconds(0.25f / .6f);
+        var resultAmmo = right.AmmoData.UpgradeRecipe.UpgradesTo;
+        // Remove the left ammo slot, and update the right ammo slot
+        Destroy(left.transform.parent.gameObject);
+        right.SetSlotData(resultAmmo);
+        AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/AmmoCombine"),
+            right.GetComponent<AmmoUpgradeCombinerHandler>().GetPitchBasedOnResultRarity(resultAmmo.Rarity));
+        // Reassess upgrade available for all ammo
+        PlayerBattleUIDelegates.InvokeOnCheckForUpgradesSetIcons();
+        PlayerBattleUIDelegates.InvokeOnResetAllAmmoSlotsCanvasGroupAlpha();
+
+        yield return new WaitForSeconds(1f);
+        _autoUpgradeChecksToDo += 1;
     }
 }

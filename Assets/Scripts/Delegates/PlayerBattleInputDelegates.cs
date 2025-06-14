@@ -5,7 +5,7 @@ public class PlayerBattleInputDelegates {
     #region Events
 
     public static event Action<AmmoSlot> OnShopAmmoTap;
-    public static event Action OnRemoveActiveAmmoShopItem, OnDelayedCheckForUpgrades;
+    public static event Action OnRemoveActiveAmmoShopItem, OnDelayedCheckForUpgrades, OnRequestUpgradeCheck;
 
 
     public static void InvokeOnShopAmmoTap(AmmoSlot ammoSlot) {
@@ -18,6 +18,10 @@ public class PlayerBattleInputDelegates {
 
     public static void InvokeOnDelayedCheckForUpgrades() {
         OnDelayedCheckForUpgrades?.Invoke();
+    }
+
+    public static void InvokeOnRequestUpgradeCheck() {
+        OnRequestUpgradeCheck?.Invoke();
     }
 
     #endregion
