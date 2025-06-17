@@ -229,3 +229,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OwnerId: -1
+  ProjectileData: {fileID: 0}
+  Explosive: 1

@@ -27,6 +27,8 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
+        if (!ammoSlot.IsInteractable()) return;
+
         SetInteractable(false);
         layoutElement.ignoreLayout = true;
         _originalParent = cardItemRectTransform.parent;
@@ -41,7 +43,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
 
         // Position under mouse
         RectTransformUtility.ScreenPointToLocalPointInRectangle(_dragLayer, eventData.position,
-            eventData.pressEventCamera, out var localMousePos);
+            eventData.pressEventCamera, out Vector2 localMousePos);
         cardItemRectTransform.anchoredPosition = localMousePos;
 
         // Show drop indicator
@@ -51,20 +53,24 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     }
 
     public void OnDrag(PointerEventData eventData) {
+        if (!ammoSlot.IsInteractable()) return;
+
         EventSystem.current.SetSelectedGameObject(gameObject);
 
         // Move the object freely under mouse
         RectTransformUtility.ScreenPointToLocalPointInRectangle(_dragLayer, eventData.position,
-            eventData.pressEventCamera, out var localPoint);
+            eventData.pressEventCamera, out Vector2 localPoint);
         cardItemRectTransform.anchoredPosition = localPoint;
 
         // Find where to reorder in the original layout group
-        var newIndex = FindClosestSiblingIndex(eventData);
+        int newIndex = FindClosestSiblingIndex(eventData);
         if (newIndex != _originalSiblingIndex) _originalSiblingIndex = newIndex;
         UpdateDropIndicatorPosition(eventData);
     }
 
     public void OnEndDrag(PointerEventData eventData) {
+        if (!ammoSlot.IsInteractable()) return;
+
         SetInteractable(true);
         layoutElement.ignoreLayout = false;
 
@@ -89,13 +95,13 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
         // canvasGroup.interactable = isInteractable;
 
         // Get ammo data of dragged item
-        var draggedAmmoData = ammoSlot.AmmoData;
+        AmmoData draggedAmmoData = ammoSlot.AmmoData;
 
         // If the ammo is upgradeable, make the ammo that can be combined with opaque
         foreach (Transform child in _ammoFrameCanvasGroup.transform) {
-            var currAmmoSlotScript = child.GetComponentInChildren<AmmoSlot>();
+            AmmoSlot currAmmoSlotScript = child.GetComponentInChildren<AmmoSlot>();
             if (currAmmoSlotScript == null) continue;
-            var currAmmoData = currAmmoSlotScript.AmmoData;
+            AmmoData currAmmoData = currAmmoSlotScript.AmmoData;
             if (currAmmoData == null) {
                 Debug.LogError("An ammo slot does not have any ammo data!!");
                 continue;
@@ -107,14 +113,14 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     }
 
     private int FindClosestSiblingIndex(PointerEventData eventData) {
-        var closestIndex = CountAmmoSlotChildren(_originalParent);
-        var closestDistance = float.MaxValue;
-        for (var i = 0; i < CountAmmoSlotChildren(_originalParent) + 1; i++) {
-            var sibling = _originalParent.GetChild(i);
-            var siblingRect = sibling as RectTransform;
-            var siblingScreenPos =
+        int closestIndex = CountAmmoSlotChildren(_originalParent);
+        float closestDistance = float.MaxValue;
+        for (int i = 0; i < CountAmmoSlotChildren(_originalParent) + 1; i++) {
+            Transform sibling = _originalParent.GetChild(i);
+            RectTransform siblingRect = sibling as RectTransform;
+            Vector2 siblingScreenPos =
                 RectTransformUtility.WorldToScreenPoint(eventData.pressEventCamera, siblingRect.position);
-            var distance = eventData.position.x - siblingScreenPos.x;
+            float distance = eventData.position.x - siblingScreenPos.x;
             if (Mathf.Abs(distance) < closestDistance) {
                 closestDistance = Mathf.Abs(distance);
                 closestIndex = i;
@@ -125,7 +131,7 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     }
 
     private void UpdateDropIndicatorPosition(PointerEventData eventData) {
-        var newIndex = FindClosestSiblingIndex(eventData);
+        int newIndex = FindClosestSiblingIndex(eventData);
 
         // Move dropIndicator to the calculated index
         newIndex = Mathf.Clamp(newIndex, 0, CountAmmoSlotChildren(_originalParent));
@@ -133,7 +139,8 @@ public class AmmoDragAndDropHandler : MonoBehaviour, IPointerDownHandler, IBegin
     }
 
     private int CountAmmoSlotChildren(Transform ammoSlotContainerTransform) {
-        var result = 0;
+        if (ammoSlotContainerTransform == null) return 0;
+        int result = 0;
         foreach (Transform child in ammoSlotContainerTransform)
             if (child.GetComponentInChildren<AmmoSlot>() != null)
                 result++;

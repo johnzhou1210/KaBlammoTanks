@@ -1,27 +1,26 @@
-using System;
 using KBCore.Refs;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(AmmoSlot))]
 public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler {
-    [SerializeField, Self] private AmmoSlot ammoSlot;
-    private float _tapWindowThreshold = 0.5f;
-    private float _pointerDownTime = 0f;
+    [SerializeField] [Self] private AmmoSlot ammoSlot;
+    private float _pointerDownTime;
 
     private bool _pointerInside = true; // Track if pointer is still inside
+    private readonly float _tapWindowThreshold = 0.5f;
 
-    void OnValidate() {
-        this.ValidateRefs();
-    }
-
-    void OnEnable() {
+    private void OnEnable() {
         ammoSlot.SetSlotData(ammoSlot.AmmoData);
     }
 
+    private void OnValidate() {
+        this.ValidateRefs();
+    }
+
     public void OnPointerDown(PointerEventData eventData) {
+        if (!ammoSlot.IsInteractable()) return;
+
         // if (!DragLock.TryStartDrag(eventData.pointerId)) return;
         print("Item pointer down");
         _pointerInside = true; // Assume pointer is down inside
@@ -29,11 +28,15 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     }
 
     public void OnPointerExit(PointerEventData eventData) {
+        if (!ammoSlot.IsInteractable()) return;
+
         print("Pointer exited");
         _pointerInside = false; // Mark as exited
     }
 
     public void OnPointerUp(PointerEventData eventData) {
+        if (!ammoSlot.IsInteractable()) return;
+
         if (_pointerInside) {
             float pointerUpTime = Time.time;
             float heldDuration = pointerUpTime - _pointerDownTime;
@@ -45,13 +48,8 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             } else {
                 print("Item pointer up inside, but cancelled");
             }
-            
-            
-        }
-        else {
+        } else {
             print("Item pointer up outside");
         }
     }
-
-
 }

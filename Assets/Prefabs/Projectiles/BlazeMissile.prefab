@@ -236,6 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OwnerId: -1
   ProjectileData: {fileID: 0}
+  Explosive: 1
 --- !u!1 &7525731560611490362
 GameObject:
   m_ObjectHideFlags: 0

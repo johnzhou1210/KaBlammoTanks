@@ -9,6 +9,8 @@ public class AmmoSlot : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI ammoName, damageText;
     [SerializeField] private GameObject upgradeAvailableIcon;
     [SerializeField] private UIEffect AmmoSlotUIEffect, MainFrameUIEffect;
+    private bool _interactable = true;
+
     public AmmoData AmmoData { get; private set; }
 
     public void SetSlotData(AmmoData ammoData) {
@@ -54,5 +56,13 @@ public class AmmoSlot : MonoBehaviour {
         }
 
         Debug.Log("Set frame to stuff of rarity " + AmmoData.Rarity);
+    }
+
+    public bool IsInteractable() {
+        return _interactable;
+    }
+
+    public void SetIsInteractable(bool val) {
+        _interactable = val;
     }
 }
