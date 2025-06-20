@@ -22,7 +22,7 @@ public class BezierProjectile : MonoBehaviour {
         if (_distanceTraveled >= _totalLength) {
             transform.position = end;
             _moving = false;
-            GetComponent<AmmoCollision>().Disintegrate();
+            GetComponent<AmmoCollision>().Collide();
             // Damage player or enemy tank depending on ownership
             AmmoCollision ammoCollisionScript = GetComponent<AmmoCollision>();
             int targetId = ammoCollisionScript.OwnerId == 0 ? 1 : 0;

@@ -17,11 +17,13 @@ public class AmmoCollision : MonoBehaviour {
         Collide();
     }
 
-    private void Collide() {
+    public void Collide() {
         if (Explosive)
             Disintegrate();
         else
             Debrify();
+        Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
+        rigidbody.AddForce(Vector3.left * (OwnerId == 0 ? 1f : -1f), ForceMode2D.Impulse);
     }
 
     public void Disintegrate() {
@@ -38,6 +40,8 @@ public class AmmoCollision : MonoBehaviour {
 
         gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         gameObject.GetComponent<Collider2D>().isTrigger = false;
+
+
         transform.parent = AirFieldDelegates.GetDebrisTransform?.Invoke();
 
         StartCoroutine(Cleanup());
