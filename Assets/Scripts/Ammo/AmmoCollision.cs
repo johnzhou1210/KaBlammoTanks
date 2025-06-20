@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using KBCore.Refs;
+using TMPro;
 using UnityEngine;
 
 public class AmmoCollision : MonoBehaviour {
@@ -7,26 +10,63 @@ public class AmmoCollision : MonoBehaviour {
     public bool Explosive;
     [SerializeField] private float cleanupTime = 10f, fadeTime = 3f;
     [SerializeField] private int fadeSteps = 15;
+    [SerializeField, Child] private TextMeshPro debugNumber;
 
+    private bool _debrified = false;
+    private int _durability = 1;
+
+
+    private void OnValidate() {
+        this.ValidateRefs();
+    }
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.transform.parent != AirFieldDelegates.GetAirFieldTransform?.Invoke()) return;
+        if (!ProjectileData.CanCollide) return;
         AmmoCollision otherAmmo = other.GetComponent<AmmoCollision>();
         if (otherAmmo == null) return;
         if (otherAmmo.OwnerId == OwnerId) return;
+        ExchangeBlows(otherAmmo);
+    }
+
+    public void Initialize(int ownerId, AmmoData projectileData) {
+        OwnerId = ownerId;
+        ProjectileData = projectileData;
+        _durability = ProjectileData.Durability;
+        Debug.Log(debugNumber);
+        Debug.Log(debugNumber.text);
+        debugNumber.text = $"{_durability} / {ProjectileData.Durability}";
+    }
+
+    public void ExchangeBlows(AmmoCollision otherAmmo) {
+        int thisOriginalDurability = _durability;
+        int otherOriginalDurability = otherAmmo._durability;
+
+        _durability = Math.Clamp(thisOriginalDurability - otherOriginalDurability, 0, ProjectileData.Durability);
+        otherAmmo._durability = Math.Clamp(otherOriginalDurability - thisOriginalDurability, 0, otherAmmo.ProjectileData.Durability);
+        Debug.Log($"{_durability} / {ProjectileData.Durability}");
+        debugNumber.text = $"{_durability} / {ProjectileData.Durability}";
+        otherAmmo.debugNumber.text = $"{otherAmmo._durability} / {otherAmmo.ProjectileData.Durability}";
         otherAmmo.Collide();
         Collide();
     }
 
-    public void Collide() {
-        if (Explosive)
-            Disintegrate();
-        else
-            Debrify();
-        Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
-        rigidbody.AddForce(Vector3.left * (OwnerId == 0 ? 1f : -1f), ForceMode2D.Impulse);
+    public void Collide(bool hitTank = false) {
+        if (hitTank || _durability == 0) {
+            WreckAmmo();
+        }
     }
 
-    public void Disintegrate() {
+
+    private void WreckAmmo() {
+        if (Explosive) {
+            Disintegrate();
+        } else {
+            Debrify();
+            Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
+            rigidbody.AddForce(Vector3.left * (OwnerId == 0 ? 1f : -1f), ForceMode2D.Impulse);
+        }
+    }
+
+    private void Disintegrate() {
         Instantiate(Resources.Load<GameObject>("Prefabs/VFX/ExplosionEffect"), transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

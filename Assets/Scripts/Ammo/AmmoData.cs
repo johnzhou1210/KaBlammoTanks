@@ -24,4 +24,6 @@ public class AmmoData : ScriptableObject {
    public float LoadingTime;
    public UpgradeRecipe UpgradeRecipe;
    public Rarity Rarity;
+   public bool CanCollide;
+   public int Durability = 1;
 }

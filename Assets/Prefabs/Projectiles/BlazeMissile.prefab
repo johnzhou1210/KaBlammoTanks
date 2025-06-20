@@ -237,6 +237,10 @@ MonoBehaviour:
   OwnerId: -1
   ProjectileData: {fileID: 0}
   Explosive: 1
+  cleanupTime: 10
+  fadeTime: 3
+  fadeSteps: 15
+  debugNumber: {fileID: 618630513188362452}
 --- !u!1 &7525731560611490362
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class TankController : MonoBehaviour {
-    private const float UpperCannonHeight = 3.5f;
+    private const float UpperCannonHeight = 5.5f;
     [field: SerializeField] public GameObject Barrel { get; private set; }
     [field: SerializeField] public int TankMaxHealth { get; private set; } = 100;
     [field: SerializeField] public int TankId { get; private set; }
@@ -54,8 +54,7 @@ public class TankController : MonoBehaviour {
         projectile.transform.parent = AirFieldDelegates.GetAirFieldTransform?.Invoke();
         var moveScript = projectile.GetComponent<BezierProjectile>();
         var collisionChecker = projectile.GetComponent<AmmoCollision>();
-        collisionChecker.ProjectileData = projectileData;
-        collisionChecker.OwnerId = TankId;
+        collisionChecker.Initialize(TankId, projectileData);
         moveScript.Launch(startPos, endPos, archedTrajectory ? UpperCannonHeight : 0f, 10f / projectileData.Speed);
         if (TankId == 1) moveScript.FlipX();
         if (projectile.TryGetComponent(out AmmoRotate rotateScript)) rotateScript.ReverseRotation();

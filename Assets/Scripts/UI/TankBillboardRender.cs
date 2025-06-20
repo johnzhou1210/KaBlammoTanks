@@ -21,10 +21,10 @@ public class TankBillboardRender : MonoBehaviour {
         Slider targetSlider = id == 0 ? playerHealthSlider : enemyHealthSlider;
         TextMeshProUGUI targetText = id == 0 ? playerHealthText : enemyHealthText;
         
-        int currHealth = TankDelegates.GetTankHealthById?.Invoke(id) ?? 0;
-        int maxHealth = TankDelegates.GetTankMaxHealthById?.Invoke(id) ?? 0;
-        targetSlider.value = (float)currHealth / maxHealth;
-        targetText.text = $"{currHealth} / {maxHealth}";
+        // int currHealth = TankDelegates.GetTankHealthById?.Invoke(id) ?? 0;
+        // int maxHealth = TankDelegates.GetTankMaxHealthById?.Invoke(id) ?? 0;
+        // targetSlider.value = (float)currHealth / maxHealth;
+        // targetText.text = $"{currHealth} / {maxHealth}";
         
     }
     

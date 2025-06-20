@@ -19,11 +19,25 @@ ShaderVariantCollection:
         passType: 0
       - keywords: COLOR_FILTER EDGE_PLAIN TRANSITION_SHINY
         passType: 0
+      - keywords: COLOR_FILTER GRADATION_COLOR2
+        passType: 0
       - keywords: COLOR_FILTER GRADATION_RADIAL
         passType: 0
       - keywords: COLOR_FILTER GRADATION_RADIAL TRANSITION_SHINY
         passType: 0
+      - keywords: COLOR_FILTER TRANSITION_PATTERN
+        passType: 0
       - keywords: COLOR_FILTER TRANSITION_SHINY
+        passType: 0
+      - keywords: DETAIL_ADDITIVE
+        passType: 0
+      - keywords: DETAIL_MASKING
+        passType: 0
+      - keywords: DETAIL_MULTIPLY
+        passType: 0
+      - keywords: DETAIL_REPLACE
+        passType: 0
+      - keywords: DETAIL_SUBTRACTIVE
         passType: 0
       - keywords: EDGE_PLAIN
         passType: 0
@@ -39,6 +53,8 @@ ShaderVariantCollection:
         passType: 0
       - keywords: EDGE_PLAIN GRADATION_RADIAL
         passType: 0
+      - keywords: EDGE_PLAIN TRANSITION_PATTERN
+        passType: 0
       - keywords: EDGE_PLAIN TRANSITION_SHINY
         passType: 0
       - keywords: EDGE_SHINY
@@ -46,6 +62,8 @@ ShaderVariantCollection:
       - keywords: EDGE_SHINY GRADATION_COLOR2
         passType: 0
       - keywords: EDGE_SHINY GRADATION_GRADIENT UNITY_UI_ALPHACLIP
+        passType: 0
+      - keywords: EDGE_SHINY TRANSITION_PATTERN
         passType: 0
       - keywords: GRADATION_COLOR2
         passType: 0
@@ -58,6 +76,16 @@ ShaderVariantCollection:
       - keywords: GRADATION_GRADIENT UNITY_UI_ALPHACLIP
         passType: 0
       - keywords: GRADATION_RADIAL
+        passType: 0
+      - keywords: TRANSITION_CUTOFF
+        passType: 0
+      - keywords: TRANSITION_FADE
+        passType: 0
+      - keywords: TRANSITION_MASK
+        passType: 0
+      - keywords: TRANSITION_MELT
+        passType: 0
+      - keywords: TRANSITION_PATTERN
         passType: 0
       - keywords: TRANSITION_SHINY
         passType: 0

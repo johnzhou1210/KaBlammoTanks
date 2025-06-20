@@ -23,3 +23,5 @@ MonoBehaviour:
     CombineWith: {fileID: 0}
     UpgradesTo: {fileID: 0}
   Rarity: 0
+  CanCollide: 1
+  Durability: 1
