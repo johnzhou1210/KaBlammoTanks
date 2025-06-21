@@ -15,7 +15,7 @@ MonoBehaviour:
   AmmoName: Cataclysm Missile
   Icon: {fileID: 21300000, guid: c93ea626cbf4449dc87dc8256cb46f82, type: 3}
   Damage: 256
-  Speed: 0.5
+  Speed: 0.6
   ProjectilePrefab: {fileID: 1896137933994655150, guid: 62c56ca802bec47e5af10e2874c9ddf1, type: 3}
   Cost: 64
   LoadingTime: 0.5
@@ -25,3 +25,4 @@ MonoBehaviour:
   Rarity: 3
   CanCollide: 1
   Durability: 1
+  Explosive: 1

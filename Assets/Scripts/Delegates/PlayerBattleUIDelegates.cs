@@ -5,6 +5,8 @@ public class PlayerBattleUIDelegates {
     #region Funcs
 
     public static Func<RectTransform> GetDragLayerRectTransform;
+    public static Func<Transform> GetDamageIndicatorTransform;
+    public static Func<int, Vector3> GetHealthNumberUIPosition;
 
     #endregion
 

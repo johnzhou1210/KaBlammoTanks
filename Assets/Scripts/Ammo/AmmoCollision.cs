@@ -7,12 +7,10 @@ using UnityEngine;
 public class AmmoCollision : MonoBehaviour {
     public int OwnerId = -1;
     public AmmoData ProjectileData;
-    public bool Explosive;
     [SerializeField] private float cleanupTime = 10f, fadeTime = 3f;
     [SerializeField] private int fadeSteps = 15;
     [SerializeField, Child] private TextMeshPro debugNumber;
-
-    private bool _debrified = false;
+    
     private int _durability = 1;
 
 
@@ -53,11 +51,19 @@ public class AmmoCollision : MonoBehaviour {
         if (hitTank || _durability == 0) {
             WreckAmmo();
         }
+        if (hitTank) {
+            // Show damage indicator
+            GameObject DamageIndicatorPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/UI/DamageIndicator"), PlayerBattleUIDelegates.GetDamageIndicatorTransform?.Invoke());
+            Vector3 DamageIndicatorScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
+            DamageIndicatorScreenPosition.z = 0;
+            DamageIndicatorPrefab.transform.position = DamageIndicatorScreenPosition;
+            DamageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileData.Damage, OwnerId);
+        }
     }
 
 
     private void WreckAmmo() {
-        if (Explosive) {
+        if (ProjectileData.Explosive) {
             Disintegrate();
         } else {
             Debrify();

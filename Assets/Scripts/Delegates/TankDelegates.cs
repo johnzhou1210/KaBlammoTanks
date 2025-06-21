@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class TankDelegates
 {
@@ -30,5 +31,6 @@ public class TankDelegates
     public static Func<int, int> GetTankHealthById, GetTankMaxHealthById;
 
     #endregion
+
 }
 

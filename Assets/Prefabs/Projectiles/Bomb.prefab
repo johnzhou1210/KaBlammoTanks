@@ -411,3 +411,4 @@ MonoBehaviour:
   cleanupTime: 10
   fadeTime: 3
   fadeSteps: 15
+  debugNumber: {fileID: 726748737183896334}

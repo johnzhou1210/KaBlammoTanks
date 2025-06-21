@@ -26,4 +26,5 @@ public class AmmoData : ScriptableObject {
    public Rarity Rarity;
    public bool CanCollide;
    public int Durability = 1;
+   public bool Explosive;
 }

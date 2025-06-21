@@ -11,6 +11,8 @@ public class TankBillboardRender : MonoBehaviour {
 
     void OnEnable() {
         TankDelegates.OnUpdateTankHealthUI += UpdateHealth;
+
+        PlayerBattleUIDelegates.GetHealthNumberUIPosition = GetHealthNumberUIPosition;
     }
 
     void OnDisable() {
@@ -27,6 +29,10 @@ public class TankBillboardRender : MonoBehaviour {
         targetFill.fillAmount = (float)currHealth / maxHealth;
         targetText.text = $"{currHealth}\n{maxHealth}";
         
+    }
+
+    private Vector3 GetHealthNumberUIPosition(int tankId) {
+        return (tankId == 0 ? enemyFractionLine : playerFractionLine).transform.position;
     }
     
 }

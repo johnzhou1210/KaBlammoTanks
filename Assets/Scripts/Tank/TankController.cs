@@ -5,7 +5,7 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class TankController : MonoBehaviour {
-    private const float UpperCannonHeight = 5.5f;
+    private const float UpperCannonHeight = 5.2f;
     [field: SerializeField] public GameObject Barrel { get; private set; }
     [field: SerializeField] public int TankMaxHealth { get; private set; } = 100;
     [field: SerializeField] public int TankId { get; private set; }

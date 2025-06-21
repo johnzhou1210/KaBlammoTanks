@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd524b99e1d6d4638bfe889e4f8b1399, type: 3}
+  m_Name: Shield
+  m_EditorClassIdentifier: 
+  AmmoName: Shield
+  Icon: {fileID: 407898282721357089, guid: e08b573bf2d280e47bc2cc8095887202, type: 3}
+  Damage: 2
+  Speed: 0.5
+  ProjectilePrefab: {fileID: 1896137933994655150, guid: d2e88b529584e43009a08d311d82990c, type: 3}
+  Cost: 0
+  LoadingTime: 0.5
+  UpgradeRecipe:
+    CombineWith: {fileID: 0}
+    UpgradesTo: {fileID: 0}
+  Rarity: 0
+  CanCollide: 1
+  Durability: 1
+  Explosive: 0
