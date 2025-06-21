@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TankBillboardRender : MonoBehaviour {
-    [SerializeField] TextMeshProUGUI playerHealthText, enemyHealthText;
-    [SerializeField] Slider playerHealthSlider, enemyHealthSlider;
+    [SerializeField] TextMeshProUGUI playerHealthText, enemyHealthText, playerFractionLine, enemyFractionLine;
+    [SerializeField] Image playerHealthFill, enemyHealthFill;
 
 
     void OnEnable() {
@@ -18,13 +18,14 @@ public class TankBillboardRender : MonoBehaviour {
     }
 
     private void UpdateHealth(int id, int damage) {
-        Slider targetSlider = id == 0 ? playerHealthSlider : enemyHealthSlider;
+        Image targetFill = id == 0 ? playerHealthFill : enemyHealthFill;
+        TextMeshProUGUI targetFractionLine = id == 0 ? playerFractionLine : enemyFractionLine;
         TextMeshProUGUI targetText = id == 0 ? playerHealthText : enemyHealthText;
         
-        // int currHealth = TankDelegates.GetTankHealthById?.Invoke(id) ?? 0;
-        // int maxHealth = TankDelegates.GetTankMaxHealthById?.Invoke(id) ?? 0;
-        // targetSlider.value = (float)currHealth / maxHealth;
-        // targetText.text = $"{currHealth} / {maxHealth}";
+        int currHealth = TankDelegates.GetTankHealthById?.Invoke(id) ?? 0;
+        int maxHealth = TankDelegates.GetTankMaxHealthById?.Invoke(id) ?? 0;
+        targetFill.fillAmount = (float)currHealth / maxHealth;
+        targetText.text = $"{currHealth}\n{maxHealth}";
         
     }
     
