@@ -2262,7 +2262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Barrel>k__BackingField: {fileID: 1707928511}
-  <TankMaxHealth>k__BackingField: 1000
+  <TankMaxHealth>k__BackingField: 150
   <TankId>k__BackingField: 0
   EnemyAI: 0
 --- !u!1 &452807178
@@ -4850,7 +4850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Barrel>k__BackingField: {fileID: 715624406}
-  <TankMaxHealth>k__BackingField: 1000
+  <TankMaxHealth>k__BackingField: 150
   <TankId>k__BackingField: 1
   EnemyAI: 1
 --- !u!1 &1052846829

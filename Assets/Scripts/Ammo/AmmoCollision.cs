@@ -45,11 +45,16 @@ public class AmmoCollision : MonoBehaviour {
         otherAmmo.debugNumber.text = $"{otherAmmo._durability} / {otherAmmo.ProjectileData.Durability}";
         otherAmmo.Collide();
         Collide();
+        if (!ProjectileData.Explosive) {
+            Vector3 midpoint = (transform.position + otherAmmo.transform.position) * 0.5f;
+            Instantiate(Resources.Load<GameObject>("Prefabs/VFX/CollisionEffect"), midpoint, Quaternion.identity);
+        }
+        
     }
 
-    public void Collide(bool hitTank = false) {
+    public void Collide(bool hitTank = false, bool forceSparksIfNotExplosive = false) {
         if (hitTank || _durability == 0) {
-            WreckAmmo();
+            WreckAmmo(forceSparksIfNotExplosive);
         }
         if (hitTank) {
             // Show damage indicator
@@ -62,11 +67,14 @@ public class AmmoCollision : MonoBehaviour {
     }
 
 
-    private void WreckAmmo() {
+    private void WreckAmmo(bool forceSparksIfNotExplosive = false) {
         if (ProjectileData.Explosive) {
             Disintegrate();
         } else {
             Debrify();
+            if (forceSparksIfNotExplosive) {
+                Instantiate(Resources.Load<GameObject>("Prefabs/VFX/CollisionEffect"), transform.position, Quaternion.identity);
+            }
             Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
             rigidbody.AddForce(Vector3.left * (OwnerId == 0 ? 1f : -1f), ForceMode2D.Impulse);
         }
