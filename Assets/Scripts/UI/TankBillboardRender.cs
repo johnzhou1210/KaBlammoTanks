@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using KBCore.Refs;
 using TMPro;
 using UnityEngine;
@@ -25,14 +26,42 @@ public class TankBillboardRender : MonoBehaviour {
         TextMeshProUGUI targetText = id == 0 ? playerHealthText : enemyHealthText;
         
         int currHealth = TankDelegates.GetTankHealthById?.Invoke(id) ?? 0;
-        int maxHealth = TankDelegates.GetTankMaxHealthById?.Invoke(id) ?? 0;
-        targetFill.fillAmount = (float)currHealth / maxHealth;
-        targetText.text = $"{currHealth}\n{maxHealth}";
+        int maxHealth = TankDelegates.GetTankMaxHealthById?.Invoke(id) ?? 1;
+
+        float targetFillAmount = (float)currHealth / maxHealth;
+
+        DOTween.To(() => targetFill.fillAmount, x => targetFill.fillAmount = x, targetFillAmount, 0.5f).SetEase(Ease.OutCubic);
+
+        int prevHealth = 0;
+        if (int.TryParse(targetText.text.Split('\n')[0], out var parsed)) {
+            prevHealth = parsed;
+        }
+
+        DOTween.To(() => prevHealth, x => {
+            prevHealth = x;
+            targetText.text = $"{x}\n{maxHealth}";
+        }, currHealth, 0.5f).SetEase(Ease.OutCubic);
         
+        Color low = new Color(1f, 0.1f, 0.1f);  // red-ish
+        Color mid = new Color(1f, 1f, 0.1f);    // yellow-ish
+        Color white = Color.white;
+
+        Color targetColor;
+
+        if (targetFillAmount >= 0.5f) {
+            targetColor = white;
+        } else {
+            float t = targetFillAmount / 0.5f;  // scales 0–0.5 → 0–1
+            targetColor = Color.Lerp(low, mid, t);
+        }
+        
+        targetText.DOColor(targetColor, 0.5f).SetEase(Ease.OutCubic);
+        targetFractionLine.DOColor(targetColor, 0.5f).SetEase(Ease.OutCubic);
+
     }
 
     private Vector3 GetHealthNumberUIPosition(int tankId) {
-        return (tankId == 0 ? enemyFractionLine : playerFractionLine).transform.position;
+        return (tankId == 1 ? enemyFractionLine : playerFractionLine).transform.position;
     }
     
 }

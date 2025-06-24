@@ -7,11 +7,12 @@ using UnityEngine;
 public class DamageIndicator : MonoBehaviour {
     private int _damageNumber = 0;
     [SerializeField, Self] private TextMeshProUGUI damageNumberText;
-    [SerializeField, Parent] private CanvasGroup canvasGroup;
+    [SerializeField] private CanvasGroup canvasGroup;
 
-    private void OnValidate() {
-        this.ValidateRefs();
+    private void Start() {
+        canvasGroup = transform.parent.GetComponent<CanvasGroup>();
     }
+
 
     public void Initialize(int damageNumber, int tankId) {
         _damageNumber = damageNumber;
@@ -25,6 +26,7 @@ public class DamageIndicator : MonoBehaviour {
         seq.Append(transform.DOMove(floatUpPos, 0.3f).SetEase(Ease.OutQuad));
         seq.Append(transform.DOMove(targetPos, 0.4f).SetEase(Ease.InQuad));
         seq.Join(canvasGroup.DOFade(0f, 0.4f));
+        seq.AppendCallback(() => TankDelegates.InvokeOnTakeDamage(tankId, _damageNumber));
         seq.AppendCallback(() => Destroy(gameObject));
     }
 

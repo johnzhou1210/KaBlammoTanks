@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Shield
   m_EditorClassIdentifier: 
   AmmoName: Shield
-  Icon: {fileID: 407898282721357089, guid: e08b573bf2d280e47bc2cc8095887202, type: 3}
-  Damage: 2
-  Speed: 0.5
-  ProjectilePrefab: {fileID: 1896137933994655150, guid: d2e88b529584e43009a08d311d82990c, type: 3}
+  Icon: {fileID: 21300000, guid: 43804b7c8ed9742ae9a29df5ada15250, type: 3}
+  Damage: 1
+  Speed: 0.25
+  ProjectilePrefab: {fileID: 1896137933994655150, guid: d04eadec3d86142fdb6e946553761bc1, type: 3}
   Cost: 0
   LoadingTime: 0.5
   UpgradeRecipe:
     CombineWith: {fileID: 0}
     UpgradesTo: {fileID: 0}
-  Rarity: 0
+  Rarity: 1
   CanCollide: 1
-  Durability: 1
+  Durability: 3
   Explosive: 0

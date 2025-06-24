@@ -419,8 +419,8 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  m_GradationOffset: -0.02
-  m_GradationScale: 0.5143234
+  m_GradationOffset: 0
+  m_GradationScale: 0.5
   m_GradationRotation: 0
   m_AllowToModifyMeshShape: 1
   m_EdgeMode: 0
@@ -456,18 +456,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bec66edf90344812b70335f7cba4f5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_color1:
-    r: 0.035770353
-    g: 0
-    b: 0.3207547
-    a: 1
-  m_color2:
-    r: 0
-    g: 0
-    b: 0
-    a: 0
-  m_angle: 270
-  m_ignoreRatio: 1
 --- !u!114 &44769175
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -762,8 +750,8 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
-  m_GradationOffset: -0.02
-  m_GradationScale: 0.5143234
+  m_GradationOffset: 0
+  m_GradationScale: 0.5
   m_GradationRotation: 0
   m_AllowToModifyMeshShape: 1
   m_EdgeMode: 0
@@ -799,18 +787,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bec66edf90344812b70335f7cba4f5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_color1:
-    r: 0.035770353
-    g: 0
-    b: 0.3207547
-    a: 1
-  m_color2:
-    r: 0
-    g: 0
-    b: 0
-    a: 0
-  m_angle: 270
-  m_ignoreRatio: 1
 --- !u!1 &178721889
 GameObject:
   m_ObjectHideFlags: 0
@@ -2286,7 +2262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Barrel>k__BackingField: {fileID: 1707928511}
-  <TankMaxHealth>k__BackingField: 100
+  <TankMaxHealth>k__BackingField: 1000
   <TankId>k__BackingField: 0
   EnemyAI: 0
 --- !u!1 &452807178
@@ -4874,7 +4850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Barrel>k__BackingField: {fileID: 715624406}
-  <TankMaxHealth>k__BackingField: 100
+  <TankMaxHealth>k__BackingField: 1000
   <TankId>k__BackingField: 1
   EnemyAI: 1
 --- !u!1 &1052846829

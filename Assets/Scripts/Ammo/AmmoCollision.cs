@@ -57,7 +57,7 @@ public class AmmoCollision : MonoBehaviour {
             Vector3 DamageIndicatorScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
             DamageIndicatorScreenPosition.z = 0;
             DamageIndicatorPrefab.transform.position = DamageIndicatorScreenPosition;
-            DamageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileData.Damage, OwnerId);
+            DamageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileData.Damage, OwnerId == 0 ? 1 : 0 );
         }
     }
 
