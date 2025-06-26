@@ -22,7 +22,7 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         if (!ammoSlot.IsInteractable()) return;
 
         // if (!DragLock.TryStartDrag(eventData.pointerId)) return;
-        print("Item pointer down");
+        // print("Item pointer down");
         _pointerInside = true; // Assume pointer is down inside
         _pointerDownTime = Time.time;
     }
@@ -30,7 +30,7 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public void OnPointerExit(PointerEventData eventData) {
         if (!ammoSlot.IsInteractable()) return;
 
-        print("Pointer exited");
+        // print("Pointer exited");
         _pointerInside = false; // Mark as exited
     }
 
@@ -42,14 +42,14 @@ public class AmmoTapHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             float heldDuration = pointerUpTime - _pointerDownTime;
 
             if (_pointerInside && heldDuration <= _tapWindowThreshold) {
-                print("Item pointer up inside, registered");
+                // print("Item pointer up inside, registered");
                 AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/PopSound"), 1f);
                 PlayerBattleInputDelegates.InvokeOnShopAmmoTap(ammoSlot);
             } else {
-                print("Item pointer up inside, but cancelled");
+                // print("Item pointer up inside, but cancelled");
             }
         } else {
-            print("Item pointer up outside");
+            // print("Item pointer up outside");
         }
     }
 }

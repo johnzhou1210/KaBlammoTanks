@@ -236,7 +236,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OwnerId: -1
   ProjectileData: {fileID: 0}
-  Explosive: 1
   cleanupTime: 10
   fadeTime: 3
   fadeSteps: 15

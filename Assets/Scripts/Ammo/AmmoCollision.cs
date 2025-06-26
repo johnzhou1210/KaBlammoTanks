@@ -19,6 +19,7 @@ public class AmmoCollision : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D other) {
         if (!ProjectileData.CanCollide) return;
+        if (transform.parent != other.transform.parent) return;
         AmmoCollision otherAmmo = other.GetComponent<AmmoCollision>();
         if (otherAmmo == null) return;
         if (otherAmmo.OwnerId == OwnerId) return;
@@ -29,8 +30,6 @@ public class AmmoCollision : MonoBehaviour {
         OwnerId = ownerId;
         ProjectileData = projectileData;
         _durability = ProjectileData.Durability;
-        Debug.Log(debugNumber);
-        Debug.Log(debugNumber.text);
         debugNumber.text = $"{_durability} / {ProjectileData.Durability}";
     }
 
@@ -40,7 +39,7 @@ public class AmmoCollision : MonoBehaviour {
 
         _durability = Math.Clamp(thisOriginalDurability - otherOriginalDurability, 0, ProjectileData.Durability);
         otherAmmo._durability = Math.Clamp(otherOriginalDurability - thisOriginalDurability, 0, otherAmmo.ProjectileData.Durability);
-        Debug.Log($"{_durability} / {ProjectileData.Durability}");
+        // Debug.Log($"{_durability} / {ProjectileData.Durability}");
         debugNumber.text = $"{_durability} / {ProjectileData.Durability}";
         otherAmmo.debugNumber.text = $"{otherAmmo._durability} / {otherAmmo.ProjectileData.Durability}";
         otherAmmo.Collide();
@@ -91,9 +90,13 @@ public class AmmoCollision : MonoBehaviour {
         if (bezierScript != null) bezierScript.enabled = false;
         if (ammoRotateScript) ammoRotateScript.enabled = false;
 
-
-        gameObject.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
+        rigidbody.bodyType = RigidbodyType2D.Dynamic;
+        rigidbody.gravityScale = 0.5f;
+        rigidbody.mass = 1.2f;
+        
         gameObject.GetComponent<Collider2D>().isTrigger = false;
+        
 
 
         transform.parent = AirFieldDelegates.GetDebrisTransform?.Invoke();

@@ -65,5 +65,7 @@ public class TankController : MonoBehaviour {
         if (TankId != playerId) return;
         TankHealth = Math.Clamp(TankHealth - damage, 0, TankMaxHealth);
         TankDelegates.InvokeOnUpdateTankHealthUI(playerId, TankHealth);
+        // Check for game end condition
+        TankBattleDelegates.InvokeOnCheckIfBattleIsOver();
     }
 }

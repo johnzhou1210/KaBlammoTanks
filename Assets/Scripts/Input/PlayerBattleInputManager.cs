@@ -71,7 +71,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
         AnimateSelectionChanges();
         if (ammoSlot == null) return;
         AmmoData newAmmoData = ammoSlot.AmmoData;
-        print("Active ammo shop item set to " + newAmmoData.AmmoName);
+        // print("Active ammo shop item set to " + newAmmoData.AmmoName);
     }
 
     private void AnimateSelectionChanges() {
@@ -136,7 +136,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
                 if (currAmmoData.UpgradeRecipe.CombineWith != null) {
                     AmmoData entryInQuestion = currAmmoData.UpgradeRecipe.CombineWith;
                     if (!bagOfFreqs.TryAdd(entryInQuestion, 1)) {
-                        print("incremented 1 in drag area");
+                        // print("incremented 1 in drag area");
                         bagOfFreqs[entryInQuestion]++;
                     }
                 }
@@ -175,9 +175,8 @@ public class PlayerBattleInputManager : MonoBehaviour {
     }
 
     private void RemoveActiveAmmoShopItem() {
-        Debug.Log("IN HERE");
         _activeAmmoShopItem.GetComponent<Animator>().Play("AmmoCardConsume");
-        Debug.Log("Removed ammo shop item");
+        // Debug.Log("Removed ammo shop item");
         _activeAmmoShopItem = null;
     }
 

@@ -54,8 +54,6 @@ public class AmmoSlot : MonoBehaviour {
                 Debug.LogError("Unknown Rarity!");
                 break;
         }
-
-        Debug.Log("Set frame to stuff of rarity " + AmmoData.Rarity);
     }
 
     public bool IsInteractable() {
