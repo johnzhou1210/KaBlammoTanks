@@ -2578,7 +2578,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -3458,12 +3458,12 @@ GameObject:
   - component: {fileID: 716650622}
   - component: {fileID: 716650621}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: BattleStatusPopup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &716650620
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4775,6 +4775,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058cbe823d852447f8a3eedfe9528b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battleStatusPopup: {fileID: 716650619}
+  postProcessingVolume: {fileID: 1005892299}
+  winVolumeProfile: {fileID: 11400000, guid: 6d397f6b4074e426985ea03dfedd87ed, type: 2}
+  loseVolumeProfile: {fileID: 11400000, guid: 8df85da358adc4c97a2b6ce3ece4de29, type: 2}
 --- !u!4 &960343212
 Transform:
   m_ObjectHideFlags: 0
@@ -4974,6 +4978,55 @@ MonoBehaviour:
   <TankMaxHealth>k__BackingField: 150
   <TankId>k__BackingField: 1
   EnemyAI: 1
+--- !u!1 &1005892298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1005892300}
+  - component: {fileID: 1005892299}
+  m_Layer: 0
+  m_Name: PostProcessing
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1005892299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005892298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 3f9215ea0144899419cfbc0957140d3f, type: 2}
+--- !u!4 &1005892300
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1005892298}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -112.55316, y: -14.514954, z: -4.3758607}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1052846829
 GameObject:
   m_ObjectHideFlags: 0
@@ -8237,3 +8290,4 @@ SceneRoots:
   - {fileID: 1359192708}
   - {fileID: 622474817}
   - {fileID: 960343212}
+  - {fileID: 1005892300}

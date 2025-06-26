@@ -1,5 +1,7 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public enum BattleResult {
     PLAYER_VICTORY,
@@ -10,6 +12,10 @@ public enum BattleResult {
 
 public class TankBattleManager : MonoBehaviour {
     private BattleResult _battleStatus = BattleResult.IN_PROGRESS;
+    [SerializeField] private GameObject battleStatusPopup;
+    [SerializeField] private Volume postProcessingVolume;
+    [SerializeField] private VolumeProfile winVolumeProfile, loseVolumeProfile;
+    
     private void OnEnable() {
         TankBattleDelegates.CheckIfBattleIsOver += CheckIfBattleOver;
     }
@@ -24,7 +30,7 @@ public class TankBattleManager : MonoBehaviour {
         _battleStatus = GetBattleStatus();
         if (_battleStatus != BattleResult.IN_PROGRESS) {
             print(_battleStatus);
-            EndBattle();
+            Invoke(nameof(EndBattle), 1f);
         }
     }
 
@@ -39,12 +45,20 @@ public class TankBattleManager : MonoBehaviour {
     }
 
     private void EndBattle() {
+        battleStatusPopup.SetActive(true);
+        TextMeshProUGUI battleStatusText = battleStatusPopup.GetComponentInChildren<TextMeshProUGUI>();
+        Time.timeScale = 0f;
         switch (_battleStatus) {
             case BattleResult.PLAYER_VICTORY:
+                battleStatusText.text = "VICTORY";
+                postProcessingVolume.profile = winVolumeProfile;
                 break;
             case BattleResult.ENEMY_VICTORY:
+                battleStatusText.text = "DEFEAT";
+                postProcessingVolume.profile = loseVolumeProfile;
                 break;
             case BattleResult.STALEMATE:
+                battleStatusText.text = "STALEMATE";
                 break;
             default:
                 Debug.LogError("Invalid battle status stored in _battleStatus variable!");
