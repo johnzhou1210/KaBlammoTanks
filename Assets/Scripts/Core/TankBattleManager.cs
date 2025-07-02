@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -12,16 +13,16 @@ public enum BattleResult {
 
 public class TankBattleManager : MonoBehaviour {
     private BattleResult _battleStatus = BattleResult.IN_PROGRESS;
-    [SerializeField] private GameObject battleStatusPopup;
+    [SerializeField] private GameObject battleStatusPopup, countdownPopup;
     [SerializeField] private Volume postProcessingVolume;
     [SerializeField] private VolumeProfile winVolumeProfile, loseVolumeProfile;
     
     private void OnEnable() {
-        TankBattleDelegates.CheckIfBattleIsOver += CheckIfBattleOver;
+        TankBattleDelegates.OnCheckIfBattleIsOver += CheckIfBattleOver;
     }
 
     private void OnDisable() {
-        TankBattleDelegates.CheckIfBattleIsOver -= CheckIfBattleOver;
+        TankBattleDelegates.OnCheckIfBattleIsOver -= CheckIfBattleOver;
     }
 
     private void CheckIfBattleOver() {
@@ -64,6 +65,32 @@ public class TankBattleManager : MonoBehaviour {
                 Debug.LogError("Invalid battle status stored in _battleStatus variable!");
                 break;
         }
+    }
+
+    private void Start() {
+        StartCoroutine(BattleStartCountdown());
+    }
+
+    private IEnumerator StartBattle() {
+        yield return null;
+    }
+
+    private IEnumerator BattleStartCountdown() {
+        int countdownTime = 3;
+        countdownPopup.SetActive(true);
+        TextMeshProUGUI battleCountdownText = countdownPopup.GetComponentInChildren<TextMeshProUGUI>();
+        for (int i = countdownTime; i > 0; i--) {
+            AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/CinematicHit"), 1f);
+            battleCountdownText.text = i.ToString();
+            yield return new WaitForSeconds(1f);
+        }
+        AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/CannonFire"), 1f);
+        battleCountdownText.text = "FIGHT!";
+        yield return new WaitForSeconds(3f);
+        countdownPopup.SetActive(false);
+        TankBattleDelegates.InvokeOnInitTanks();
+        
+        
     }
 
 }

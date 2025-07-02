@@ -5,10 +5,15 @@ public class TankBattleDelegates
 {
     #region Events
 
-    public static event Action CheckIfBattleIsOver;
+    public static event Action OnCheckIfBattleIsOver;
+    public static event Action OnInitTanks;
 
     public static void InvokeOnCheckIfBattleIsOver() {
-        CheckIfBattleIsOver?.Invoke();
+        OnCheckIfBattleIsOver?.Invoke();
+    }
+
+    public static void InvokeOnInitTanks() {
+        OnInitTanks?.Invoke();
     }
 
     #endregion

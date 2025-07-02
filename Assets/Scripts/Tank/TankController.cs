@@ -14,18 +14,19 @@ public class TankController : MonoBehaviour {
 
     private void Start() {
         TankHealth = TankMaxHealth;
-        if (EnemyAI) StartCoroutine(EnemyAICoroutine());
         TankDelegates.InvokeOnUpdateTankHealthUI(TankId, TankHealth);
     }
 
     private void OnEnable() {
         TankDelegates.OnProjectileFire += FireProjectile;
         TankDelegates.OnTakeDamage += TakeDamage;
+        TankBattleDelegates.OnInitTanks += InitTank;
     }
 
     private void OnDisable() {
         TankDelegates.OnProjectileFire -= FireProjectile;
         TankDelegates.OnTakeDamage -= TakeDamage;
+        TankBattleDelegates.OnInitTanks -= InitTank;
     }
 
     private IEnumerator EnemyAICoroutine() {
@@ -67,5 +68,9 @@ public class TankController : MonoBehaviour {
         TankDelegates.InvokeOnUpdateTankHealthUI(playerId, TankHealth);
         // Check for game end condition
         TankBattleDelegates.InvokeOnCheckIfBattleIsOver();
+    }
+
+    private void InitTank() {
+        if (EnemyAI) StartCoroutine(EnemyAICoroutine());
     }
 }

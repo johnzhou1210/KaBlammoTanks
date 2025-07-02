@@ -43,6 +43,8 @@ ShaderVariantCollection:
         passType: 0
       - keywords: EDGE_PLAIN GRADATION_COLOR2
         passType: 0
+      - keywords: EDGE_PLAIN GRADATION_GRADIENT
+        passType: 0
       - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_PATTERN UNITY_UI_ALPHACLIP
         passType: 0
       - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_SHINY
@@ -97,6 +99,8 @@ ShaderVariantCollection:
       - keywords: COLOR_FILTER EDGE_PLAIN TRANSITION_SHINY
         passType: 0
       - keywords: EDGE_PLAIN
+        passType: 0
+      - keywords: EDGE_PLAIN GRADATION_GRADIENT
         passType: 0
       - keywords: EDGE_PLAIN GRADATION_GRADIENT TRANSITION_SHINY
         passType: 0
