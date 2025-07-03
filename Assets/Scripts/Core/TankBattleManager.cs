@@ -86,7 +86,7 @@ public class TankBattleManager : MonoBehaviour {
         }
         AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/CannonFire"), 1f);
         battleCountdownText.text = "FIGHT!";
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(1f);
         countdownPopup.SetActive(false);
         TankBattleDelegates.InvokeOnInitTanks();
         
