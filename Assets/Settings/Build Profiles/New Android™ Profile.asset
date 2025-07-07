@@ -171,13 +171,7 @@ MonoBehaviour:
         2}'
     - line: '|   - {fileID: 11400000, guid: eabf680f0540b438f8e30e25a82a8646, type:
         2}'
-    - line: '|   - {fileID: 11400000, guid: fa79cf70fe128408eac1d898db2ef1ff, type:
-        2}'
-    - line: '|   - {fileID: 3962006718452862873, guid: cf6bee89b2f054aa287a3b86091ee6c0,
-        type: 2}'
-    - line: '|   - {fileID: 11400000, guid: 2bb9e6c90b6564d02b6617fd728679c8, type:
-        2}'
-    - line: '|   - {fileID: 11400000, guid: 351a2b58c96c14644a4d72688144c480, type:
+    - line: '|   - {fileID: 11400000, guid: e442ce8fe0cbd4e01bf31a91f2dcec8f, type:
         2}'
     - line: '|   metroInputSource: 0'
     - line: '|   wsaTransparentSwapchain: 0'
