@@ -51,7 +51,7 @@ public class TankController : MonoBehaviour {
 
     private IEnumerator FireCoroutine(AmmoData projectileData, Vector3 startPos, Vector3 endPos,
         bool archedTrajectory) {
-        var projectile = Instantiate(projectileData.ProjectilePrefab, startPos, quaternion.identity);
+        var projectile = Instantiate(projectileData.ProjectilePrefab, startPos, Quaternion.identity);
         projectile.transform.parent = AirFieldDelegates.GetAirFieldTransform?.Invoke();
         var moveScript = projectile.GetComponent<BezierProjectile>();
         var collisionChecker = projectile.GetComponent<AmmoCollision>();

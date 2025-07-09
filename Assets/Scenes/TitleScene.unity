@@ -1356,11 +1356,11 @@ GameObject:
   m_Component:
   - component: {fileID: 1646338844}
   - component: {fileID: 1646338843}
-  - component: {fileID: 1646338842}
   - component: {fileID: 1646338841}
   - component: {fileID: 1646338840}
   - component: {fileID: 1646338846}
   - component: {fileID: 1646338845}
+  - component: {fileID: 1646338847}
   m_Layer: 0
   m_Name: NetworkManagerObject
   m_TagString: Untagged
@@ -1394,30 +1394,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetX: 50
   offsetY: 0
---- !u!114 &1646338842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1646338839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  port: 7777
-  NoDelay: 1
-  SendTimeout: 5000
-  ReceiveTimeout: 30000
-  serverMaxMessageSize: 16384
-  serverMaxReceivesPerTick: 10000
-  serverSendQueueLimitPerConnection: 10000
-  serverReceiveQueueLimitPerConnection: 10000
-  clientMaxMessageSize: 16384
-  clientMaxReceivesPerTick: 1000
-  clientSendQueueLimit: 10000
-  clientReceiveQueueLimit: 10000
 --- !u!114 &1646338843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1446,7 +1422,7 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 84848519527932435, guid: 92e03575917914ac3b8a6ff34b6bffa3, type: 3}
   autoCreatePlayer: 1
-  playerSpawnMethod: 0
+  playerSpawnMethod: 1
   spawnPrefabs: []
   exceptionsDisconnect: 1
   snapshotSettings:
@@ -1507,7 +1483,7 @@ MonoBehaviour:
   BroadcastAddress: 
   serverBroadcastListenPort: 47777
   ActiveDiscoveryInterval: 3
-  transport: {fileID: 1646338842}
+  transport: {fileID: 1646338847}
   OnServerFound:
     m_PersistentCalls:
       m_Calls:
@@ -1524,6 +1500,35 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   secretHandshake: -185599928354720265
+--- !u!114 &1646338847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646338839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  port: 7777
+  DualMode: 1
+  NoDelay: 1
+  Interval: 10
+  Timeout: 10000
+  RecvBufferSize: 7361536
+  SendBufferSize: 7361536
+  FastResend: 2
+  ReceiveWindowSize: 4096
+  SendWindowSize: 4096
+  MaxRetransmit: 40
+  MaximizeSocketBuffers: 1
+  ReliableMaxMessageSize: 297433
+  UnreliableMaxMessageSize: 1194
+  debugLog: 0
+  statisticsGUI: 0
+  statisticsLog: 0
 --- !u!1 &1821925355
 GameObject:
   m_ObjectHideFlags: 0
