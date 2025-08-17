@@ -3,6 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Unity.Netcode;
 
 public enum BattleResult {
     PLAYER_VICTORY,
@@ -11,7 +12,7 @@ public enum BattleResult {
     IN_PROGRESS
 }
 
-public class TankBattleManager : MonoBehaviour {
+public class TankBattleManager : NetworkBehaviour {
     private BattleResult _battleStatus = BattleResult.IN_PROGRESS;
     [SerializeField] private GameObject battleStatusPopup, countdownPopup;
     [SerializeField] private Volume postProcessingVolume;
@@ -65,6 +66,7 @@ public class TankBattleManager : MonoBehaviour {
                 Debug.LogError("Invalid battle status stored in _battleStatus variable!");
                 break;
         }
+        
     }
 
     private void Start() {

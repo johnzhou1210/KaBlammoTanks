@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEditor;
@@ -8,16 +9,21 @@ using Random = UnityEngine.Random;
 
 public class PlayerNetwork : NetworkBehaviour {
     [SerializeField] private InputAction moveAction;
-    [SerializeField] private InputAction buttonAction;
+    [SerializeField] private InputAction createAction, deleteAction;
 
+    [SerializeField] private Transform spawnedObjectPrefab;
+    private Transform spawnedObjectTransform;
+    
     private void OnEnable() {
         moveAction.Enable();
-        buttonAction.Enable();
+        createAction.Enable();
+        deleteAction.Enable();
     }
 
     private void OnDisable() {
         moveAction.Disable();
-        buttonAction.Disable();
+        createAction.Disable();
+        deleteAction.Disable();
     }
 
     public override void OnNetworkSpawn() {
@@ -47,16 +53,37 @@ public class PlayerNetwork : NetworkBehaviour {
         
         if (!IsOwner) return;
 
-        if (buttonAction.triggered) {
-            randomNumber.Value = new MyCustomData {
-                _int = Random.Range(0, 100),
-                _bool = Random.Range(0,2) == 0,
-                message = new FixedString128Bytes("Hello World!")
-            };
+        if (createAction.triggered) {
+            spawnedObjectTransform = Instantiate(spawnedObjectPrefab);
+            spawnedObjectTransform.GetComponent<NetworkObject>().Spawn(true);
+
+            // TestServerRpc(new ServerRpcParams());
+            // TestClientRpc(new ClientRpcParams{Send = new ClientRpcSendParams { TargetClientIds = new List<ulong>{1}}} );
+            // randomNumber.Value = new MyCustomData {
+            //     _int = Random.Range(0, 100),
+            //     _bool = Random.Range(0,2) == 0,
+            //     message = new FixedString128Bytes("Hello World!")
+            // };
+        }
+
+        if (deleteAction.triggered) {
+            Destroy(spawnedObjectTransform.gameObject);
         }
         
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 movement = new Vector3(input.x, input.y, 0f) * (1f * Time.deltaTime);
         transform.Translate(movement);
     }
+
+
+    [ServerRpc]
+    private void TestServerRpc(ServerRpcParams serverRpcParams) {
+        Debug.Log("TestServerRpc" + OwnerClientId + ": " + serverRpcParams.Receive.SenderClientId);
+    }
+
+    [ClientRpc]
+    private void TestClientRpc(ClientRpcParams clientRpcParams) {
+        Debug.Log("Testing client rpc");
+    }
+    
 }

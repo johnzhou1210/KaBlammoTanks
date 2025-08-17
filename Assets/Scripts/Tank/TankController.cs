@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using Unity.Mathematics;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class TankController : MonoBehaviour {
+public class TankController : NetworkBehaviour {
     private const float UpperCannonHeight = 5.2f;
     [field: SerializeField] public GameObject Barrel { get; private set; }
     [field: SerializeField] public int TankMaxHealth { get; private set; } = 100;

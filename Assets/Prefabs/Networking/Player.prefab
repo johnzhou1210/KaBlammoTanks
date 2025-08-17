@@ -122,23 +122,41 @@ MonoBehaviour:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
-  buttonAction:
-    m_Name: Button
-    m_Type: 1
-    m_ExpectedControlType: Button
-    m_Id: c697a8bc-3d12-40b7-8dbd-522547d90a86
+  createAction:
+    m_Name: Create
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: af71047c-7a2d-4c4b-a5a9-f6178b814040
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
     - m_Name: 
-      m_Id: 95b06dce-a2d1-48fd-b0a3-f262083f23dc
+      m_Id: 80a36756-8918-41d0-b393-35a8e878baf5
       m_Path: <Keyboard>/f
       m_Interactions: 
       m_Processors: 
       m_Groups: 
-      m_Action: Button
+      m_Action: Create
       m_Flags: 0
     m_Flags: 0
+  deleteAction:
+    m_Name: Delete
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 6f392458-346a-4ca8-a6fa-eba2b9e73d58
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 78d9b183-bb31-4e96-a0c3-2cdfc98b75b4
+      m_Path: <Keyboard>/x
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Delete
+      m_Flags: 0
+    m_Flags: 0
+  spawnedObjectPrefab: {fileID: 8872928875786827428, guid: 5417c47d59d9d4a878bd41adb64845a1, type: 3}
 --- !u!114 &5914987856732140370
 MonoBehaviour:
   m_ObjectHideFlags: 0

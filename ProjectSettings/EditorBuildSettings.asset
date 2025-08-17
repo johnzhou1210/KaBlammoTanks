@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/BattleScene.unity
     guid: 342334a0cc305b34481235e701c17aee
+  - enabled: 1
+    path: Assets/Scenes/BoostrapScene.unity
+    guid: f22813abb6067458eacf663b0077edea
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 2bb9e6c90b6564d02b6617fd728679c8, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: cf6bee89b2f054aa287a3b86091ee6c0, type: 2}
