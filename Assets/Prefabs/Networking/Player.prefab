@@ -122,6 +122,23 @@ MonoBehaviour:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
+  buttonAction:
+    m_Name: Button
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: c697a8bc-3d12-40b7-8dbd-522547d90a86
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 95b06dce-a2d1-48fd-b0a3-f262083f23dc
+      m_Path: <Keyboard>/f
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Button
+      m_Flags: 0
+    m_Flags: 0
 --- !u!114 &5914987856732140370
 MonoBehaviour:
   m_ObjectHideFlags: 0
