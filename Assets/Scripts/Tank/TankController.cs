@@ -72,6 +72,6 @@ public class TankController : NetworkBehaviour {
     }
 
     private void InitTank() {
-        if (EnemyAI) StartCoroutine(EnemyAICoroutine());
+        // if (EnemyAI) StartCoroutine(EnemyAICoroutine());
     }
 }

@@ -44,7 +44,7 @@ public class GameManager : NetworkBehaviour {
         if (state.Value == GameState.Lobby) {
             state.Value = GameState.Playing;
 
-            NetworkSceneManager.Instance.LoadGameScene();
+            // ProjectSceneManager.Instance.LoadArenaScene();
         }
     }
 
@@ -61,7 +61,7 @@ public class GameManager : NetworkBehaviour {
     public void ResetToLobbyServerRpc() {
         if (state.Value == GameState.Results) {
             state.Value = GameState.Lobby;
-            NetworkSceneManager.Instance.LoadLobbyScene();
+            // ProjectSceneManager.Instance.LoadLobbyScene();
         }
     }
     

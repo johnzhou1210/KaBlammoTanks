@@ -144,6 +144,8 @@ PlayerSettings:
   preloadedAssets:
   - {fileID: 11400000, guid: f519797609f41458984d6a61a9a29f44, type: 2}
   - {fileID: 11400000, guid: e442ce8fe0cbd4e01bf31a91f2dcec8f, type: 2}
+  - {fileID: 11400000, guid: eabf680f0540b438f8e30e25a82a8646, type: 2}
+  - {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -296,7 +298,9 @@ PlayerSettings:
   m_BuildTargetPlatformIcons:
   - m_BuildTarget: Android
     m_Icons:
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: a2dcdbe843de440e8bf4f8aefcec82fe, type: 3}
+      - {fileID: 2800000, guid: a2dcdbe843de440e8bf4f8aefcec82fe, type: 3}
       m_Width: 432
       m_Height: 432
       m_Kind: 2

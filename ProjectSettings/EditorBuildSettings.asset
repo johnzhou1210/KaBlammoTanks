@@ -6,14 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TitleScene.unity
-    guid: a1a603ff254184e9982d31cdbf80f073
-  - enabled: 1
-    path: Assets/Scenes/BattleScene.unity
-    guid: 342334a0cc305b34481235e701c17aee
-  - enabled: 1
     path: Assets/Scenes/BoostrapScene.unity
     guid: f22813abb6067458eacf663b0077edea
+  - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: abb9560cf29d845519d8409dd0ab7511
+  - enabled: 1
+    path: Assets/Scenes/ArenaScene/ArenaScene.unity
+    guid: 0c4a34b347ebe484f97eb0fdc9c55ca2
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 2bb9e6c90b6564d02b6617fd728679c8, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: cf6bee89b2f054aa287a3b86091ee6c0, type: 2}
