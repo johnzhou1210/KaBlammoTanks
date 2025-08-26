@@ -1,24 +1,26 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class TankDelegates
 {
     #region Events
 
-    public static event Action<AmmoData, bool, int> OnProjectileFire;
-    public static event Action<int, int> OnTakeDamage, OnUpdateTankHealthUI;
+    public static event Action<AmmoRequest, bool> OnProjectileFire;
+    public static event Action<ulong, int> OnUpdateTankHealthUI;
+    public static event Action<ulong, int> OnTakeDamage;
 
-    public static void InvokeOnProjectileFire(AmmoData ammoData, bool isUpperCannon, int playerId)
+    public static void InvokeOnProjectileFire(AmmoRequest request, bool isUpperCannon)
     {
-        OnProjectileFire?.Invoke(ammoData, isUpperCannon, playerId);
+        OnProjectileFire?.Invoke(request, isUpperCannon);
     }
 
-    public static void InvokeOnTakeDamage(int playerId, int damage)
+    public static void InvokeOnTakeDamage(ulong targetId, int damage)
     {
-        OnTakeDamage?.Invoke(playerId, damage);
+        OnTakeDamage?.Invoke(targetId, damage);
     }
 
-    public static void InvokeOnUpdateTankHealthUI(int playerId, int health)
+    public static void InvokeOnUpdateTankHealthUI(ulong playerId, int health)
     {
         OnUpdateTankHealthUI?.Invoke(playerId, health);
     }
@@ -27,8 +29,8 @@ public class TankDelegates
 
     #region Funcs
 
-    public static Func<int, TankController> GetTankControllerById;
-    public static Func<int, int> GetTankHealthById, GetTankMaxHealthById;
+    public static Func<ulong, TankController> GetTankControllerById;
+    public static Func<ulong, int> GetTankHealthById, GetTankMaxHealthById;
 
     #endregion
 

@@ -14,7 +14,7 @@ public class DamageIndicator : MonoBehaviour {
     }
 
 
-    public void Initialize(int damageNumber, int tankId) {
+    public void Initialize(int damageNumber, ulong tankId) {
         _damageNumber = damageNumber;
         damageNumberText.text = _damageNumber.ToString();
 

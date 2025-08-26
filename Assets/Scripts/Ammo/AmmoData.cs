@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 [System.Serializable]
@@ -27,4 +28,14 @@ public class AmmoData : ScriptableObject {
    public bool CanCollide;
    public int Durability = 1;
    public bool Explosive;
+}
+
+public struct AmmoRequest : INetworkSerializable {
+   public string AmmoName;
+   public bool IsValid;
+
+   public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter {
+      serializer.SerializeValue(ref AmmoName);
+      
+   }
 }

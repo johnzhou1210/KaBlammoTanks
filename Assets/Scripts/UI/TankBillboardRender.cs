@@ -11,16 +11,16 @@ public class TankBillboardRender : MonoBehaviour {
 
 
     void OnEnable() {
-        TankDelegates.OnUpdateTankHealthUI += UpdateHealth;
+        // TankDelegates.OnUpdateTankHealthUI += UpdateHealth;
 
         PlayerBattleUIDelegates.GetHealthNumberUIPosition = GetHealthNumberUIPosition;
     }
 
     void OnDisable() {
-        TankDelegates.OnUpdateTankHealthUI -= UpdateHealth;
+        // TankDelegates.OnUpdateTankHealthUI -= UpdateHealth;
     }
 
-    private void UpdateHealth(int id, int damage) {
+    private void UpdateHealth(ulong id, int damage) {
         Image targetFill = id == 0 ? playerHealthFill : enemyHealthFill;
         TextMeshProUGUI targetFractionLine = id == 0 ? playerFractionLine : enemyFractionLine;
         TextMeshProUGUI targetText = id == 0 ? playerHealthText : enemyHealthText;
@@ -60,7 +60,7 @@ public class TankBillboardRender : MonoBehaviour {
 
     }
 
-    private Vector3 GetHealthNumberUIPosition(int tankId) {
+    private Vector3 GetHealthNumberUIPosition(ulong tankId) {
         return (tankId == 1 ? enemyFractionLine : playerFractionLine).transform.position;
     }
     

@@ -1,5 +1,7 @@
 using System;
+using Unity.Netcode;
 using UnityEditor;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,12 +14,14 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
    Color originalSlotBackgroundColor;
    float _currentFireLoadingTime = 0.25f;
 
-   AmmoData _loadedAmmoData;
+   AmmoRequest _loadedAmmoRequest;
    bool _firingInProgress = false;
    private float _loadingTimer = 0f;
+   private TankController _localTank;
 
    void Start() {
       originalSlotBackgroundColor = slotBackgroundImage.color;
+      _localTank = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<TankController>();
    }
 
    void OnEnable() {
@@ -47,7 +51,11 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
             _currentFireLoadingTime = currAmmoData.LoadingTime;
             _loadingTimer = 0f;
             _firingInProgress = true;
-            _loadedAmmoData = currAmmoData;
+            AmmoRequest currAmmoRequest = new AmmoRequest {
+               AmmoName = currAmmoData.AmmoName,
+               IsValid = true
+            };
+            _loadedAmmoRequest = currAmmoRequest;
             selectedShopSlot.SetIsInteractable(false);
             PlayerBattleInputDelegates.InvokeOnRemoveActiveAmmoShopItem();
          }
@@ -66,8 +74,8 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
          loadingFill.fillAmount = 0f;
          if (_firingInProgress) {
             _firingInProgress = false;
-            InitiateFire(_loadedAmmoData);
-            _loadedAmmoData = null;
+            InitiateFire(_loadedAmmoRequest);
+            _loadedAmmoRequest.IsValid = false;
          }
          return;  
       }
@@ -79,8 +87,12 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
       return Mathf.Approximately(-1f, _loadingTimer) || _loadingTimer >= _currentFireLoadingTime;
    }
 
-   private void InitiateFire(AmmoData ammoData) {
-      TankDelegates.InvokeOnProjectileFire(ammoData, IsUpperCannon, 0);
+   private void InitiateFire(AmmoRequest ammoRequest) {
+      // TankDelegates.InvokeOnProjectileFire(ammoRequest, IsUpperCannon);
+      if (_localTank != null && _localTank.IsOwner) {
+         _localTank.FireProjectileServerRpc(ammoRequest, IsUpperCannon);
+      }
+      
    }
 
 }

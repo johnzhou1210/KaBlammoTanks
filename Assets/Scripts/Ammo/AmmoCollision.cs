@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using KBCore.Refs;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class AmmoCollision : MonoBehaviour {
-    public int OwnerId = -1;
+public class AmmoCollision : NetworkBehaviour {
+    public ulong OwnerId = 0;
     public AmmoData ProjectileData;
     [SerializeField] private float cleanupTime = 10f, fadeTime = 3f;
     [SerializeField] private int fadeSteps = 15;
@@ -26,8 +27,8 @@ public class AmmoCollision : MonoBehaviour {
         ExchangeBlows(otherAmmo);
     }
 
-    public void Initialize(int ownerId, AmmoData projectileData) {
-        OwnerId = ownerId;
+    public void Initialize(ulong ownerId, AmmoData projectileData) {
+        OwnerId = NetworkManager.Singleton.LocalClientId;
         ProjectileData = projectileData;
         _durability = ProjectileData.Durability;
         debugNumber.text = $"{_durability} / {ProjectileData.Durability}";
@@ -61,7 +62,7 @@ public class AmmoCollision : MonoBehaviour {
             Vector3 DamageIndicatorScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
             DamageIndicatorScreenPosition.z = 0;
             DamageIndicatorPrefab.transform.position = DamageIndicatorScreenPosition;
-            DamageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileData.Damage, OwnerId == 0 ? 1 : 0 );
+            DamageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileData.Damage, OwnerId == 0 ?  (ulong) 1 : 0 );
         }
     }
 

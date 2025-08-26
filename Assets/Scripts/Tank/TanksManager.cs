@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 
-public class TanksManager : MonoBehaviour
+public class TanksManager : NetworkBehaviour
 {
     [SerializeField] private TankController[] tankControllers;
     void OnEnable() {
         TankDelegates.GetTankControllerById = (id) => {
-            return tankControllers.FirstOrDefault(e => e.TankId == id);
+            return tankControllers.FirstOrDefault(e => e.OwnerClientId == id);
         };
 
         TankDelegates.GetTankHealthById = (id) => {

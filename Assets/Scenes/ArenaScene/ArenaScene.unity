@@ -2015,6 +2015,7 @@ GameObject:
   m_Component:
   - component: {fileID: 373364486}
   - component: {fileID: 373364485}
+  - component: {fileID: 373364488}
   - component: {fileID: 373364487}
   m_Layer: 0
   m_Name: PlayerTank
@@ -2112,6 +2113,31 @@ MonoBehaviour:
   <TankMaxHealth>k__BackingField: 150
   <TankId>k__BackingField: 0
   EnemyAI: 0
+--- !u!114 &373364488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373364484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 74499763
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &452807178
 GameObject:
   m_ObjectHideFlags: 0
@@ -4682,6 +4708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1001986293}
   - component: {fileID: 1001986292}
+  - component: {fileID: 1001986295}
   - component: {fileID: 1001986294}
   m_Layer: 0
   m_Name: EnemyTank
@@ -4779,6 +4806,31 @@ MonoBehaviour:
   <TankMaxHealth>k__BackingField: 150
   <TankId>k__BackingField: 1
   EnemyAI: 0
+--- !u!114 &1001986295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001986291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1570962989
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 0
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
 --- !u!1 &1005892298
 GameObject:
   m_ObjectHideFlags: 0
