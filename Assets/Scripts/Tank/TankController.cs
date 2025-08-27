@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class TankController : NetworkBehaviour {
     private const float UpperCannonHeight = 5.2f;
-    [field: SerializeField] public GameObject Barrel { get; private set; }
+    public GameObject Tank { get; private set; }
     [field: SerializeField] public int TankMaxHealth { get; private set; } = 100;
     [SerializeField] private bool EnemyAI;
     public int TankHealth { get; private set; }
@@ -21,6 +21,11 @@ public class TankController : NetworkBehaviour {
         // TankDelegates.OnProjectileFire += FireProjectileServerRpc;
         // TankDelegates.OnTakeDamage += TakeDamageServerRpc;
         TankBattleDelegates.OnInitTanks += InitTank;
+        if (NetworkManager.Singleton.IsHost) {
+            Tank = GameObject.FindGameObjectWithTag("HostTank");
+        } else {
+            Tank = GameObject.FindGameObjectWithTag("HosteeTank");
+        }
     }
 
     private void OnDisable() {
@@ -51,23 +56,25 @@ public class TankController : NetworkBehaviour {
                 Transform firePoint = clientObject.transform;
                 
                 // Look up ammo from database
-                AmmoData ammoData = AmmoDatabase.Instance.GetAmmo(request.AmmoName);
+                AmmoDatabase database = Resources.Load<AmmoDatabase>("ScriptableObjects/AmmoDatabase");
+                AmmoData ammoData = database.GetAmmo(request.AmmoName);
                 if (ammoData == null) {
                     Debug.LogWarning("Invalid ammo name: " + request.AmmoName);
                     return;
                 }
                 
                 // Get appropriate barrel position
-                Vector3? transformPosition = TankDelegates.GetTankControllerById?.Invoke(senderClientId).Barrel.transform.position;
-                if (transformPosition != null) {
-                    Vector3 startPos = (Vector3)transformPosition;
-                    Vector3? position = TankDelegates.GetTankControllerById?.Invoke((ulong)(senderClientId == 0 ? 1 : 0)).Barrel.transform.position;
-                    if (position != null) {
-                        Vector3 endPos = (Vector3)position;
-                        StartCoroutine(FireCoroutine(senderClientId, ammoData, startPos, endPos, isUpperCannon));
-                    }
-                    Instantiate(Resources.Load<GameObject>("Prefabs/VFX/SmokeEffect"), startPos, Quaternion.identity);
-                }
+                GameObject shooterTankGameObject = senderClientId == 0 ? TankDelegates.GetHostTankGameObject?.Invoke() : TankDelegates.GetHosteeTankGameObject?.Invoke();
+                GameObject targetTankGameObject = senderClientId == 0 ? TankDelegates.GetHosteeTankGameObject?.Invoke() : TankDelegates.GetHostTankGameObject?.Invoke();
+                
+                Vector3? shootingBarrelPosition = shooterTankGameObject!.transform.Find("Barrel").transform.position;
+                Vector3? targetBarrelPosition = targetTankGameObject!.transform.Find("Barrel").transform.position;
+                
+                Vector3 startPos = (Vector3)shootingBarrelPosition;
+                Vector3 endPos = (Vector3)targetBarrelPosition;
+                StartCoroutine(FireCoroutine(senderClientId, ammoData, startPos, endPos, isUpperCannon));
+                Instantiate(Resources.Load<GameObject>("Prefabs/VFX/SmokeEffect"), startPos, Quaternion.identity);
+                
                 AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/CannonFire"), Random.Range(0.8f, 1.2f));
 
 

@@ -29,9 +29,9 @@ public class TankDelegates
 
     #region Funcs
 
-    public static Func<ulong, TankController> GetTankControllerById;
-    public static Func<ulong, int> GetTankHealthById, GetTankMaxHealthById;
-
+    public static Func<TankController> GetHostTankController, GetHosteeTankController;
+    public static Func<GameObject> GetHostTankGameObject, GetHosteeTankGameObject;
+    
     #endregion
 
 }

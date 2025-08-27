@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using KBCore.Refs;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,8 +26,21 @@ public class TankBillboardRender : MonoBehaviour {
         TextMeshProUGUI targetFractionLine = id == 0 ? playerFractionLine : enemyFractionLine;
         TextMeshProUGUI targetText = id == 0 ? playerHealthText : enemyHealthText;
         
-        int currHealth = TankDelegates.GetTankHealthById?.Invoke(id) ?? 0;
-        int maxHealth = TankDelegates.GetTankMaxHealthById?.Invoke(id) ?? 1;
+        TankController hostTankController = TankDelegates.GetHostTankController?.Invoke();
+        TankController hosteeTankController = TankDelegates.GetHosteeTankController?.Invoke();
+
+        if (hostTankController == null || hosteeTankController == null) {
+            throw new Exception("Host or Hostee Tank Controller is null");
+        }
+
+        int currHealth, maxHealth;
+        if (NetworkManager.Singleton.IsHost) {
+            currHealth = hostTankController.TankHealth;
+            maxHealth = hostTankController.TankMaxHealth;
+        } else {
+            currHealth = hosteeTankController.TankHealth;
+            maxHealth = hosteeTankController.TankMaxHealth;
+        }
 
         float targetFillAmount = (float)currHealth / maxHealth;
 

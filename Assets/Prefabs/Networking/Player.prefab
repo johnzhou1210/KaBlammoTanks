@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1566444212573237614}
   - component: {fileID: 1054724441533103354}
   - component: {fileID: 5914987856732140370}
+  - component: {fileID: 3118571782981571782}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -203,6 +204,21 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &3118571782981571782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5845721660894174498}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cde4019040a542739575f339d27a204, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  <TankMaxHealth>k__BackingField: 100
+  EnemyAI: 0
 --- !u!1 &7297106746081703339
 GameObject:
   m_ObjectHideFlags: 0

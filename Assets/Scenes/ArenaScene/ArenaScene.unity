@@ -2015,10 +2015,8 @@ GameObject:
   m_Component:
   - component: {fileID: 373364486}
   - component: {fileID: 373364485}
-  - component: {fileID: 373364488}
-  - component: {fileID: 373364487}
   m_Layer: 0
-  m_Name: PlayerTank
+  m_Name: HostTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2096,48 +2094,6 @@ Transform:
   - {fileID: 1707928512}
   m_Father: {fileID: 1089084728}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &373364487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373364484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cde4019040a542739575f339d27a204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  <Barrel>k__BackingField: {fileID: 1707928511}
-  <TankMaxHealth>k__BackingField: 150
-  <TankId>k__BackingField: 0
-  EnemyAI: 0
---- !u!114 &373364488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373364484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 74499763
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &452807178
 GameObject:
   m_ObjectHideFlags: 0
@@ -3152,7 +3108,7 @@ GameObject:
   m_Component:
   - component: {fileID: 715624407}
   m_Layer: 0
-  m_Name: Barrel (1)
+  m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4575,6 +4531,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
+  BattleStatus:
+    m_InternalValue: 3
   battleStatusPopup: {fileID: 716650619}
   countdownPopup: {fileID: 1210985652}
   postProcessingVolume: {fileID: 1005892299}
@@ -4708,10 +4666,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1001986293}
   - component: {fileID: 1001986292}
-  - component: {fileID: 1001986295}
-  - component: {fileID: 1001986294}
   m_Layer: 0
-  m_Name: EnemyTank
+  m_Name: HosteeTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4789,48 +4745,6 @@ Transform:
   - {fileID: 715624407}
   m_Father: {fileID: 1089084728}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1001986294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1001986291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cde4019040a542739575f339d27a204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  <Barrel>k__BackingField: {fileID: 715624406}
-  <TankMaxHealth>k__BackingField: 150
-  <TankId>k__BackingField: 1
-  EnemyAI: 0
---- !u!114 &1001986295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1001986291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1570962989
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 0
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!1 &1005892298
 GameObject:
   m_ObjectHideFlags: 0
@@ -4960,8 +4874,8 @@ GameObject:
   - component: {fileID: 1089084728}
   - component: {fileID: 1089084729}
   m_Layer: 0
-  m_Name: Tanks
-  m_TagString: Untagged
+  m_Name: TanksManager
+  m_TagString: TanksManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4990,14 +4904,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1089084727}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7df813b8722142a1ba4d43747560ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tankControllers:
-  - {fileID: 373364487}
-  - {fileID: 1001986294}
+  hostTankGO: {fileID: 373364484}
+  hosteeTankGO: {fileID: 1001986291}
 --- !u!1 &1096851194
 GameObject:
   m_ObjectHideFlags: 0

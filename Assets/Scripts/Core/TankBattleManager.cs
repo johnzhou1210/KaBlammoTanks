@@ -4,16 +4,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Unity.Netcode;
+using UnityEngine.PlayerLoop;
 
 public enum BattleResult {
-    PLAYER_VICTORY,
-    ENEMY_VICTORY,
+    VICTORY,
+    DEFEAT,
     STALEMATE,
     IN_PROGRESS
 }
 
 public class TankBattleManager : NetworkBehaviour {
-    private BattleResult _battleStatus = BattleResult.IN_PROGRESS;
+    public NetworkVariable<BattleResult> BattleStatus = new NetworkVariable<BattleResult>(BattleResult.IN_PROGRESS);
     [SerializeField] private GameObject battleStatusPopup, countdownPopup;
     [SerializeField] private Volume postProcessingVolume;
     [SerializeField] private VolumeProfile winVolumeProfile, loseVolumeProfile;
@@ -27,46 +28,50 @@ public class TankBattleManager : NetworkBehaviour {
     }
 
     private void CheckIfBattleOver() {
-        if (_battleStatus != BattleResult.IN_PROGRESS) return; // Prevent multiple calls if battle is already over
+        if (BattleStatus.Value != BattleResult.IN_PROGRESS) return; // Prevent multiple calls if battle is already over
         // If battle over, trigger battle end
-        _battleStatus = GetBattleStatus();
-        if (_battleStatus != BattleResult.IN_PROGRESS) {
-            print(_battleStatus);
-            Invoke(nameof(EndBattle), 1f);
+        ulong? winnerId = GetWinningClientId();
+        if (winnerId != null) {
+            EndBattle(winnerId);
         }
     }
 
-    private BattleResult GetBattleStatus() {
+    private ulong? GetWinningClientId() {
         // Get the health of both tanks
-        int playerTankHealth = TankDelegates.GetTankHealthById?.Invoke(0) ?? 0;
-        int enemyTankHealth = TankDelegates.GetTankHealthById?.Invoke(1) ?? 0;
-        if (playerTankHealth == 0 && enemyTankHealth == 0) return BattleResult.STALEMATE;
-        if (enemyTankHealth == 0) return BattleResult.PLAYER_VICTORY;
-        if (playerTankHealth == 0) return BattleResult.ENEMY_VICTORY;
-        return BattleResult.IN_PROGRESS;
+        TankController hostTankController = TankDelegates.GetHostTankController?.Invoke();
+        TankController hosteeTankController = TankDelegates.GetHosteeTankController?.Invoke();
+        int hostTankHealth = hostTankController!.TankHealth;
+        int hosteeTankHealth = hosteeTankController!.TankHealth;
+        if (hosteeTankHealth == 0) return hostTankController!.OwnerClientId;
+        if (hostTankHealth == 0) return hosteeTankController!.OwnerClientId;
+        return null;
     }
 
-    private void EndBattle() {
-        battleStatusPopup.SetActive(true);
-        TextMeshProUGUI battleStatusText = battleStatusPopup.GetComponentInChildren<TextMeshProUGUI>();
-        Time.timeScale = 0f;
-        switch (_battleStatus) {
-            case BattleResult.PLAYER_VICTORY:
-                battleStatusText.text = "VICTORY";
-                postProcessingVolume.profile = winVolumeProfile;
-                break;
-            case BattleResult.ENEMY_VICTORY:
-                battleStatusText.text = "DEFEAT";
-                postProcessingVolume.profile = loseVolumeProfile;
-                break;
-            case BattleResult.STALEMATE:
-                battleStatusText.text = "STALEMATE";
-                break;
-            default:
-                Debug.LogError("Invalid battle status stored in _battleStatus variable!");
-                break;
+    public void EndBattle(ulong? winningClientId) {
+        if (winningClientId == null) return;
+        foreach (var clientPair in NetworkManager.Singleton.ConnectedClients) {
+            ulong clientId = clientPair.Key;
+            if (clientId == winningClientId) {
+                ShowResultClientRpc(BattleResult.VICTORY, new ClientRpcParams {
+                    Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { clientId } }
+                });
+            } else {
+                ShowResultClientRpc(BattleResult.DEFEAT, new ClientRpcParams {
+                    Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { clientId } }
+                });
+            }
         }
-        
+    }
+
+    [ClientRpc]
+    private void ShowResultClientRpc(BattleResult result, ClientRpcParams clientRpcParams = default) {
+        if (result == BattleResult.VICTORY) {
+            UIManager.Instance.ShowWinScreen();
+            postProcessingVolume.profile = winVolumeProfile;
+        } else {
+            UIManager.Instance.ShowLoseScreen();
+            postProcessingVolume.profile = loseVolumeProfile;
+        }
     }
 
     private void Start() {

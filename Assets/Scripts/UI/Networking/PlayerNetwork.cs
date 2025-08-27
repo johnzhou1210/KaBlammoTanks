@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public class PlayerNetwork : NetworkBehaviour {
@@ -30,6 +32,7 @@ public class PlayerNetwork : NetworkBehaviour {
         randomNumber.OnValueChanged += (MyCustomData previousValue, MyCustomData newValue) => {
             Debug.Log(OwnerClientId + "; " + newValue._int + "; " + newValue._bool + "; " + newValue.message);
         };
+        StartCoroutine(WaitForTankInit());
     }
 
     private NetworkVariable<MyCustomData> randomNumber = new NetworkVariable<MyCustomData>(new MyCustomData {
@@ -84,6 +87,19 @@ public class PlayerNetwork : NetworkBehaviour {
     [ClientRpc]
     private void TestClientRpc(ClientRpcParams clientRpcParams) {
         Debug.Log("Testing client rpc");
+    }
+
+    private IEnumerator WaitForTankInit() {
+        yield return new WaitUntil(() => {
+            List<Scene> syncedScenes = NetworkManager.Singleton.SceneManager.GetSynchronizedScenes();
+            if (syncedScenes.Contains(SceneManager.GetSceneByName("ArenaScene"))) {
+                return true;
+            }
+            return false;
+        });
+        // Arena scene is loaded
+        TanksManager tanksManager = GameObject.FindWithTag("TanksManager").GetComponent<TanksManager>();
+        tanksManager.enabled = true;
     }
     
 }

@@ -3,39 +3,27 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
-public class TanksManager : NetworkBehaviour
-{
-    [SerializeField] private TankController[] tankControllers;
+public class TanksManager : MonoBehaviour {
+    private TankController hostTankController, hosteeTankController;
+    [SerializeField] private GameObject hostTankGO, hosteeTankGO;
     void OnEnable() {
-        TankDelegates.GetTankControllerById = (id) => {
-            return tankControllers.FirstOrDefault(e => e.OwnerClientId == id);
-        };
-
-        TankDelegates.GetTankHealthById = (id) => {
-            TankController controller = TankDelegates.GetTankControllerById?.Invoke(id) ?? null;
-            if (controller == null) {
-                Debug.LogError("Tank controller not found");
-                return -1;
-            }
-            return controller.TankHealth;
-        };
+        NetworkObject host = NetworkManager.Singleton.ConnectedClients[0].PlayerObject;
+        NetworkObject hostee = NetworkManager.Singleton.ConnectedClients[1].PlayerObject;
+        hostTankController = host.GetComponent<TankController>();
+        hosteeTankController = hostee.GetComponent<TankController>();
         
-        TankDelegates.GetTankMaxHealthById = (id) => {
-            TankController controller = TankDelegates.GetTankControllerById?.Invoke(id) ?? null;
-            if (controller == null) {
-                Debug.LogError("Tank controller not found");
-                return -1;
-            }
-            return controller.TankMaxHealth;
-        };
-
+        TankDelegates.GetHostTankController = () => hostTankController;
+        TankDelegates.GetHosteeTankController = () => hosteeTankController;
+        TankDelegates.GetHostTankGameObject = () => hostTankGO;
+        TankDelegates.GetHosteeTankGameObject = () => hosteeTankGO;
 
     }
 
     void OnDisable() {
-        TankDelegates.GetTankControllerById = null;
-        TankDelegates.GetTankHealthById = null;
-        TankDelegates.GetTankMaxHealthById = null;
+        TankDelegates.GetHostTankController = null;
+        TankDelegates.GetHosteeTankController = null;
+        TankDelegates.GetHostTankGameObject = null;
+        TankDelegates.GetHosteeTankGameObject = null;
     }
 
 }

@@ -90,6 +90,7 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
    private void InitiateFire(AmmoRequest ammoRequest) {
       // TankDelegates.InvokeOnProjectileFire(ammoRequest, IsUpperCannon);
       if (_localTank != null && _localTank.IsOwner) {
+         Debug.Log("Has needed permissions; firing ammo.");
          _localTank.FireProjectileServerRpc(ammoRequest, IsUpperCannon);
       }
       

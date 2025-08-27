@@ -7,11 +7,8 @@ public class AmmoDatabase : ScriptableObject {
     public AmmoData[] AllAmmo;
 
     private Dictionary<string, AmmoData> lookup;
-    
-    public static AmmoDatabase Instance { get; private set; }
 
-    private void OnEnable() {
-        Instance = this;
+    private void Awake() {
         lookup = new Dictionary<string, AmmoData>();
         foreach (var ammo in AllAmmo) {
             lookup[ammo.AmmoName] = ammo;
