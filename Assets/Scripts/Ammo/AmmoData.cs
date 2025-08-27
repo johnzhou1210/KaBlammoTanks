@@ -28,6 +28,18 @@ public class AmmoData : ScriptableObject {
    public bool CanCollide;
    public int Durability = 1;
    public bool Explosive;
+   
+   public override string ToString() {
+      return $"[AmmoData] " +
+             $"Name: {AmmoName}, " +
+             $"Damage: {Damage}, " +
+             $"Speed: {Speed}, " +
+             $"Cost: {Cost}, " +
+             $"Durability: {Durability}, " +
+             $"Explosive: {Explosive}, " +
+             $"Rarity: {Rarity}, " +
+             $"Collidable: {CanCollide}";
+   }
 }
 
 public struct AmmoRequest : INetworkSerializable {

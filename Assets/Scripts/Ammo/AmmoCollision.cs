@@ -5,21 +5,37 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
+public struct AmmoCollisionData : INetworkSerializable {
+    public bool CanCollide;
+    public int Durability;
+    public bool Explosive;
+    public int Damage;
+    
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter {
+        serializer.SerializeValue(ref CanCollide);
+        serializer.SerializeValue(ref Durability);
+        serializer.SerializeValue(ref Explosive);
+        serializer.SerializeValue(ref Damage);
+    }
+}
+
 public class AmmoCollision : NetworkBehaviour {
     public ulong OwnerId = 0;
-    public AmmoData ProjectileData;
+    
     [SerializeField] private float cleanupTime = 10f, fadeTime = 3f;
     [SerializeField] private int fadeSteps = 15;
     [SerializeField, Child] private TextMeshPro debugNumber;
     
-    private int _durability = 1;
+    public NetworkVariable<AmmoCollisionData> ProjectileCollisionData;
+    private NetworkVariable<int> _durability = new NetworkVariable<int>();
 
 
     private void OnValidate() {
         this.ValidateRefs();
     }
+
     private void OnTriggerEnter2D(Collider2D other) {
-        if (!ProjectileData.CanCollide) return;
+        if (!ProjectileCollisionData.Value.CanCollide) return;
         if (transform.parent != other.transform.parent) return;
         AmmoCollision otherAmmo = other.GetComponent<AmmoCollision>();
         if (otherAmmo == null) return;
@@ -28,52 +44,90 @@ public class AmmoCollision : NetworkBehaviour {
     }
 
     public void Initialize(ulong ownerId, AmmoData projectileData) {
-        OwnerId = NetworkManager.Singleton.LocalClientId;
-        ProjectileData = projectileData;
-        _durability = ProjectileData.Durability;
-        debugNumber.text = $"{_durability} / {ProjectileData.Durability}";
+        Debug.Log($"Params in Initialize: {ownerId}, {projectileData}");
+        OwnerId = ownerId;
+        
+        // Turn projectile data into struct for ease of networking
+        AmmoCollisionData collisionData = new AmmoCollisionData {
+            CanCollide = projectileData.CanCollide,
+            Durability = projectileData.Durability,
+            Explosive = projectileData.Explosive,
+            Damage = projectileData.Damage
+        };
+        ProjectileCollisionData.Value = collisionData;
+        _durability.OnValueChanged += (oldVal, newVal) => {
+            UpdateDebugTextClientRpc(newVal, ProjectileCollisionData.Value.Durability);
+        };
+
+        if (IsServer) {
+            _durability.Value = ProjectileCollisionData.Value.Durability;
+        }
+        
+        UpdateDebugTextClientRpc(ProjectileCollisionData.Value.Durability, ProjectileCollisionData.Value.Durability);
     }
 
-    public void ExchangeBlows(AmmoCollision otherAmmo) {
-        int thisOriginalDurability = _durability;
-        int otherOriginalDurability = otherAmmo._durability;
+    [ClientRpc]
+    private void UpdateDebugTextClientRpc(int value, int maxValue) {
+        debugNumber.text = $"{value} / {maxValue}";
+    }
+    
 
-        _durability = Math.Clamp(thisOriginalDurability - otherOriginalDurability, 0, ProjectileData.Durability);
-        otherAmmo._durability = Math.Clamp(otherOriginalDurability - thisOriginalDurability, 0, otherAmmo.ProjectileData.Durability);
-        // Debug.Log($"{_durability} / {ProjectileData.Durability}");
-        debugNumber.text = $"{_durability} / {ProjectileData.Durability}";
-        otherAmmo.debugNumber.text = $"{otherAmmo._durability} / {otherAmmo.ProjectileData.Durability}";
+    public void ExchangeBlows(AmmoCollision otherAmmo) {
+        if (!IsServer) return;
+        int thisOriginalDurability = _durability.Value;
+        int otherOriginalDurability = otherAmmo._durability.Value;
+        _durability.Value = Math.Clamp(thisOriginalDurability - otherOriginalDurability, 0, ProjectileCollisionData.Value.Durability);
+        otherAmmo._durability.Value = Math.Clamp(otherOriginalDurability - thisOriginalDurability, 0, otherAmmo.ProjectileCollisionData.Value.Durability);
         otherAmmo.Collide();
         Collide();
-        if (!ProjectileData.Explosive) {
+        if (!ProjectileCollisionData.Value.Explosive) {
             Vector3 midpoint = (transform.position + otherAmmo.transform.position) * 0.5f;
-            Instantiate(Resources.Load<GameObject>("Prefabs/VFX/CollisionEffect"), midpoint, Quaternion.identity);
+            GameObject collisionEffect = Instantiate(Resources.Load<GameObject>("Prefabs/VFX/CollisionEffect"), midpoint, Quaternion.identity);
+            NetworkObject collisionEffectNetworkObject = collisionEffect.GetComponent<NetworkObject>();
+            collisionEffectNetworkObject.Spawn();
         }
         
     }
 
     public void Collide(bool hitTank = false, bool forceSparksIfNotExplosive = false) {
-        if (hitTank || _durability == 0) {
-            WreckAmmo(forceSparksIfNotExplosive);
+        if (IsServer) {
+            if (hitTank || _durability.Value == 0) {
+                WreckAmmo(forceSparksIfNotExplosive);
+            }
         }
-        if (hitTank) {
-            // Show damage indicator
-            GameObject DamageIndicatorPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/UI/DamageIndicator"), PlayerBattleUIDelegates.GetDamageIndicatorTransform?.Invoke());
-            Vector3 DamageIndicatorScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
-            DamageIndicatorScreenPosition.z = 0;
-            DamageIndicatorPrefab.transform.position = DamageIndicatorScreenPosition;
-            DamageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileData.Damage, OwnerId == 0 ?  (ulong) 1 : 0 );
+
+        if (IsClient) {
+            if (hitTank) {
+                // Show damage indicator. put this into a client rpc
+                DamageIndicatorClientRpc(OwnerId == 0 ? (ulong) 1 : 0, ProjectileCollisionData.Value.Damage);
+            }
         }
+        
     }
 
+    [ClientRpc]
+    private void DamageIndicatorClientRpc(ulong targetClientId, int damage, ClientRpcParams clientRpcParams = default) {
+        GameObject damageIndicatorPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/UI/DamageIndicator"), PlayerBattleUIDelegates.GetDamageIndicatorTransform?.Invoke());
+        Vector3 damageIndicatorScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        damageIndicatorScreenPosition.z = 0;
+        damageIndicatorPrefab.transform.position = damageIndicatorScreenPosition;
+        Debug.Log(ProjectileCollisionData);
+        Debug.Log(ProjectileCollisionData.Value.Damage);
+        Debug.Log(OwnerId);
+        damageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileCollisionData.Value.Damage, OwnerId == 0 ?  (ulong) 1 : 0 );
+    }
 
     private void WreckAmmo(bool forceSparksIfNotExplosive = false) {
-        if (ProjectileData.Explosive) {
+        if (!IsServer) return;
+        if (ProjectileCollisionData.Value.Explosive) {
             Disintegrate();
         } else {
-            Debrify();
+            transform.parent = AirFieldDelegates.GetDebrisTransform?.Invoke();
+            DebrifyClientRpc();
             if (forceSparksIfNotExplosive) {
-                Instantiate(Resources.Load<GameObject>("Prefabs/VFX/CollisionEffect"), transform.position, Quaternion.identity);
+                GameObject sparks = Instantiate(Resources.Load<GameObject>("Prefabs/VFX/CollisionEffect"), transform.position, Quaternion.identity);
+                NetworkObject sparksNetworkObject = sparks.GetComponent<NetworkObject>();
+                sparksNetworkObject.Spawn();
             }
             Rigidbody2D rigidbody = gameObject.GetComponent<Rigidbody2D>();
             rigidbody.AddForce(Vector3.left * (OwnerId == 0 ? 1f : -1f), ForceMode2D.Impulse);
@@ -81,11 +135,15 @@ public class AmmoCollision : NetworkBehaviour {
     }
 
     private void Disintegrate() {
-        Instantiate(Resources.Load<GameObject>("Prefabs/VFX/ExplosionEffect"), transform.position, Quaternion.identity);
+        GameObject explosion = Instantiate(Resources.Load<GameObject>("Prefabs/VFX/ExplosionEffect"), transform.position, Quaternion.identity);
+        NetworkObject explosionNetworkObject = explosion.GetComponent<NetworkObject>();
+        explosionNetworkObject.Spawn();
+        
         Destroy(gameObject);
     }
 
-    private void Debrify() {
+    [ClientRpc]
+    private void DebrifyClientRpc() {
         BezierProjectile bezierScript = gameObject.GetComponent<BezierProjectile>();
         AmmoRotate ammoRotateScript = gameObject.GetComponent<AmmoRotate>();
         if (bezierScript != null) bezierScript.enabled = false;
@@ -97,10 +155,6 @@ public class AmmoCollision : NetworkBehaviour {
         rigidbody.mass = 1.2f;
         
         gameObject.GetComponent<Collider2D>().isTrigger = false;
-        
-
-
-        transform.parent = AirFieldDelegates.GetDebrisTransform?.Invoke();
 
         StartCoroutine(Cleanup());
     }
@@ -121,7 +175,10 @@ public class AmmoCollision : NetworkBehaviour {
             yield return new WaitForSeconds(fadeTime / fadeSteps);
         }
 
-        Destroy(gameObject);
+        if (IsServer) {
+            Destroy(gameObject);
+        }
+        
 
         yield return null;
     }

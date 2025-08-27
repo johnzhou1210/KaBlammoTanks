@@ -73,7 +73,10 @@ public class TankController : NetworkBehaviour {
                 Vector3 startPos = (Vector3)shootingBarrelPosition;
                 Vector3 endPos = (Vector3)targetBarrelPosition;
                 StartCoroutine(FireCoroutine(senderClientId, ammoData, startPos, endPos, isUpperCannon));
-                Instantiate(Resources.Load<GameObject>("Prefabs/VFX/SmokeEffect"), startPos, Quaternion.identity);
+                GameObject smokeEffect =  Instantiate(Resources.Load<GameObject>("Prefabs/VFX/SmokeEffect"), startPos, Quaternion.identity);
+                NetworkObject smokeNetworkObject = smokeEffect.GetComponent<NetworkObject>();
+                smokeNetworkObject.Spawn();
+               
                 
                 AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/CannonFire"), Random.Range(0.8f, 1.2f));
 
@@ -87,12 +90,17 @@ public class TankController : NetworkBehaviour {
     private IEnumerator FireCoroutine(ulong senderClientId, AmmoData projectileData, Vector3 startPos, Vector3 endPos,
         bool archedTrajectory) {
         var projectile = Instantiate(projectileData.ProjectilePrefab, startPos, Quaternion.identity);
+        NetworkObject projectileNetworkObject = projectile.GetComponent<NetworkObject>();
+        projectileNetworkObject.Spawn();
         projectile.transform.parent = AirFieldDelegates.GetAirFieldTransform?.Invoke();
+        
+        
         var moveScript = projectile.GetComponent<BezierProjectile>();
         var collisionChecker = projectile.GetComponent<AmmoCollision>();
+        Debug.Log($"Attempting to initialize projectile with senderClientId: {senderClientId} and projectileData: {projectileData}");
         collisionChecker.Initialize(senderClientId, projectileData);
         moveScript.Launch(startPos, endPos, archedTrajectory ? UpperCannonHeight : 0f, 10f / projectileData.Speed);
-        if (senderClientId == 1) moveScript.FlipX();
+        if (senderClientId == 1) moveScript.FlipXClientRpc();
         if (projectile.TryGetComponent(out AmmoRotate rotateScript)) rotateScript.ReverseRotation();
         yield return null;
     }

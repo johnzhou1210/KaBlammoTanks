@@ -1,11 +1,14 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class EffectCleanup : MonoBehaviour {
+public class EffectCleanup : NetworkBehaviour {
     [SerializeField] float cleanupTime = 1f;
 
     void Start() {
-        Invoke(nameof(Cleanup), cleanupTime);
+        if (IsServer) {
+            Invoke(nameof(Cleanup), cleanupTime);
+        }
     }
 
     private void Cleanup() {
