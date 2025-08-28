@@ -111,7 +111,7 @@ public class AmmoCollision : NetworkBehaviour {
     [ClientRpc]
     private void DamageIndicatorClientRpc(ulong targetClientId, int damage, ClientRpcParams clientRpcParams = default) {
         GameObject damageIndicatorPrefab = Instantiate(Resources.Load<GameObject>("Prefabs/UI/DamageIndicator"), PlayerBattleUIDelegates.GetDamageIndicatorTransform?.Invoke());
-        Vector3 damageIndicatorScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        Vector3 damageIndicatorScreenPosition = ArenaUIManager.Instance.GetMainCamera().WorldToScreenPoint(transform.position);
         damageIndicatorScreenPosition.z = 0;
         damageIndicatorPrefab.transform.position = damageIndicatorScreenPosition;
         Debug.Log(ProjectileCollisionData);

@@ -28,9 +28,14 @@ public class TankController : NetworkBehaviour {
             TankMaxHealth.Value = 100;
             TankHealth.Value = TankMaxHealth.Value;
         }
-        TankDelegates.InvokeOnUpdateTankHealthUI(OwnerClientId, TankHealth.Value, TankMaxHealth.Value);
+        StartCoroutine(InitialHealthUIUpdateWhenReady());
     }
 
+    private IEnumerator InitialHealthUIUpdateWhenReady() {
+        yield return new WaitUntil((() => TankMaxHealth.Value > 0));
+        TankDelegates.InvokeOnUpdateTankHealthUI(OwnerClientId, TankHealth.Value, TankMaxHealth.Value);
+    }
+    
     private void OnDisable() {
         TankDelegates.OnTakeDamage -= TakeDamage;
         TankBattleDelegates.OnInitTanks -= InitTank;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,11 +8,12 @@ public class EffectCleanup : NetworkBehaviour {
 
     void Start() {
         if (IsServer) {
-            Invoke(nameof(Cleanup), cleanupTime);
+            StartCoroutine(Cleanup());
         }
     }
 
-    private void Cleanup() {
+    private IEnumerator Cleanup() {
+        yield return new WaitForSecondsRealtime(cleanupTime);
         Destroy(gameObject);
     }
 }

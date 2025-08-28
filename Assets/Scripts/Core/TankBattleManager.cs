@@ -4,7 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Unity.Netcode;
+using UnityEditor.PackageManager;
 using UnityEngine.PlayerLoop;
+using Random = UnityEngine.Random;
 
 public enum BattleResult {
     VICTORY,
@@ -49,6 +51,49 @@ public class TankBattleManager : NetworkBehaviour {
 
     public void EndBattle(ulong? winningClientId) {
         if (winningClientId == null) return;
+        StartCoroutine(EndBattleCutscene(winningClientId));
+    }
+
+    [ClientRpc]
+    private void FocusHostCameraClientRpc(ClientRpcParams clientRpcParams = default) {
+        ArenaUIManager.Instance.FocusHostCamera();
+    }
+    
+    [ClientRpc]
+    private void FocusHosteeCameraClientRpc(ClientRpcParams clientRpcParams = default) {
+        ArenaUIManager.Instance.FocusHosteeCamera();
+    }
+
+    [ClientRpc]
+    private void HideBattleUIClientRpc(ClientRpcParams clientRpcParams = default) {
+        ArenaUIManager.Instance.HideBattleUI();
+    }
+    
+    private IEnumerator EndBattleCutscene(ulong? winningClientId) {
+        if (winningClientId == null) {
+            throw new Exception("WinningClient is null!");
+        }
+        
+        // Freeze time
+        if (IsClient) {
+            Time.timeScale = 0;
+        }
+        
+        // Disable battle UI (e.g. ammo slot destinations, and ammo shop)
+        HideBattleUIClientRpc();
+        
+        ulong killedTank = winningClientId.Value == 0 ? (ulong) 1 : 0;
+        // Focus camera onto killed tank
+        if (killedTank == 0) {
+            FocusHostCameraClientRpc();
+        } else {
+            FocusHosteeCameraClientRpc();
+        } 
+        
+        StartCoroutine(PlayDeathAnim(killedTank));
+        
+        
+        yield return new WaitForSecondsRealtime(10f);
         foreach (var clientPair in NetworkManager.Singleton.ConnectedClients) {
             ulong clientId = clientPair.Key;
             if (clientId == winningClientId) {
@@ -61,19 +106,40 @@ public class TankBattleManager : NetworkBehaviour {
                 });
             }
         }
+        
     }
 
     [ClientRpc]
     private void ShowResultClientRpc(BattleResult result, ClientRpcParams clientRpcParams = default) {
         if (result == BattleResult.VICTORY) {
-            UIManager.Instance.ShowWinScreen();
+            ArenaUIManager.Instance.ShowWinScreen();
             postProcessingVolume.profile = winVolumeProfile;
         } else {
-            UIManager.Instance.ShowLoseScreen();
+            ArenaUIManager.Instance.ShowLoseScreen();
             postProcessingVolume.profile = loseVolumeProfile;
         }
     }
 
+    [ClientRpc]
+    private void PlayExplosionSoundClientRpc(Vector3 position) {
+        AudioManager.Instance.PlaySFXAtPoint(position, Resources.Load<AudioClip>("Audio/SFX/Explosion"));
+    }
+
+    private IEnumerator PlayDeathAnim(ulong killedTankId) {
+        TanksManager tanksManager = GameObject.FindWithTag("TanksManager").GetComponent<TanksManager>();
+        GameObject killedTank = killedTankId == 0 ? tanksManager.GetHostTankGO() : tanksManager.GetHosteeTankGO();
+        GameObject explosionPrefab = Resources.Load<GameObject>("Prefabs/VFX/ExplosionEffect");
+        for (int i = 0; i < 32; i++) {
+            GameObject explosionInstance = Instantiate(explosionPrefab, killedTank.transform.position + new Vector3(Random.Range(-1f,1f) * 1.5f, Random.Range(-1f,1f) * 1.5f, 0f), Quaternion.identity);
+            NetworkObject explosionNetworkObject = explosionInstance.GetComponent<NetworkObject>();
+            explosionNetworkObject.Spawn();
+            PlayExplosionSoundClientRpc(explosionInstance.transform.position);
+            yield return new WaitForSecondsRealtime(Random.Range(0.05f, 0.34f));
+        }
+        
+        yield return null;
+    }
+    
     private void Start() {
         StartCoroutine(BattleStartCountdown());
     }

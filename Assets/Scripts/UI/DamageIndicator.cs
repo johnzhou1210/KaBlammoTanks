@@ -23,6 +23,9 @@ public class DamageIndicator : MonoBehaviour {
         seq.Append(transform.DOMove(floatUpPos, 0.3f).SetEase(Ease.OutQuad));
         seq.Append(transform.DOMove(targetPos, 0.4f).SetEase(Ease.InQuad));
         seq.Join(canvasGroup.DOFade(0f, 0.4f));
+
+        seq.SetUpdate(true);
+        
         seq.AppendCallback(() => {
             Debug.Log("AppendCallback fired!");
             if (NetworkManager.Singleton.IsServer) {

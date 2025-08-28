@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5073897981188491694}
   - component: {fileID: 1238724829573471471}
   - component: {fileID: 8613375242565283523}
-  - component: {fileID: -2893010129837368420}
   - component: {fileID: -5368159562711020697}
+  - component: {fileID: -2893010129837368420}
   - component: {fileID: -2036368482821681664}
   m_Layer: 0
   m_Name: ExplosionEffect
@@ -156,7 +156,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 18f30456a81e6495db34c59eeec2a3d8, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -166,20 +166,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-2893010129837368420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7005541176950020677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75ff49d3c96db4fe7bbf94738b75f02a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  cleanupTime: 1
 --- !u!114 &-5368159562711020697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -205,6 +191,20 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &-2893010129837368420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7005541176950020677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ff49d3c96db4fe7bbf94738b75f02a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  cleanupTime: 1
 --- !u!114 &-2036368482821681664
 MonoBehaviour:
   m_ObjectHideFlags: 0

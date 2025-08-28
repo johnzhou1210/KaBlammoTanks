@@ -29,4 +29,12 @@ public class TanksManager : MonoBehaviour {
         TankDelegates.GetHosteeTankGameObject = null;
     }
 
+    public GameObject GetHostTankGO() {
+        return hostTankGO;
+    }
+
+    public GameObject GetHosteeTankGO() {
+        return hosteeTankGO;
+    }
+
 }

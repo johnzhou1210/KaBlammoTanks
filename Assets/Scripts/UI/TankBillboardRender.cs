@@ -6,6 +6,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class TankBillboardRender : MonoBehaviour {
     [SerializeField] TextMeshProUGUI hostHealthText, hosteeHealthText, hostFractionLine, hosteeFractionLine;
@@ -36,7 +37,7 @@ public class TankBillboardRender : MonoBehaviour {
         
         float targetFillAmount = (float)newHealth / newMaxHealth;
 
-        DOTween.To(() => targetFill.fillAmount, x => targetFill.fillAmount = x, targetFillAmount, 0.5f).SetEase(Ease.OutCubic);
+        DOTween.To(() => targetFill.fillAmount, x => targetFill.fillAmount = x, targetFillAmount, 0.5f).SetEase(Ease.OutCubic).SetUpdate(true);
 
         int prevHealth = 0;
         Debug.Log(targetText);
@@ -47,7 +48,7 @@ public class TankBillboardRender : MonoBehaviour {
         DOTween.To(() => prevHealth, x => {
             prevHealth = x;
             targetText.text = $"{x}\n{newMaxHealth}";
-        }, newHealth, 0.5f).SetEase(Ease.OutCubic);
+        }, newHealth, 0.5f).SetEase(Ease.OutCubic).SetUpdate(true);
         
         Color low = new Color(1f, 0.1f, 0.1f);  // red-ish
         Color mid = new Color(1f, 1f, 0.1f);    // yellow-ish
@@ -62,10 +63,12 @@ public class TankBillboardRender : MonoBehaviour {
             targetColor = Color.Lerp(low, mid, t);
         }
         
-        targetText.DOColor(targetColor, 0.5f).SetEase(Ease.OutCubic);
-        targetFractionLine.DOColor(targetColor, 0.5f).SetEase(Ease.OutCubic);
+        targetText.DOColor(targetColor, 0.5f).SetEase(Ease.OutCubic).SetUpdate(true);
+        targetFractionLine.DOColor(targetColor, 0.5f).SetEase(Ease.OutCubic).SetUpdate(true);
+        
     }
 
+    
   
 
     private Vector3 GetHealthNumberUIPosition(ulong tankId) {
