@@ -7,7 +7,7 @@ public class TankDelegates
     #region Events
 
     public static event Action<AmmoRequest, bool> OnProjectileFire;
-    public static event Action<ulong, int> OnUpdateTankHealthUI;
+    public static event Action<ulong, int, int> OnUpdateTankHealthUI;
     public static event Action<int, ulong> OnTakeDamage;
 
     public static void InvokeOnProjectileFire(AmmoRequest request, bool isUpperCannon)
@@ -21,9 +21,9 @@ public class TankDelegates
         OnTakeDamage?.Invoke(damage, targetId);
     }
 
-    public static void InvokeOnUpdateTankHealthUI(ulong playerId, int health)
+    public static void InvokeOnUpdateTankHealthUI(ulong playerId, int health, int maxHealth)
     {
-        OnUpdateTankHealthUI?.Invoke(playerId, health);
+        OnUpdateTankHealthUI?.Invoke(playerId, health, maxHealth);
     }
 
     #endregion

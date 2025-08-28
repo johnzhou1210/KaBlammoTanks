@@ -8,14 +8,11 @@ using Random = UnityEngine.Random;
 public class TankController : NetworkBehaviour {
     private const float UpperCannonHeight = 5.2f;
     public GameObject Tank { get; private set; }
-    [field: SerializeField] public int TankMaxHealth { get; private set; } = 100;
+    public NetworkVariable<int> TankMaxHealth = new NetworkVariable<int>();
     [SerializeField] private bool EnemyAI;
-    public int TankHealth { get; private set; }
-
-    private void Start() {
-        TankHealth = TankMaxHealth;
-        TankDelegates.InvokeOnUpdateTankHealthUI(OwnerClientId, TankHealth);
-    }
+    
+    
+    public NetworkVariable<int> TankHealth = new NetworkVariable<int>();
 
     private void OnEnable() {
         Debug.Log($"TankController enabled on {(IsServer ? "SERVER" : "CLIENT")} with OwnerId={OwnerClientId}");
@@ -26,6 +23,12 @@ public class TankController : NetworkBehaviour {
         } else {
             Tank = GameObject.FindGameObjectWithTag("HosteeTank");
         }
+        if (IsServer) {
+            Debug.Log("Initialized Tank Health Values");
+            TankMaxHealth.Value = 100;
+            TankHealth.Value = TankMaxHealth.Value;
+        }
+        TankDelegates.InvokeOnUpdateTankHealthUI(OwnerClientId, TankHealth.Value, TankMaxHealth.Value);
     }
 
     private void OnDisable() {
@@ -34,7 +37,7 @@ public class TankController : NetworkBehaviour {
     }
 
     private IEnumerator EnemyAICoroutine() {
-        while (TankHealth > 0) {
+        while (TankHealth.Value > 0) {
             yield return new WaitForSeconds(Random.Range(0.25f, 6f));
             var allProjectileData = Resources.LoadAll<AmmoData>("ScriptableObjects/Projectiles");
             // FireProjectileServerRpc(allProjectileData[Random.Range(0, allProjectileData.Length)], Random.Range(0, 2) != 0, 1);
@@ -106,17 +109,29 @@ public class TankController : NetworkBehaviour {
 
     
     private void TakeDamage(int damage, ulong targetId) {
-        Debug.Log($"targetId : {targetId}, ownerId :  {OwnerClientId}");
-        if (targetId != OwnerClientId) return;
-        Debug.Log($"Client {OwnerClientId} taking {damage} damage");
+        // Client should never be running this method
+        if (targetId == OwnerClientId) {
+            Debug.Log($"Client {OwnerClientId} taking {damage} damage");
+            TankHealth.Value = Math.Clamp(TankHealth.Value - damage, 0, TankMaxHealth.Value);
+        }
         
-        TankHealth = Math.Clamp(TankHealth - damage, 0, TankMaxHealth);
-        TankDelegates.InvokeOnUpdateTankHealthUI(OwnerClientId, TankHealth);
+        UpdateAllTankHealthUIClientRpc(TankHealth.Value, TankMaxHealth.Value);
+        
         // Check for game end condition
         TankBattleDelegates.InvokeOnCheckIfBattleIsOver();
+        
+    }
+
+    [ClientRpc]
+    private void UpdateAllTankHealthUIClientRpc(int newHealth, int newMaxHealth) {
+        TankDelegates.InvokeOnUpdateTankHealthUI(OwnerClientId, newHealth, newMaxHealth);
     }
 
     private void InitTank() {
         // if (EnemyAI) StartCoroutine(EnemyAICoroutine());
+    }
+
+    public override string ToString() {
+        return $"Tank {OwnerClientId}: health: {TankHealth.Value}, maxHealth: {TankMaxHealth.Value}";
     }
 }

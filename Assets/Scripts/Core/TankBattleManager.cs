@@ -40,8 +40,8 @@ public class TankBattleManager : NetworkBehaviour {
         // Get the health of both tanks
         TankController hostTankController = TankDelegates.GetHostTankController?.Invoke();
         TankController hosteeTankController = TankDelegates.GetHosteeTankController?.Invoke();
-        int hostTankHealth = hostTankController!.TankHealth;
-        int hosteeTankHealth = hosteeTankController!.TankHealth;
+        int hostTankHealth = hostTankController!.TankHealth.Value;
+        int hosteeTankHealth = hosteeTankController!.TankHealth.Value;
         if (hosteeTankHealth == 0) return hostTankController!.OwnerClientId;
         if (hostTankHealth == 0) return hosteeTankController!.OwnerClientId;
         return null;

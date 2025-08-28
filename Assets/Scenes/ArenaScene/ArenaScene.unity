@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 44769174}
   - component: {fileID: 44769173}
   m_Layer: 5
-  m_Name: EnemyBillboard
+  m_Name: HosteeBillboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 146053022}
   - component: {fileID: 146053021}
   m_Layer: 5
-  m_Name: PlayerBillboard
+  m_Name: HostBillboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4871,12 +4871,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e74c659f4cd246a4ab9d63012934b70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealthText: {fileID: 1096851196}
-  enemyHealthText: {fileID: 2137131380}
-  playerFractionLine: {fileID: 1806542051}
-  enemyFractionLine: {fileID: 2141368597}
-  playerHealthFill: {fileID: 940379638}
-  enemyHealthFill: {fileID: 915282918}
+  hostHealthText: {fileID: 1096851196}
+  hosteeHealthText: {fileID: 2137131380}
+  hostFractionLine: {fileID: 1806542051}
+  hosteeFractionLine: {fileID: 2141368597}
+  hostHealthFill: {fileID: 940379638}
+  hosteeHealthFill: {fileID: 915282918}
 --- !u!225 &1052846832
 CanvasGroup:
   m_ObjectHideFlags: 0

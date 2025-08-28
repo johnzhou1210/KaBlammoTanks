@@ -117,7 +117,7 @@ public class AmmoCollision : NetworkBehaviour {
         Debug.Log(ProjectileCollisionData);
         Debug.Log(ProjectileCollisionData.Value.Damage);
         Debug.Log(OwnerId);
-        damageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileCollisionData.Value.Damage, OwnerId == 0 ?  (ulong) 1 : 0 );
+        damageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileCollisionData.Value.Damage, targetClientId);
     }
 
     private void WreckAmmo(bool forceSparksIfNotExplosive = false) {
