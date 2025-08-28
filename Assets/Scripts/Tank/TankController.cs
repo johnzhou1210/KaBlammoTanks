@@ -18,10 +18,10 @@ public class TankController : NetworkBehaviour {
     }
 
     private void OnEnable() {
-        // TankDelegates.OnProjectileFire += FireProjectileServerRpc;
-        // TankDelegates.OnTakeDamage += TakeDamageServerRpc;
+        Debug.Log($"TankController enabled on {(IsServer ? "SERVER" : "CLIENT")} with OwnerId={OwnerClientId}");
+        TankDelegates.OnTakeDamage += TakeDamage;
         TankBattleDelegates.OnInitTanks += InitTank;
-        if (NetworkManager.Singleton.IsHost) {
+        if (OwnerClientId == 0) {
             Tank = GameObject.FindGameObjectWithTag("HostTank");
         } else {
             Tank = GameObject.FindGameObjectWithTag("HosteeTank");
@@ -29,8 +29,7 @@ public class TankController : NetworkBehaviour {
     }
 
     private void OnDisable() {
-        // TankDelegates.OnProjectileFire -= FireProjectileServerRpc;
-        // TankDelegates.OnTakeDamage -= TakeDamageServerRpc;
+        TankDelegates.OnTakeDamage -= TakeDamage;
         TankBattleDelegates.OnInitTanks -= InitTank;
     }
 
@@ -105,12 +104,14 @@ public class TankController : NetworkBehaviour {
         yield return null;
     }
 
-    [ClientRpc(RequireOwnership = false)]
-    private void TakeDamageClientRpc(ulong targetClientId, int damage, ClientRpcParams clientRpcParams = default) {
-        Debug.Log($"Client {targetClientId} taking {damage} damage");
+    
+    private void TakeDamage(int damage, ulong targetId) {
+        Debug.Log($"targetId : {targetId}, ownerId :  {OwnerClientId}");
+        if (targetId != OwnerClientId) return;
+        Debug.Log($"Client {OwnerClientId} taking {damage} damage");
         
         TankHealth = Math.Clamp(TankHealth - damage, 0, TankMaxHealth);
-        TankDelegates.InvokeOnUpdateTankHealthUI(targetClientId, TankHealth);
+        TankDelegates.InvokeOnUpdateTankHealthUI(OwnerClientId, TankHealth);
         // Check for game end condition
         TankBattleDelegates.InvokeOnCheckIfBattleIsOver();
     }

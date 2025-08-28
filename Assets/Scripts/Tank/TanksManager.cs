@@ -16,6 +16,9 @@ public class TanksManager : MonoBehaviour {
         TankDelegates.GetHosteeTankController = () => hosteeTankController;
         TankDelegates.GetHostTankGameObject = () => hostTankGO;
         TankDelegates.GetHosteeTankGameObject = () => hosteeTankGO;
+        
+        hostTankController.enabled = true;
+        hosteeTankController.enabled = true;
 
     }
 

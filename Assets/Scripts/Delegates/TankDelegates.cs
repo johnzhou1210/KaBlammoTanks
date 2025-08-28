@@ -8,16 +8,17 @@ public class TankDelegates
 
     public static event Action<AmmoRequest, bool> OnProjectileFire;
     public static event Action<ulong, int> OnUpdateTankHealthUI;
-    public static event Action<ulong, int> OnTakeDamage;
+    public static event Action<int, ulong> OnTakeDamage;
 
     public static void InvokeOnProjectileFire(AmmoRequest request, bool isUpperCannon)
     {
         OnProjectileFire?.Invoke(request, isUpperCannon);
     }
 
-    public static void InvokeOnTakeDamage(ulong targetId, int damage)
+    public static void InvokeOnTakeDamage(int damage, ulong targetId)
     {
-        OnTakeDamage?.Invoke(targetId, damage);
+        Debug.Log($"[TankDelegates] Invoking OnTakeDamage damage={damage} targetId={targetId}");
+        OnTakeDamage?.Invoke(damage, targetId);
     }
 
     public static void InvokeOnUpdateTankHealthUI(ulong playerId, int health)

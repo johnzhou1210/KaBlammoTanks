@@ -44,7 +44,6 @@ public class AmmoCollision : NetworkBehaviour {
     }
 
     public void Initialize(ulong ownerId, AmmoData projectileData) {
-        Debug.Log($"Params in Initialize: {ownerId}, {projectileData}");
         OwnerId = ownerId;
         
         // Turn projectile data into struct for ease of networking
@@ -93,6 +92,10 @@ public class AmmoCollision : NetworkBehaviour {
         if (IsServer) {
             if (hitTank || _durability.Value == 0) {
                 WreckAmmo(forceSparksIfNotExplosive);
+            }
+            if (hitTank) {
+                // Deal damage to tank
+                
             }
         }
 

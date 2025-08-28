@@ -12,13 +12,13 @@ public class TankBillboardRender : MonoBehaviour {
 
 
     void OnEnable() {
-        // TankDelegates.OnUpdateTankHealthUI += UpdateHealth;
+        TankDelegates.OnUpdateTankHealthUI += UpdateHealth;
 
         PlayerBattleUIDelegates.GetHealthNumberUIPosition = GetHealthNumberUIPosition;
     }
 
     void OnDisable() {
-        // TankDelegates.OnUpdateTankHealthUI -= UpdateHealth;
+        TankDelegates.OnUpdateTankHealthUI -= UpdateHealth;
     }
 
     private void UpdateHealth(ulong id, int damage) {

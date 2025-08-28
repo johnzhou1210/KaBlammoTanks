@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - TanksManager
+  - HostTank
+  - HosteeTank
   layers:
   - Default
   - TransparentFX

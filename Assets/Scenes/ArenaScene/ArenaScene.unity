@@ -2017,7 +2017,7 @@ GameObject:
   - component: {fileID: 373364485}
   m_Layer: 0
   m_Name: HostTank
-  m_TagString: Untagged
+  m_TagString: HostTank
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4694,7 +4694,7 @@ GameObject:
   - component: {fileID: 1001986292}
   m_Layer: 0
   m_Name: HosteeTank
-  m_TagString: Untagged
+  m_TagString: HosteeTank
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
