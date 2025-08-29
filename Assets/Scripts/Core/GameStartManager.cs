@@ -8,6 +8,7 @@ public class GameStartManager : MonoBehaviour
 {
     private IEnumerator SubscribeToNetworkManager() {
         yield return new WaitUntil((() => NetworkManager.Singleton != null));
+        Debug.Log("Subscribed to network manager");
         NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
     }
     

@@ -574,7 +574,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
---- !u!1 &1343582503
+--- !u!1 &855485815
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -582,100 +582,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1343582506}
-  - component: {fileID: 1343582505}
-  - component: {fileID: 1343582504}
+  - component: {fileID: 855485817}
+  - component: {fileID: 855485816}
   m_Layer: 0
-  m_Name: NetworkManager
+  m_Name: LanDiscovery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1343582504
+--- !u!114 &855485816
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1343582503}
+  m_GameObject: {fileID: 855485815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
+  m_Script: {fileID: 11500000, guid: 21deb650cac3645b3b3d923db77b032e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ProtocolType: 0
-  m_UseWebSockets: 0
-  m_UseEncryption: 0
-  m_MaxPacketQueueSize: 128
-  m_MaxPayloadSize: 6144
-  m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
-  m_MaxConnectAttempts: 60
-  m_DisconnectTimeoutMS: 30000
-  ConnectionData:
-    Address: 127.0.0.1
-    Port: 7777
-    ServerListenAddress: 127.0.0.1
-  DebugSimulator:
-    PacketDelayMS: 0
-    PacketJitterMS: 0
-    PacketDropRate: 0
---- !u!114 &1343582505
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1343582503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NetworkManagerExpanded: 0
-  NetworkConfig:
-    ProtocolVersion: 0
-    NetworkTransport: {fileID: 1343582504}
-    PlayerPrefab: {fileID: 5845721660894174498, guid: 92e03575917914ac3b8a6ff34b6bffa3, type: 3}
-    Prefabs:
-      NetworkPrefabsLists:
-      - {fileID: 11400000, guid: 09e976ad085a146d697534f23f596920, type: 2}
-      - {fileID: 11400000, guid: 1563202e2e7ba4b9589c6db3aea5a425, type: 2}
-      - {fileID: 11400000, guid: 74a9bca44ffd04f77a4bfe07d583ea93, type: 2}
-    TickRate: 30
-    ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
-    ConnectionData: 
-    EnableTimeResync: 0
-    TimeResyncInterval: 30
-    EnsureNetworkVariableLengthSafety: 0
-    EnableSceneManagement: 1
-    ForceSamePrefabs: 1
-    RecycleNetworkIds: 1
-    NetworkIdRecycleDelay: 120
-    RpcHashSize: 0
-    LoadSceneTimeOut: 120
-    SpawnTimeout: 10
-    EnableNetworkLogs: 1
-    NetworkTopology: 0
-    UseCMBService: 0
-    AutoSpawnPlayerPrefabClientSide: 1
-    NetworkMessageMetrics: 1
-    NetworkProfilingMetrics: 1
-    OldPrefabList: []
-  RunInBackground: 1
-  LogLevel: 0
---- !u!4 &1343582506
+  broadcastPort: 47777
+  broadcastInterval: 0.3
+  hostTimeout: 5
+--- !u!4 &855485817
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1343582503}
+  m_GameObject: {fileID: 855485815}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 477.60513, y: 337.6425, z: -4.39546}
+  m_LocalPosition: {x: 771.42126, y: 468.29593, z: -11.87702}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1198,15 +1138,73 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2da3dcc22749e7f4280737786d898334, type: 3}
+--- !u!1001 &7793952650023953713
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2227617609533717983, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_Name
+      value: NetworkManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 477.60513
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 337.6425
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -4.39546
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 232648407}
   - {fileID: 476886096}
-  - {fileID: 1343582506}
+  - {fileID: 7793952650023953713}
   - {fileID: 1651807635}
   - {fileID: 771116015}
   - {fileID: 263689923}
   - {fileID: 206375023}
   - {fileID: 350341532}
+  - {fileID: 855485817}
