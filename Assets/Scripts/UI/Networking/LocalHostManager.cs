@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
@@ -13,19 +14,43 @@ public class LocalHostManager : MonoBehaviour {
     }
 
     public void StartHostSession() {
-        _hostPort = PortAllocator.GetNextAvailablePort();
-        
-        _transport.SetConnectionData("0.0.0.0", (ushort)_hostPort);
-        NetworkManager.Singleton.StartHost();
-        
-        LanDiscovery.Instance.StartBroadcasting(_hostPort);
-        Debug.Log($"Started host on port {_hostPort}");
+        StartCoroutine(RestartHostRoutine());
     }
 
+    private IEnumerator RestartHostRoutine() {
+        // Ensure previous session is cleaned up
+        LanDiscovery.Instance.Disconnect();
+
+        yield return null;
+
+        _hostPort = PortAllocator.GetNextAvailablePort();
+        _transport.SetConnectionData("0.0.0.0", (ushort)_hostPort);
+
+        Debug.Log($"Host starting on port {_hostPort}");
+        NetworkManager.Singleton.StartHost();
+        Debug.Log("Host StartHost completed");
+
+        LanDiscovery.Instance.StartBroadcasting(_hostPort);
+        
+    }
+
+
     public void StartClientSession(string hostIP, int hostPort) {
+        StartCoroutine(RestartClientRoutine(hostIP, hostPort));
+    }
+
+    private IEnumerator RestartClientRoutine(string hostIP, int hostPort) {
+        LanDiscovery.Instance.Disconnect();
+        
+    
         _transport.SetConnectionData(hostIP, (ushort)hostPort);
-        NetworkManager.Singleton.StartClient();
-        Debug.Log($"Connecting to host {hostIP}:{hostPort}");
+
+        yield return null;
+
+        Debug.Log($"Client connecting to {hostIP}:{hostPort}");
+        bool started = NetworkManager.Singleton.StartClient();
+        Debug.Log($"Client StartClient returned {started}");
+      
     }
 
     private void OnApplicationQuit() {

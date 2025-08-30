@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
 public class LanDiscovery : MonoBehaviour
@@ -22,6 +24,8 @@ public class LanDiscovery : MonoBehaviour
     private UdpClient _broadcastSender;
 
     private readonly Dictionary<string, (int port, double lastSeen)> _activeHosts = new();
+
+    private Coroutine _broadcastCoroutine;
 
     private void Awake()
     {
@@ -42,7 +46,10 @@ public class LanDiscovery : MonoBehaviour
     private void OnDisable()
     {
         StopListening();
-        StopBroadcasting();
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost) {
+            StopBroadcasting();
+        }
+        
     }
 
     private void Update()
@@ -61,21 +68,33 @@ public class LanDiscovery : MonoBehaviour
                 _activeHosts.Remove(key);
         }
     }
+    
+
+
+    public void Disconnect() {
+        NetworkManager.Singleton.Shutdown();
+    }
+    
 
     #region Hosting
 
     public void StartBroadcasting(int gamePort)
     {
-        StopBroadcasting();
-        StartCoroutine(BroadcastLoop(gamePort));
+        _broadcastCoroutine = StartCoroutine(BroadcastLoop(gamePort));
     }
 
     public void StopBroadcasting()
     {
-        StopAllCoroutines();
+        if (_broadcastCoroutine != null && NetworkManager.Singleton != null) {
+            StopCoroutine(_broadcastCoroutine);
+            _broadcastCoroutine = null;
+        }
         _broadcastSender?.Close();
         _broadcastSender = null;
+        Disconnect();
         Debug.Log($"Stopped broadcasting to port {broadcastPort}");
+        Debug.LogWarning("STOPPED BROADCASTING!");
+        
     }
 
     private IEnumerator BroadcastLoop(int gamePort)
@@ -119,6 +138,7 @@ public class LanDiscovery : MonoBehaviour
         string localIP = GetLocalIPAddress();
         string[] parts = localIP.Split('.');
         return $"{parts[0]}.{parts[1]}.{parts[2]}.255";
+        
     }
 
     #endregion

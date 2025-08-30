@@ -4,6 +4,7 @@ using KBCore.Refs;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public struct AmmoCollisionData : INetworkSerializable {
     public bool CanCollide;
@@ -28,6 +29,7 @@ public class AmmoCollision : NetworkBehaviour {
     
     public NetworkVariable<AmmoCollisionData> ProjectileCollisionData;
     private NetworkVariable<int> _durability = new NetworkVariable<int>();
+    private AudioClip _collisionSound;
 
 
     private void OnValidate() {
@@ -45,7 +47,8 @@ public class AmmoCollision : NetworkBehaviour {
 
     public void Initialize(ulong ownerId, AmmoData projectileData) {
         OwnerId = ownerId;
-        
+
+        _collisionSound = projectileData.AmmoImpactSound;
         // Turn projectile data into struct for ease of networking
         AmmoCollisionData collisionData = new AmmoCollisionData {
             CanCollide = projectileData.CanCollide,
@@ -100,12 +103,18 @@ public class AmmoCollision : NetworkBehaviour {
         }
 
         if (IsClient) {
+            PlayCollisionSFXClientRpc();
             if (hitTank) {
                 // Show damage indicator. put this into a client rpc
                 DamageIndicatorClientRpc(OwnerId == 0 ? (ulong) 1 : 0, ProjectileCollisionData.Value.Damage);
             }
         }
         
+    }
+
+    [ClientRpc]
+    private void PlayCollisionSFXClientRpc() {  
+        AudioManager.Instance.PlaySFXAtPointUI(_collisionSound, Random.Range(0.8f, 1.2f));
     }
 
     [ClientRpc]

@@ -24,7 +24,7 @@ public class GameStartManager : MonoBehaviour
     }
 
     private void OnClientConnected(ulong clientId) {
-        Debug.Log($"Client connected: {clientId}");
+        Debug.Log($"CLIENT CONNECTED: {clientId}");
         TryStartGame();
     }
 

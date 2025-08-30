@@ -85,13 +85,17 @@ public class TankController : NetworkBehaviour {
                 smokeNetworkObject.Spawn();
                
                 
-                AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/CannonFire"), Random.Range(0.8f, 1.2f));
+                
+                FireCannonSoundClientRpc();
 
 
             }
         }
-        
-        
+    }
+
+    [ClientRpc]
+    private void FireCannonSoundClientRpc() {
+        AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/CannonFire"), Random.Range(0.8f, 1.2f));
     }
 
     private IEnumerator FireCoroutine(ulong senderClientId, AmmoData projectileData, Vector3 startPos, Vector3 endPos,

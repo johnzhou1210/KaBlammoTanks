@@ -40,14 +40,19 @@ public class LobbyUIManager : MonoBehaviour {
     }
 
     public void ReturnToMainMenu() {
-        // Stop broadcasting if you were the host
+        // Fully disconnect + cleanup the network state
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost) {
+            // Safe shutdown + destroy NetworkManager after shutdown
             LanDiscovery.Instance.StopBroadcasting();
+            LanDiscovery.Instance.Disconnect();
         }
+
+        // Switch UI back to title
         hostFrame.SetActive(false);
         joinFrame.SetActive(false);
         titleFrame.SetActive(true);
     }
+
     
     
     private void RefreshUI() {

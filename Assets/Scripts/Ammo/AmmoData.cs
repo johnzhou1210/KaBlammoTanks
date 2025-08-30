@@ -28,6 +28,8 @@ public class AmmoData : ScriptableObject {
    public bool CanCollide;
    public int Durability = 1;
    public bool Explosive;
+   public AudioClip AmmoImpactSound;
+   
    
    public override string ToString() {
       return $"[AmmoData] " +

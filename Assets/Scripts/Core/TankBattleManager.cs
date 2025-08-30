@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Unity.Netcode;
+using Unity.Networking.Transport;
 using Random = UnityEngine.Random;
 
 public enum BattleResult {
@@ -21,10 +22,26 @@ public class TankBattleManager : NetworkBehaviour {
     
     private void OnEnable() {
         TankBattleDelegates.OnCheckIfBattleIsOver += CheckIfBattleOver;
+        if (NetworkManager.Singleton != null) {
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+        }
     }
 
     private void OnDisable() {
         TankBattleDelegates.OnCheckIfBattleIsOver -= CheckIfBattleOver;
+        if (NetworkManager.Singleton != null) {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+        }
+    }
+
+    private void OnClientDisconnected(ulong disconnectedId) {
+        Debug.Log($"Client {disconnectedId} disconnected.");
+        // if (NetworkManager.Singleton.IsHost) {
+            // ulong winnerId = disconnectedId == 0 ? (ulong)1 : 0;
+        // }
+        Time.timeScale = 0;
+        ArenaUIManager.Instance.ShowWinScreen();
+        postProcessingVolume.profile = winVolumeProfile;
     }
 
     private void CheckIfBattleOver() {
@@ -120,7 +137,7 @@ public class TankBattleManager : NetworkBehaviour {
 
     [ClientRpc]
     private void PlayExplosionSoundClientRpc(Vector3 position) {
-        AudioManager.Instance.PlaySFXAtPoint(position, Resources.Load<AudioClip>("Audio/SFX/Explosion"));
+        AudioManager.Instance.PlaySFXAtPointUI(Resources.Load<AudioClip>("Audio/SFX/Explosion"), Random.Range(0.8f, 1.2f));
     }
 
     private IEnumerator PlayDeathAnim(ulong killedTankId) {
