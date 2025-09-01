@@ -4174,6 +4174,7 @@ GameObject:
   - component: {fileID: 811196404}
   - component: {fileID: 811196405}
   - component: {fileID: 811196406}
+  - component: {fileID: 811196407}
   m_Layer: 5
   m_Name: AmmoFrame
   m_TagString: Untagged
@@ -4257,7 +4258,7 @@ MonoBehaviour:
     m_Top: 15
     m_Bottom: 15
   m_ChildAlignment: 5
-  m_Spacing: -500
+  m_Spacing: -65.6
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -4298,7 +4299,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 811196399}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8311362df32c24913924bdcd83fbd7fd, type: 3}
   m_Name: 
@@ -4307,6 +4308,22 @@ MonoBehaviour:
   maxElements: 8
   maxPadding: 200
   minPadding: -500
+--- !u!114 &811196407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811196399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 536f8272a8d23444d883924cf61ac3fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minChildren: 2
+  maxChildren: 8
+  spacingAtMin: -680
+  spacingAtMax: -64
 --- !u!1 &814672408
 GameObject:
   m_ObjectHideFlags: 0
@@ -8611,7 +8628,7 @@ Transform:
   m_GameObject: {fileID: 2005942658}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.37, y: 0.1, z: -36.54075}
+  m_LocalPosition: {x: -0.19, y: 0.19, z: -36.54075}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
