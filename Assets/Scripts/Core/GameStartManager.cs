@@ -50,7 +50,6 @@ public class GameStartManager : MonoBehaviour
        
 
         if (NetworkManager.Singleton.ConnectedClients.Count == 2) {
-            LocalSceneManager.Instance.SetSoloPlay(false);
             LocalSceneManager.Instance.UnloadTitleScene();
             Debug.Log($"Trying to start game with 2 players");
             // Make the remote client stop listening

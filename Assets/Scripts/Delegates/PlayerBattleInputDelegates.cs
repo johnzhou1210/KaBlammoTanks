@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerBattleInputDelegates {
     #region Events
@@ -29,6 +30,7 @@ public class PlayerBattleInputDelegates {
 
     #region Funcs
 
+    public static Func<GameObject> GetAmmoSlotContainer;
     public static Func<AmmoSlot> GetSelectedAmmoShopItem;
     public static Func<List<AmmoSlot>> GetAllAmmoSlots;
 

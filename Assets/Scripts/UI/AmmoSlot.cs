@@ -1,3 +1,4 @@
+using System.Collections;
 using Coffee.UIEffects;
 using TMPro;
 using UnityEngine;
@@ -28,10 +29,16 @@ public class AmmoSlot : MonoBehaviour {
     }
 
     public void OnConsumeFinish() {
-        Destroy(transform.parent.gameObject);
-        PlayerBattleInputDelegates.InvokeOnDelayedCheckForUpgrades();
+        StartCoroutine(RebuildRoutine());
     }
 
+    IEnumerator RebuildRoutine() {
+        Destroy(transform.parent.gameObject);
+        yield return new WaitForEndOfFrame();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(PlayerBattleInputDelegates.GetAmmoSlotContainer?.Invoke().GetComponent<RectTransform>());
+        PlayerBattleInputDelegates.InvokeOnDelayedCheckForUpgrades();
+    }
+    
     private void LoadUIEffectBasedOnRarity() {
         if (AmmoData.Rarity != Rarity.LEGENDARY)
             AmmoSlotUIEffect.LoadPreset("NonLegendaryRarityAmmoSlot");

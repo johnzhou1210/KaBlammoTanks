@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 public class LocalSceneManager : MonoBehaviour
 {
     public static LocalSceneManager Instance;
-    public bool IsSoloPlay { get; private set; }
 
     private void Awake()
     {
@@ -27,10 +26,6 @@ public class LocalSceneManager : MonoBehaviour
 
     public void ResubscribeToSceneVerificationEvents() {
         StartCoroutine(ConnectSceneVerificationEvents());
-    }
-
-    public void SetSoloPlay(bool val) {
-        IsSoloPlay = val;
     }
 
     private bool VerifyScene(int sceneIndex, string sceneName, LoadSceneMode loadSceneMode) {

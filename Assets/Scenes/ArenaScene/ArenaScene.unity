@@ -230,7 +230,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 254.00006, y: 0}
-  m_SizeDelta: {x: 617.1647, y: 539.2207}
+  m_SizeDelta: {x: 663.4728, y: 539.2207}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &32365353
 MonoBehaviour:
@@ -2186,7 +2186,6 @@ GameObject:
   - component: {fileID: 373364485}
   - component: {fileID: 373364487}
   - component: {fileID: 373364488}
-  - component: {fileID: 373364489}
   m_Layer: 0
   m_Name: HostTank
   m_TagString: HostTank
@@ -2307,24 +2306,6 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
---- !u!114 &373364489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373364484}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cde4019040a542739575f339d27a204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  TankMaxHealth:
-    m_InternalValue: 0
-  EnemyAI: 0
-  TankHealth:
-    m_InternalValue: 0
 --- !u!1 &452807178
 GameObject:
   m_ObjectHideFlags: 0
@@ -3387,7 +3368,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -305, y: -60.00006}
+  m_AnchoredPosition: {x: -305, y: -60}
   m_SizeDelta: {x: 472.187, y: 164.36548}
   m_Pivot: {x: 1, y: 0}
 --- !u!225 &640972740
@@ -4192,6 +4173,7 @@ GameObject:
   - component: {fileID: 811196403}
   - component: {fileID: 811196404}
   - component: {fileID: 811196405}
+  - component: {fileID: 811196406}
   m_Layer: 5
   m_Name: AmmoFrame
   m_TagString: Untagged
@@ -4216,8 +4198,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 251, y: 97.16583}
-  m_SizeDelta: {x: 0, y: 228}
+  m_AnchoredPosition: {x: 291, y: 85.26036}
+  m_SizeDelta: {x: 1086.4, y: 204.1891}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &811196401
 MonoBehaviour:
@@ -4232,7 +4214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.46226418, g: 0.41647387, b: 0.41647387, a: 0}
+  m_Color: {r: 0.030037642, g: 1, b: 0, a: 0.6392157}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4274,12 +4256,12 @@ MonoBehaviour:
     m_Right: 15
     m_Top: 15
     m_Bottom: 15
-  m_ChildAlignment: 4
-  m_Spacing: 10.57
+  m_ChildAlignment: 5
+  m_Spacing: -500
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
@@ -4290,7 +4272,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 811196399}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
@@ -4309,6 +4291,22 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &811196406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811196399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8311362df32c24913924bdcd83fbd7fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minElements: 2
+  maxElements: 8
+  maxPadding: 200
+  minPadding: -500
 --- !u!1 &814672408
 GameObject:
   m_ObjectHideFlags: 0
@@ -5527,7 +5525,6 @@ GameObject:
   - component: {fileID: 1001986293}
   - component: {fileID: 1001986292}
   - component: {fileID: 1001986294}
-  - component: {fileID: 1001986295}
   m_Layer: 0
   m_Name: HosteeTank
   m_TagString: HosteeTank
@@ -5623,24 +5620,6 @@ MonoBehaviour:
   identityMarker: {fileID: 814672408}
   triangle: {fileID: 1029630505}
   identityText: {fileID: 814672409}
---- !u!114 &1001986295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1001986291}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cde4019040a542739575f339d27a204, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  TankMaxHealth:
-    m_InternalValue: 0
-  EnemyAI: 1
-  TankHealth:
-    m_InternalValue: 0
 --- !u!1 &1005892298
 GameObject:
   m_ObjectHideFlags: 0
@@ -5896,8 +5875,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7df813b8722142a1ba4d43747560ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soloTankController: {fileID: 373364489}
-  aiTankController: {fileID: 1001986295}
   hostTankGO: {fileID: 373364484}
   hosteeTankGO: {fileID: 1001986291}
   HostColor: {r: 0, g: 0, b: 1, a: 0}
@@ -9377,7 +9354,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3445845954815502526, guid: 4c977e5a38dbd4959853e4e39d3aa9c1, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 704.5895
+      value: 108.98279
       objectReference: {fileID: 0}
     - target: {fileID: 3445845954815502526, guid: 4c977e5a38dbd4959853e4e39d3aa9c1, type: 3}
       propertyPath: m_AnchoredPosition.y

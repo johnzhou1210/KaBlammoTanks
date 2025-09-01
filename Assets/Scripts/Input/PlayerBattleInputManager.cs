@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class PlayerBattleInputManager : MonoBehaviour {
@@ -48,6 +49,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
 
         PlayerBattleInputDelegates.GetSelectedAmmoShopItem = () => _activeAmmoShopItem;
         PlayerBattleInputDelegates.GetAllAmmoSlots = GetAllAmmoSlots;
+        PlayerBattleInputDelegates.GetAmmoSlotContainer = () => AmmoSlotContainer.gameObject;
     }
 
     private void OnDisable() {
@@ -64,6 +66,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
 
         PlayerBattleInputDelegates.GetSelectedAmmoShopItem = null;
         PlayerBattleInputDelegates.GetAllAmmoSlots = null;
+        PlayerBattleInputDelegates.GetAmmoSlotContainer = null;
     }
 
     private void SetActiveAmmoShopItem(AmmoSlot ammoSlot) {
@@ -184,7 +187,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
         GameObject newAmmoSlot = Instantiate(Resources.Load<GameObject>("Prefabs/UI/CardItem"), AmmoSlotContainer);
         newAmmoSlot.transform.SetSiblingIndex(0);
         newAmmoSlot.GetComponentInChildren<AmmoSlot>().SetSlotData(ammoData);
-
+        
         // Also account for if user is currently dragging something. If they are, change the alpha of the slot accordingly
         RectTransform dragArea = PlayerBattleUIDelegates.GetDragLayerRectTransform?.Invoke();
         if (dragArea != null)
@@ -298,8 +301,8 @@ public class PlayerBattleInputManager : MonoBehaviour {
 
     private IEnumerator SupplyAmmoCoroutine() {
         while (true) {
-            yield return new WaitForSeconds(Random.Range(1f, 3f));
-            if (GetAllAmmoSlots().Count < 7)
+            yield return new WaitForSeconds(Random.Range(10f, 30f));
+            if (GetAllAmmoSlots().Count < 8)
                 SpawnRandomAmmoSlot(GetAmmoPool("ScriptableObjects/AmmoPools/DefaultPool"));
         }
     }

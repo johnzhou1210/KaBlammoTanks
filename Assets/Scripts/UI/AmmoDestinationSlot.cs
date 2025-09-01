@@ -20,7 +20,7 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
 
    void Start() {
       originalSlotBackgroundColor = slotBackgroundImage.color;
-      // _localTank = LocalSceneManager.Instance.IsSoloPlay ? soloTankController : NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<TankController>();
+      _localTank =  NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<TankController>();
    }
 
    void OnEnable() {
@@ -87,7 +87,6 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
    }
 
    private void InitiateFire(AmmoRequest ammoRequest) {
-      // TankDelegates.InvokeOnProjectileFire(ammoRequest, IsUpperCannon);
       if (_localTank != null && _localTank.IsOwner) {
          Debug.Log("Has needed permissions; firing ammo.");
          _localTank.FireProjectileServerRpc(ammoRequest, IsUpperCannon);

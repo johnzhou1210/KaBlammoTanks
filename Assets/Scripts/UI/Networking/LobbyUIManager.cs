@@ -62,19 +62,6 @@ public class LobbyUIManager : MonoBehaviour {
         titleFrame.SetActive(true);
     }
 
-    public void PlaySoloGame() {
-        Debug.Log("Starting singleplayer session...");
-        if (NetworkManager.Singleton != null) {
-            NetworkManager.Singleton.Shutdown();
-        }
-        LocalSceneManager.Instance.SetSoloPlay(true);
-        SceneManager.UnloadSceneAsync("TitleScene");
-        SceneManager.LoadScene("ArenaScene", LoadSceneMode.Additive);
-        TanksManager tanksManager = GameObject.FindWithTag("TanksManager").GetComponent<TanksManager>();
-        tanksManager.enabled = true;
-    }
-    
-    
     private void RefreshUI() {
         foreach (Transform child in hostListContainer)
             Destroy(child.gameObject);
