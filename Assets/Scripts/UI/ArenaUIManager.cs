@@ -16,7 +16,6 @@ public class ArenaUIManager : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void HideBattleUI() {

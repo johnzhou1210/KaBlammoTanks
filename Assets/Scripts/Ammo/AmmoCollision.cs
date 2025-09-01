@@ -106,7 +106,7 @@ public class AmmoCollision : NetworkBehaviour {
             PlayCollisionSFXClientRpc();
             if (hitTank) {
                 // Show damage indicator. put this into a client rpc
-                DamageIndicatorClientRpc(OwnerId == 0 ? (ulong) 1 : 0, ProjectileCollisionData.Value.Damage);
+                DamageIndicatorClientRpc(OwnerId == 0 ? (ulong) TankDelegates.GetHosteeId?.Invoke()! : 0, ProjectileCollisionData.Value.Damage);
             }
         }
         
@@ -129,7 +129,7 @@ public class AmmoCollision : NetworkBehaviour {
         damageIndicatorPrefab.GetComponent<DamageIndicator>().Initialize(ProjectileCollisionData.Value.Damage, targetClientId);
     }
 
-    private void WreckAmmo(bool forceSparksIfNotExplosive = false) {
+    public void WreckAmmo(bool forceSparksIfNotExplosive = false) {
         if (!IsServer) return;
         if (ProjectileCollisionData.Value.Explosive) {
             Disintegrate();

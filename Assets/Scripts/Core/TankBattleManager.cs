@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Unity.Netcode;
 using Unity.Networking.Transport;
+using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
 public enum BattleResult {
@@ -19,12 +21,14 @@ public class TankBattleManager : NetworkBehaviour {
     [SerializeField] private GameObject battleStatusPopup, countdownPopup;
     [SerializeField] private Volume postProcessingVolume;
     [SerializeField] private VolumeProfile winVolumeProfile, loseVolumeProfile;
-    
+    [SerializeField] private Transform airfieldTransform;
+    private Coroutine _endBattleCutscene;
     private void OnEnable() {
         TankBattleDelegates.OnCheckIfBattleIsOver += CheckIfBattleOver;
         if (NetworkManager.Singleton != null) {
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
         }
+        TankDelegates.GetHosteeId = GetHosteeId;
     }
 
     private void OnDisable() {
@@ -32,16 +36,12 @@ public class TankBattleManager : NetworkBehaviour {
         if (NetworkManager.Singleton != null) {
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
+        TankDelegates.GetHosteeId = null;
     }
 
     private void OnClientDisconnected(ulong disconnectedId) {
         Debug.Log($"Client {disconnectedId} disconnected.");
-        // if (NetworkManager.Singleton.IsHost) {
-            // ulong winnerId = disconnectedId == 0 ? (ulong)1 : 0;
-        // }
-        Time.timeScale = 0;
-        ArenaUIManager.Instance.ShowWinScreen();
-        postProcessingVolume.profile = winVolumeProfile;
+        AbruptWin();
     }
 
     private void CheckIfBattleOver() {
@@ -51,6 +51,68 @@ public class TankBattleManager : NetworkBehaviour {
         if (winnerId != null) {
             EndBattle(winnerId);
         }
+    }
+
+    public ulong GetHosteeId() {
+        foreach (var kv in NetworkManager.Singleton.ConnectedClients) {
+            if (kv.Key != 0) {
+                return kv.Key;
+            }
+        }
+        throw new KeyNotFoundException("Could not find hostee id!");
+    }
+    
+    private void AbruptWin() {
+        Time.timeScale = 0;
+        if (ArenaUIManager.Instance == null) return;
+        ArenaUIManager.Instance.ShowWinScreen();
+        postProcessingVolume.profile = winVolumeProfile;
+        ArenaUIManager.Instance.HideBattleUI();
+        StartCoroutine(StartShutDownGame());
+    }
+
+    private IEnumerator StartShutDownGame() {
+        yield return new WaitForSecondsRealtime(4f);
+        // Scene networkedScene = SceneManager.GetSceneByName("ArenaScene");
+        // foreach (GameObject go in networkedScene.GetRootGameObjects())
+        // {
+        //     Debug.Log("in outer foreach");
+        //     NetworkObject[] netObjects = go.GetComponentsInChildren<NetworkObject>(true);
+        //     foreach (NetworkObject netObj in netObjects)
+        //     {
+        //         Debug.Log("in inner foreach");
+        //         if (netObj.IsSpawned && NetworkManager.Singleton.IsServer)
+        //         {
+        //             netObj.Despawn(true);
+        //         }
+        //     }
+        // }
+        yield return new WaitForSecondsRealtime(1f);
+        if (IsServer) {
+            SetTimeScaleClientRpc(1f);
+            EndGameClientRpc();
+        } else if (NetworkManager.Singleton.ConnectedClients.Count == 1) {
+            SceneManager.LoadScene("BootstrapScene");
+            LocalSceneManager.Instance.LoadTitleScene();
+        }
+        NetworkManager.Singleton.Shutdown();
+    }
+ 
+
+    
+    
+    
+
+    [ClientRpc]
+    private void EndGameClientRpc()
+    {
+        SceneManager.LoadScene("BootstrapScene");
+        LocalSceneManager.Instance.LoadTitleScene();
+        Debug.Log("Game ended for client.");
+        // LanDiscovery.Instance.StartListening();
+        
+        
+        
     }
 
     private ulong? GetWinningClientId() {
@@ -66,7 +128,8 @@ public class TankBattleManager : NetworkBehaviour {
 
     public void EndBattle(ulong? winningClientId) {
         if (winningClientId == null) return;
-        StartCoroutine(EndBattleCutscene(winningClientId));
+        if (_endBattleCutscene != null) return;
+        _endBattleCutscene = StartCoroutine(EndBattleCutscene(winningClientId));
     }
 
     [ClientRpc]
@@ -83,21 +146,35 @@ public class TankBattleManager : NetworkBehaviour {
     private void HideBattleUIClientRpc(ClientRpcParams clientRpcParams = default) {
         ArenaUIManager.Instance.HideBattleUI();
     }
+
+    [ClientRpc]
+    private void SetTimeScaleClientRpc(float timeScale) {
+        Time.timeScale = timeScale;
+    }
     
     private IEnumerator EndBattleCutscene(ulong? winningClientId) {
         if (winningClientId == null) {
             throw new Exception("WinningClient is null!");
         }
         
-        // Freeze time
-        if (IsClient) {
-            Time.timeScale = 0;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+
+        if (IsServer) {
+            SetTimeScaleClientRpc(0.2f);
+        }
+        
+        // Disintegrate all existing projectiles in the airfield
+        if (IsServer) {
+            while (airfieldTransform.childCount > 0) {
+                airfieldTransform.GetChild(0).GetComponent<AmmoCollision>().WreckAmmo(true);
+                yield return new WaitForSecondsRealtime(0.1f);
+            }
         }
         
         // Disable battle UI (e.g. ammo slot destinations, and ammo shop)
         HideBattleUIClientRpc();
         
-        ulong killedTank = winningClientId.Value == 0 ? (ulong) 1 : 0;
+        ulong killedTank = winningClientId.Value == 0 ? (ulong) TankDelegates.GetHosteeId?.Invoke()! : 0;
         // Focus camera onto killed tank
         if (killedTank == 0) {
             FocusHostCameraClientRpc();
@@ -109,6 +186,10 @@ public class TankBattleManager : NetworkBehaviour {
         
         
         yield return new WaitForSecondsRealtime(10f);
+        if (IsServer) {
+            SetTimeScaleClientRpc(0f);
+        }
+        StartCoroutine(StartShutDownGame());
         foreach (var clientPair in NetworkManager.Singleton.ConnectedClients) {
             ulong clientId = clientPair.Key;
             if (clientId == winningClientId) {

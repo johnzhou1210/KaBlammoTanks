@@ -22,6 +22,7 @@ public class LocalHostManager : MonoBehaviour {
         LanDiscovery.Instance.Disconnect();
 
         yield return null;
+        yield return new WaitForSeconds(0.1f);
 
         _hostPort = PortAllocator.GetNextAvailablePort();
         _transport.SetConnectionData("0.0.0.0", (ushort)_hostPort);
@@ -30,6 +31,7 @@ public class LocalHostManager : MonoBehaviour {
         NetworkManager.Singleton.StartHost();
         Debug.Log("Host StartHost completed");
 
+        Debug.LogWarning("StartBroadcasting via LocalHostManager RestartHostRoutine");
         LanDiscovery.Instance.StartBroadcasting(_hostPort);
         
     }
@@ -55,7 +57,9 @@ public class LocalHostManager : MonoBehaviour {
 
     private void OnApplicationQuit() {
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost) {
+            Debug.LogWarning("Stopped broadcasting via LocalHostManager OnApplicationQuit");
             LanDiscovery.Instance.StopBroadcasting();
+            NetworkManager.Singleton.Shutdown();
         }
     }
 

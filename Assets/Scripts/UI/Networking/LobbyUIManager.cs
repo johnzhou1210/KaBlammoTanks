@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LobbyUIManager : MonoBehaviour {
@@ -28,6 +29,9 @@ public class LobbyUIManager : MonoBehaviour {
     }
 
     public void ShowJoinGameScreen() {
+        Debug.LogWarning("Started listening via LobbyUIManager ShowJoinGameScreen");
+        LanDiscovery.Instance.StartListening();
+        
         joinFrame.SetActive(true);
         hostFrame.SetActive(false);
         titleFrame.SetActive(false);
@@ -40,11 +44,16 @@ public class LobbyUIManager : MonoBehaviour {
     }
 
     public void ReturnToMainMenu() {
-        // Fully disconnect + cleanup the network state
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost) {
-            // Safe shutdown + destroy NetworkManager after shutdown
-            LanDiscovery.Instance.StopBroadcasting();
-            LanDiscovery.Instance.Disconnect();
+        // If was hosting, stop hosting.
+        if (NetworkManager.Singleton != null) {
+            if (NetworkManager.Singleton.IsHost) {
+                Debug.LogWarning("Stopped broadcasting via LobbyUIManager ReturnToMainMenu");
+                LanDiscovery.Instance.StopBroadcasting();
+                LanDiscovery.Instance.Disconnect();
+            } else if (NetworkManager.Singleton.IsClient) {
+                Debug.LogWarning("Stopped listening via LobbyUIManager ReturnToMainMenu");
+                LanDiscovery.Instance.StopListening();
+            }
         }
 
         // Switch UI back to title
@@ -53,6 +62,17 @@ public class LobbyUIManager : MonoBehaviour {
         titleFrame.SetActive(true);
     }
 
+    public void PlaySoloGame() {
+        Debug.Log("Starting singleplayer session...");
+        if (NetworkManager.Singleton != null) {
+            NetworkManager.Singleton.Shutdown();
+        }
+        LocalSceneManager.Instance.SetSoloPlay(true);
+        SceneManager.UnloadSceneAsync("TitleScene");
+        SceneManager.LoadScene("ArenaScene", LoadSceneMode.Additive);
+        TanksManager tanksManager = GameObject.FindWithTag("TanksManager").GetComponent<TanksManager>();
+        tanksManager.enabled = true;
+    }
     
     
     private void RefreshUI() {

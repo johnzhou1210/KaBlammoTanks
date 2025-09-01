@@ -111,7 +111,7 @@ public class TankController : NetworkBehaviour {
         Debug.Log($"Attempting to initialize projectile with senderClientId: {senderClientId} and projectileData: {projectileData}");
         collisionChecker.Initialize(senderClientId, projectileData);
         moveScript.Launch(startPos, endPos, archedTrajectory ? UpperCannonHeight : 0f, 10f / projectileData.Speed);
-        if (senderClientId == 1) moveScript.FlipXClientRpc();
+        if (senderClientId == TankDelegates.GetHosteeId?.Invoke()) moveScript.FlipXClientRpc();
         if (projectile.TryGetComponent(out AmmoRotate rotateScript)) rotateScript.ReverseRotation();
         yield return null;
     }

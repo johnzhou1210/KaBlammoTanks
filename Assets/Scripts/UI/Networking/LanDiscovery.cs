@@ -6,7 +6,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
 using UnityEngine;
 
 public class LanDiscovery : MonoBehaviour
@@ -38,16 +37,15 @@ public class LanDiscovery : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void OnEnable()
-    {
-        StartListening();
-    }
-
     private void OnDisable()
     {
+        Debug.LogWarning("Stopped listening via LanDiscovery OnDisable");
         StopListening();
         if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsHost) {
-            StopBroadcasting();
+            if (_broadcastCoroutine != null) { // This is a way to check if host is broadcasting
+                Debug.LogWarning("StopBroadcasting called on LanDiscovery OnDisable");
+                StopBroadcasting();
+            }
         }
         
     }
@@ -90,6 +88,7 @@ public class LanDiscovery : MonoBehaviour
             _broadcastCoroutine = null;
         }
         _broadcastSender?.Close();
+        Debug.Log("Setting _broadcastSender to null");
         _broadcastSender = null;
         Disconnect();
         Debug.Log($"Stopped broadcasting to port {broadcastPort}");
@@ -114,8 +113,8 @@ public class LanDiscovery : MonoBehaviour
             yield return new WaitForSeconds(0.1f);
         }
 
-        while (true)
-        {
+        while (true) {
+            if (_broadcastSender == null) yield break;
             byte[] data = Encoding.UTF8.GetBytes($"GAME:{gamePort}");
             _broadcastSender.Send(data, data.Length, endpoint);
             yield return new WaitForSeconds(broadcastInterval);
@@ -144,8 +143,8 @@ public class LanDiscovery : MonoBehaviour
     #endregion
 
     #region Listening
-
-    private void StartListening()
+    
+    public void StartListening()
     {
         if (_udpClient != null) return;
 
@@ -166,12 +165,20 @@ public class LanDiscovery : MonoBehaviour
         }
     }
 
-    private void StopListening()
+    public void StopListening()
     {
         _running = false;
-        _udpClient?.Close();
-        _udpClient = null;
-        _listenThread = null;
+        if (_udpClient != null)
+        {
+            try { _udpClient.Close(); } catch { }
+            _udpClient = null;
+        }
+        if (_listenThread != null && _listenThread.IsAlive)
+        {
+            _listenThread.Join(); // Wait for thread to terminate
+            _listenThread = null;
+        }
+  
         Debug.Log($"Stopped listening to port {broadcastPort}");
     }
 

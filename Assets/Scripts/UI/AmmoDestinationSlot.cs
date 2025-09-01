@@ -20,7 +20,7 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
 
    void Start() {
       originalSlotBackgroundColor = slotBackgroundImage.color;
-      _localTank = NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<TankController>();
+      // _localTank = LocalSceneManager.Instance.IsSoloPlay ? soloTankController : NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<TankController>();
    }
 
    void OnEnable() {

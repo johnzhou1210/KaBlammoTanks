@@ -16,16 +16,15 @@ public class ProjectSceneManager : NetworkBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
-    public override void OnNetworkSpawn() {
-        
-    }
+    
 
     public void LoadArenaScene() {
         if (NetworkManager.Singleton.IsServer) {
             NetworkManager.SceneManager.LoadScene("ArenaScene", LoadSceneMode.Additive);
         }
     }
+    
+    
     
     
     

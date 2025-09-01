@@ -30,9 +30,10 @@ public class TankDelegates
 
     #region Funcs
 
-    public static Func<TankController> GetHostTankController, GetHosteeTankController;
+    public static Func<TankController> GetHostTankController, GetHosteeTankController, GetSoloTankController, GetAITankController;
     public static Func<GameObject> GetHostTankGameObject, GetHosteeTankGameObject;
-    
+    public static Func<ulong> GetHosteeId;
+
     #endregion
 
 }

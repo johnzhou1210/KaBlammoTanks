@@ -72,7 +72,7 @@ public class TankBillboardRender : MonoBehaviour {
   
 
     private Vector3 GetHealthNumberUIPosition(ulong tankId) {
-        return (tankId == 1 ? hosteeFractionLine : hostFractionLine).transform.position;
+        return (tankId == TankDelegates.GetHosteeId?.Invoke() ? hosteeFractionLine : hostFractionLine).transform.position;
     }
     
 }
