@@ -49,9 +49,9 @@ public class ArenaUIManager : MonoBehaviour
         dragLayer.SetActive(true);
     }
     
-    public void ShowWinScreen() {
+    public void ShowWinScreen(bool fromPlayerDisconnect = false) {
         Debug.Log("Showing win screen");
-        battleStatusPopupText.text = "VICTORY";
+        battleStatusPopupText.text = fromPlayerDisconnect ? "VICTORY\n<size=64>(via RAGE QUIT!)" : "VICTORY";
     }
 
     public void ShowLoseScreen() {

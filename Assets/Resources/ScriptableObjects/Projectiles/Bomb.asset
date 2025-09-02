@@ -15,7 +15,7 @@ MonoBehaviour:
   AmmoName: Bomb
   Icon: {fileID: 6099099293644316688, guid: e08b573bf2d280e47bc2cc8095887202, type: 3}
   Damage: 28
-  Speed: 0.25
+  Speed: 0.2
   ProjectilePrefab: {fileID: 1896137933994655150, guid: dcb036cdefbf44e10800ba5d10361db3, type: 3}
   Cost: 4
   LoadingTime: 0.5

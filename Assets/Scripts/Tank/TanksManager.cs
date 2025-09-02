@@ -20,6 +20,7 @@ public class TanksManager : MonoBehaviour {
         TankDelegates.GetHosteeTankGameObject = () => hosteeTankGO;
         hostTankController.enabled = true;
         hosteeTankController.enabled = true;
+        
         if (NetworkManager.Singleton.IsHost) {
             hostTankGO.GetComponent<TankDisplay>().SetIdentityMarker("YOU", HostColor);
             hosteeTankGO.GetComponent<TankDisplay>().SetIdentityMarker("FOE", HosteeColor);

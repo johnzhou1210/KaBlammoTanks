@@ -15,7 +15,7 @@ MonoBehaviour:
   AmmoName: Wood Log
   Icon: {fileID: 407898282721357089, guid: e08b573bf2d280e47bc2cc8095887202, type: 3}
   Damage: 2
-  Speed: 0.5
+  Speed: 0.35
   ProjectilePrefab: {fileID: 1896137933994655150, guid: d2e88b529584e43009a08d311d82990c, type: 3}
   Cost: 0
   LoadingTime: 0.5

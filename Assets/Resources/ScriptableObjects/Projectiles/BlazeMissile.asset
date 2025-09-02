@@ -15,7 +15,7 @@ MonoBehaviour:
   AmmoName: Blaze Missile
   Icon: {fileID: 21300000, guid: af6db21d54eac43949d8da1e508ff687, type: 3}
   Damage: 40
-  Speed: 1
+  Speed: 0.8
   ProjectilePrefab: {fileID: 1896137933994655150, guid: 373045c8b7327415389d8feb26e8948a, type: 3}
   Cost: 12
   LoadingTime: 0.5

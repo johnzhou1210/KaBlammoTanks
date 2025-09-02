@@ -15,7 +15,7 @@ MonoBehaviour:
   AmmoName: Shield
   Icon: {fileID: 21300000, guid: 43804b7c8ed9742ae9a29df5ada15250, type: 3}
   Damage: 1
-  Speed: 0.25
+  Speed: 0.2
   ProjectilePrefab: {fileID: 1896137933994655150, guid: d04eadec3d86142fdb6e946553761bc1, type: 3}
   Cost: 0
   LoadingTime: 0.5

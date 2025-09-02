@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      battle-background-extended-UPSCALED_0: 1466744787448126132
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

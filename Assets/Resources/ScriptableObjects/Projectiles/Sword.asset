@@ -15,7 +15,7 @@ MonoBehaviour:
   AmmoName: Sword
   Icon: {fileID: 4372076660096992727, guid: 314531bb72bd7631ba52e51e3bec81f3, type: 3}
   Damage: 24
-  Speed: 0.45
+  Speed: 0.3
   ProjectilePrefab: {fileID: 1896137933994655150, guid: 240f50078c69f4664b841b45ddd71d5e, type: 3}
   Cost: 0
   LoadingTime: 0.5

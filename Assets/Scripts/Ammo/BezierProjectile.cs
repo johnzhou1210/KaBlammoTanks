@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
@@ -31,9 +32,13 @@ public class BezierProjectile : NetworkBehaviour {
         }
 
         transform.position = GetCurrentPosition();
-    }
 
-    public void Launch(Vector3 startPos, Vector3 endPos, float arcH, float dur) {
+    }
+    
+
+    public void Launch(Vector3 startPos, Vector3 endPos, float arcH, float dur, float secondsTankAlive) {
+        dur = Math.Clamp(dur, 0f, 60f);
+        Debug.Log("duration: " + dur);
         if (!IsServer) return;
         start = startPos;
         end = endPos;
@@ -43,6 +48,11 @@ public class BezierProjectile : NetworkBehaviour {
         _p2.Value = end + Vector3.up * arcHeight;
         BuildArcLengthTable();
         _speed.Value = _totalLength.Value / duration;
+        // Base speed based on arc length and duration
+        // Increase speed as tank is alive longer
+        float speedMultiplier = 1f + Mathf.Sqrt(secondsTankAlive / 2500f); // adjust divisor to control curve
+        _speed.Value = _speed.Value * speedMultiplier;
+
         _distanceTraveled.Value = 0f;
         _moving.Value = true;
     }

@@ -301,7 +301,7 @@ public class PlayerBattleInputManager : MonoBehaviour {
 
     private IEnumerator SupplyAmmoCoroutine() {
         while (true) {
-            yield return new WaitForSeconds(Random.Range(3f, 3f));
+            yield return new WaitForSeconds(Random.Range(1f, 1f));
             if (GetAllAmmoSlots().Count < 7)
                 SpawnRandomAmmoSlot(GetAmmoPool("ScriptableObjects/AmmoPools/DefaultPool"));
         }

@@ -11,8 +11,15 @@ public class TankController : NetworkBehaviour {
     public NetworkVariable<int> TankMaxHealth = new NetworkVariable<int>();
     [SerializeField] private bool EnemyAI;
     
+    public NetworkVariable<float> TimeAlive = new NetworkVariable<float>();
     
     public NetworkVariable<int> TankHealth = new NetworkVariable<int>();
+
+    private void Update() {
+        if (IsServer) {
+            TimeAlive.Value += NetworkManager.Singleton.NetworkTickSystem.TickRate;
+        }
+    }
 
     private void OnEnable() {
         Debug.Log($"TankController enabled on {(IsServer ? "SERVER" : "CLIENT")} with OwnerId={OwnerClientId}");
@@ -110,7 +117,7 @@ public class TankController : NetworkBehaviour {
         var collisionChecker = projectile.GetComponent<AmmoCollision>();
         Debug.Log($"Attempting to initialize projectile with senderClientId: {senderClientId} and projectileData: {projectileData}");
         collisionChecker.Initialize(senderClientId, projectileData);
-        moveScript.Launch(startPos, endPos, archedTrajectory ? UpperCannonHeight : 0f, 10f / projectileData.Speed);
+        moveScript.Launch(startPos, endPos, archedTrajectory ? UpperCannonHeight : 0f, 10f / projectileData.Speed, TimeAlive.Value);
         if (senderClientId == TankDelegates.GetHosteeId?.Invoke()) moveScript.FlipXClientRpc();
         if (projectile.TryGetComponent(out AmmoRotate rotateScript)) rotateScript.ReverseRotation();
         yield return null;

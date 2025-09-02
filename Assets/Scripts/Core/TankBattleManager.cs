@@ -65,13 +65,13 @@ public class TankBattleManager : NetworkBehaviour {
     private void AbruptWin() {
         Time.timeScale = 0;
         if (ArenaUIManager.Instance == null) return;
-        ArenaUIManager.Instance.ShowWinScreen();
+        ArenaUIManager.Instance.ShowWinScreen(true);
         postProcessingVolume.profile = winVolumeProfile;
         ArenaUIManager.Instance.HideBattleUI();
-        StartCoroutine(StartShutDownGame());
+        StartCoroutine(StartShutDownGame(true));
     }
 
-    private IEnumerator StartShutDownGame() {
+    private IEnumerator StartShutDownGame(bool abrupt = false) {
         yield return new WaitForSecondsRealtime(4f);
         // Scene networkedScene = SceneManager.GetSceneByName("ArenaScene");
         // foreach (GameObject go in networkedScene.GetRootGameObjects())
@@ -91,11 +91,13 @@ public class TankBattleManager : NetworkBehaviour {
         if (IsServer) {
             SetTimeScaleClientRpc(1f);
             EndGameClientRpc();
-        } else if (NetworkManager.Singleton.ConnectedClients.Count == 1) {
+        }
+        NetworkManager.Singleton.Shutdown();
+        if (abrupt) {
             SceneManager.LoadScene("BootstrapScene");
             LocalSceneManager.Instance.LoadTitleScene();
         }
-        NetworkManager.Singleton.Shutdown();
+        
     }
  
 
