@@ -92,11 +92,12 @@ public class TankBattleManager : NetworkBehaviour {
             SetTimeScaleClientRpc(1f);
             EndGameClientRpc();
         }
-        NetworkManager.Singleton.Shutdown();
         if (abrupt) {
             SceneManager.LoadScene("BootstrapScene");
             LocalSceneManager.Instance.LoadTitleScene();
         }
+        NetworkManager.Singleton.Shutdown();
+       
         
     }
  
