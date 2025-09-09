@@ -24,6 +24,10 @@ public class LocalSceneManager : MonoBehaviour
         LoadTitleScene();
     }
 
+    private void OnDestroy() {
+        Time.timeScale = 1;
+    }
+
     public void ResubscribeToSceneVerificationEvents() {
         StartCoroutine(ConnectSceneVerificationEvents());
     }

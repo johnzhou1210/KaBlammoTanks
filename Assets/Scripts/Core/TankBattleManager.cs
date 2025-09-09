@@ -42,6 +42,15 @@ public class TankBattleManager : NetworkBehaviour {
     private void OnClientDisconnected(ulong disconnectedId) {
         Debug.Log($"Client {disconnectedId} disconnected.");
         AbruptWin();
+        // if (disconnectedId == 0) {
+        //     Time.timeScale = 1;
+        //     SceneManager.LoadScene("BootstrapScene");
+        //     LocalSceneManager.Instance.LoadTitleScene();
+        // } else {
+        //     AbruptWin();
+        // }
+        
+        
     }
 
     private void CheckIfBattleOver() {
@@ -54,12 +63,17 @@ public class TankBattleManager : NetworkBehaviour {
     }
 
     public ulong GetHosteeId() {
-        foreach (var kv in NetworkManager.Singleton.ConnectedClients) {
-            if (kv.Key != 0) {
-                return kv.Key;
+        if (GameSessionManager.Instance.GameSessionType == GameSessionType.MULTIPLAYER) {
+            foreach (var kv in NetworkManager.Singleton.ConnectedClients) {
+                if (kv.Key != 0) {
+                    return kv.Key;
+                }
             }
+            throw new KeyNotFoundException("Could not find hostee id!");
         }
-        throw new KeyNotFoundException("Could not find hostee id!");
+        
+        // If singleplayer, use 1 as placeholder
+        return 1;
     }
     
     private void AbruptWin() {
@@ -73,26 +87,14 @@ public class TankBattleManager : NetworkBehaviour {
 
     private IEnumerator StartShutDownGame(bool abrupt = false) {
         yield return new WaitForSecondsRealtime(4f);
-        // Scene networkedScene = SceneManager.GetSceneByName("ArenaScene");
-        // foreach (GameObject go in networkedScene.GetRootGameObjects())
-        // {
-        //     Debug.Log("in outer foreach");
-        //     NetworkObject[] netObjects = go.GetComponentsInChildren<NetworkObject>(true);
-        //     foreach (NetworkObject netObj in netObjects)
-        //     {
-        //         Debug.Log("in inner foreach");
-        //         if (netObj.IsSpawned && NetworkManager.Singleton.IsServer)
-        //         {
-        //             netObj.Despawn(true);
-        //         }
-        //     }
-        // }
+        
         yield return new WaitForSecondsRealtime(1f);
         if (IsServer) {
             SetTimeScaleClientRpc(1f);
             EndGameClientRpc();
         }
         if (abrupt) {
+            Time.timeScale = 1;
             SceneManager.LoadScene("BootstrapScene");
             LocalSceneManager.Instance.LoadTitleScene();
         }
@@ -125,7 +127,7 @@ public class TankBattleManager : NetworkBehaviour {
         int hostTankHealth = hostTankController!.TankHealth.Value;
         int hosteeTankHealth = hosteeTankController!.TankHealth.Value;
         if (hosteeTankHealth == 0) return hostTankController!.OwnerClientId;
-        if (hostTankHealth == 0) return hosteeTankController!.OwnerClientId;
+        if (hostTankHealth == 0) return GameSessionManager.Instance.GameSessionType == GameSessionType.MULTIPLAYER ? hosteeTankController!.OwnerClientId : 1;
         return null;
     }
 
@@ -228,8 +230,9 @@ public class TankBattleManager : NetworkBehaviour {
         TanksManager tanksManager = GameObject.FindWithTag("TanksManager").GetComponent<TanksManager>();
         GameObject killedTank = killedTankId == 0 ? tanksManager.GetHostTankGO() : tanksManager.GetHosteeTankGO();
         GameObject explosionPrefab = Resources.Load<GameObject>("Prefabs/VFX/ExplosionEffect");
+        GameObject smallExplosionPrefab = Resources.Load<GameObject>("Prefabs/VFX/SmallExplosionEffect");
         for (int i = 0; i < 32; i++) {
-            GameObject explosionInstance = Instantiate(explosionPrefab, killedTank.transform.position + new Vector3(Random.Range(-1f,1f) * 1.5f, Random.Range(-1f,1f) * 1.5f, 0f), Quaternion.identity);
+            GameObject explosionInstance = Instantiate(Random.Range(0,1f) <= .2f ? explosionPrefab : smallExplosionPrefab, killedTank.transform.position + new Vector3(Random.Range(-1f,1f) * 1.5f, Random.Range(-1f,1f) * 1.5f, -1f), Quaternion.identity);
             NetworkObject explosionNetworkObject = explosionInstance.GetComponent<NetworkObject>();
             explosionNetworkObject.Spawn();
             PlayExplosionSoundClientRpc(explosionInstance.transform.position);

@@ -25,5 +25,5 @@ MonoBehaviour:
   Rarity: 0
   CanCollide: 1
   Durability: 2
-  Explosive: 0
   AmmoImpactSound: {fileID: 8300000, guid: 8fb8a7c88c4354b878aaa3fb90499333, type: 3}
+  SpecialEffect: 1

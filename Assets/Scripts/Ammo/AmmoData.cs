@@ -14,6 +14,13 @@ public enum Rarity {
    LEGENDARY,
 }
 
+public enum SpecialEffect {
+   NONE,
+   COLLISION,
+   SMALL_EXPLOSION,
+   LARGE_EXPLOSION
+}
+
 [CreateAssetMenu(fileName = "New Ammo", menuName = "Ammo", order = 1)]
 public class AmmoData : ScriptableObject {
    public string AmmoName;
@@ -27,8 +34,8 @@ public class AmmoData : ScriptableObject {
    public Rarity Rarity;
    public bool CanCollide;
    public int Durability = 1;
-   public bool Explosive;
    public AudioClip AmmoImpactSound;
+   public SpecialEffect SpecialEffect;
    
    
    public override string ToString() {
@@ -38,10 +45,11 @@ public class AmmoData : ScriptableObject {
              $"Speed: {Speed}, " +
              $"Cost: {Cost}, " +
              $"Durability: {Durability}, " +
-             $"Explosive: {Explosive}, " +
+             $"Effect: {SpecialEffect}, " +
              $"Rarity: {Rarity}, " +
              $"Collidable: {CanCollide}";
    }
+   
 }
 
 public struct AmmoRequest : INetworkSerializable {
@@ -53,3 +61,4 @@ public struct AmmoRequest : INetworkSerializable {
       
    }
 }
+

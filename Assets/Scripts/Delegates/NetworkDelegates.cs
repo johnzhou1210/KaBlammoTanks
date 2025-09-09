@@ -1,10 +1,13 @@
+using System;
 using UnityEngine;
 
-public class NetworkDelegates
-{
+public class NetworkDelegates {
+
+
     #region Events
     #endregion
-    
+
     #region Funcs
     #endregion
+
 }

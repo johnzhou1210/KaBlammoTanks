@@ -20,6 +20,14 @@ public class AmmoDestinationSlot : MonoBehaviour, IPointerUpHandler, IPointerDow
 
    void Start() {
       originalSlotBackgroundColor = slotBackgroundImage.color;
+      Invoke(nameof(DelayedStart), 3f);
+   }
+
+   private void DelayedStart() {
+      Debug.Log($"{NetworkManager.Singleton}");
+      Debug.Log($"{NetworkManager.Singleton.LocalClient}");
+      Debug.Log(NetworkManager.Singleton.LocalClient.PlayerObject); // null
+      Debug.Log(NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<TankController>());
       _localTank =  NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<TankController>();
    }
 

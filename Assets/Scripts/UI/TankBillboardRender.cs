@@ -24,6 +24,8 @@ public class TankBillboardRender : MonoBehaviour {
     }
 
     private void UpdateHealth(ulong id, int newHealth, int newMaxHealth) {
+        Debug.Log($"UpdateHealth: {id}, {newHealth}, {newMaxHealth}");
+        
         Image targetFill = id == 0 ? hostHealthFill : hosteeHealthFill;
         TextMeshProUGUI targetFractionLine = id == 0 ? hostFractionLine : hosteeFractionLine;
         TextMeshProUGUI targetText = id == 0 ? hostHealthText : hosteeHealthText;
