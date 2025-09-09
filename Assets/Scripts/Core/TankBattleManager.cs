@@ -98,6 +98,7 @@ public class TankBattleManager : NetworkBehaviour {
             SceneManager.LoadScene("BootstrapScene");
             LocalSceneManager.Instance.LoadTitleScene();
         }
+        
         NetworkManager.Singleton.Shutdown();
        
         

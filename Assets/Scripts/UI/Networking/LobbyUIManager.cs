@@ -1,4 +1,6 @@
+using System.Collections;
 using TMPro;
+using Unity.Multiplayer.Samples.BossRoom;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,24 +10,33 @@ public class LobbyUIManager : MonoBehaviour {
     [SerializeField] private LocalHostManager localHostManager;
     [SerializeField] private GameObject hostButtonPrefab;
     [SerializeField] private Transform hostListContainer;
-    [SerializeField] private Button hostGameButton, singleplayerButton;
+    [SerializeField] private Button hostGameButton, singleplayerButton, joinGameButton;
     [SerializeField] private float refreshInterval = 1f;
     [SerializeField] private GameObject titleFrame, joinFrame, hostFrame;
     private float _nextRefreshTime;
     private void Start() {
         if (localHostManager != null) {
             hostGameButton.onClick.AddListener(() => {
+                GameSessionManager.Instance.SetLanDiscoveryActive(true);
+                GameSessionManager.Instance.SetGameSessionType(GameSessionType.MULTIPLAYER);
                 localHostManager.StartHostSession();
             });
-            singleplayerButton.onClick.AddListener((() => localHostManager.StartHostSession()));
+            singleplayerButton.onClick.AddListener((() => {
+                GameSessionManager.Instance.SetGameSessionType(GameSessionType.SINGLEPLAYER);
+                localHostManager.StartHostSession();
+            }));
+            joinGameButton.onClick.AddListener((() => {
+                GameSessionManager.Instance.SetLanDiscoveryActive(true);
+                GameSessionManager.Instance.SetGameSessionType(GameSessionType.MULTIPLAYER);
+            }));
         } else {
             Debug.LogError("LobbyUIManager: Required components are not assigned in the Inspector.", this);
         }
-        RefreshUI();
+        StartCoroutine(RefreshUI());
     }
     private void Update() {
         if (Time.time >= _nextRefreshTime) {
-            RefreshUI();
+            StartCoroutine(RefreshUI());
             _nextRefreshTime = Time.time + refreshInterval;
         }
     }
@@ -59,9 +70,8 @@ public class LobbyUIManager : MonoBehaviour {
         joinFrame.SetActive(false);
         titleFrame.SetActive(true);
     }
-    
-
-    private void RefreshUI() {
+    private IEnumerator RefreshUI() {
+        yield return new WaitUntil((() => LanDiscovery.Instance != null));
         foreach (Transform child in hostListContainer)
             Destroy(child.gameObject);
         var hosts = LanDiscovery.Instance.GetActiveHosts();

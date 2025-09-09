@@ -55,6 +55,7 @@ public class TankController : NetworkBehaviour {
         TankBattleDelegates.OnInitTanks -= InitTank;
     }
     private IEnumerator EnemyAICoroutine() {
+        Debug.LogWarning("STARTED ENEMY AI COROUTINE");
         while (TankHealth.Value > 0) {
             yield return new WaitForSeconds(Random.Range(0.125f, 3f));
             if (TankHealth.Value <= 0) yield break;

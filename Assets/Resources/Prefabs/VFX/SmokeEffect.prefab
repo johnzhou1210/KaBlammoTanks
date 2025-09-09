@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -6611197767772023291}
   - component: {fileID: -1092799359810020634}
   - component: {fileID: -8361159379616718541}
+  - component: {fileID: 6104502019469307953}
   m_Layer: 0
   m_Name: SmokeEffect
   m_TagString: Untagged
@@ -4971,7 +4972,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 141433446842962269}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75ff49d3c96db4fe7bbf94738b75f02a, type: 3}
   m_Name: 
@@ -5008,9 +5009,9 @@ MonoBehaviour:
   SyncPositionX: 1
   SyncPositionY: 1
   SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 0
+  SyncRotAngleZ: 0
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
@@ -5024,6 +5025,20 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &6104502019469307953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141433446842962269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ff49d3c96db4fe7bbf94738b75f02a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  cleanupTime: 0.5
 --- !u!1 &8122789944495389005
 GameObject:
   m_ObjectHideFlags: 0

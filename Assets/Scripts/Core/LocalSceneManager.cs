@@ -52,6 +52,7 @@ public class LocalSceneManager : MonoBehaviour
 
     public void LoadTitleScene()
     {
+        GameSessionManager.Instance.SetLanDiscoveryActive(false);
         ResubscribeToSceneVerificationEvents();
         Debug.LogWarning("Resubscribed to scene verification events via LocalSceneManager LoadTitleScene");
         // ResubscribeToSceneVerificationEvents();

@@ -159,9 +159,12 @@ public class AmmoCollision : NetworkBehaviour {
             spriteRenderer.color = new Color(spriteRenderer.color.r, spriteRenderer.color.g, spriteRenderer.color.b, spriteRenderer.color.a - decreaseAmount);
             yield return new WaitForSeconds(fadeTime / fadeSteps);
         }
-        if (IsServer) {
-            Destroy(gameObject);
-        }
+        DestroyProjectileServerRpc();
         yield return null;
+    }
+
+    [ServerRpc (RequireOwnership = false)]
+    private void DestroyProjectileServerRpc() {
+        Destroy(gameObject);
     }
 }

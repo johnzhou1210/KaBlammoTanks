@@ -673,6 +673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ca88c85d433e428ea7e357d6b087fd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lanDiscovery: {fileID: 855485816}
 --- !u!1 &1625034835
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,21 +890,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 554388149177571257, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
-      propertyPath: NetworkConfig.ConnectionApproval
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2227617609533717983, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
       propertyPath: m_Name
       value: NetworkManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 5207723992777380308, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
-      propertyPath: m_DisconnectTimeoutMS
-      value: 5000
-      objectReference: {fileID: 0}
-    - target: {fileID: 5207723992777380308, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
-      propertyPath: ConnectionData.ServerListenAddress
-      value: 0.0.0.0
       objectReference: {fileID: 0}
     - target: {fileID: 8562667806517529350, guid: 3f563b65efcb94699a4eff7cf6b5d5ae, type: 3}
       propertyPath: m_LocalPosition.x

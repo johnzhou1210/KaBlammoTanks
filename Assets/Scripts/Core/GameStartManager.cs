@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameStartManager : MonoBehaviour {
-    private bool _isMultiplayer = false;
     
     private IEnumerator ResubscribeToNetworkManager() {
         yield return new WaitUntil((() => NetworkManager.Singleton != null));
@@ -33,7 +32,7 @@ public class GameStartManager : MonoBehaviour {
   
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
-        if (!_isMultiplayer) {
+        if (GameSessionManager.Instance.GameSessionType == GameSessionType.SINGLEPLAYER) {
             response.Approved = true;
             response.CreatePlayerObject = true;
             return;
@@ -52,13 +51,13 @@ public class GameStartManager : MonoBehaviour {
     
     private void OnClientConnected(ulong clientId) {
         Debug.Log($"CLIENT CONNECTED: {clientId}");
-        TryStartGame(_isMultiplayer);
+        TryStartGame();
     }
 
-    private void TryStartGame(bool multiplayer) {
-        if (multiplayer) {
+    private void TryStartGame() {
+        if (GameSessionManager.Instance.GameSessionType == GameSessionType.MULTIPLAYER) {
             if (NetworkManager.Singleton.ConnectedClients.Count == 2) {
-                GameSessionManager.Instance.SetGameSessionType(GameSessionType.MULTIPLAYER);
+                
                 
                 LocalSceneManager.Instance.UnloadTitleScene();
                 Debug.Log($"Trying to start multiplayer game");

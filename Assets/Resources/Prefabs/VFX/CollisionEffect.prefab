@@ -9578,6 +9578,7 @@ GameObject:
   - component: {fileID: -2971242441596918396}
   - component: {fileID: 4713038378407940262}
   - component: {fileID: 1268956518070630442}
+  - component: {fileID: -4465104385592050245}
   m_Layer: 0
   m_Name: CollisionEffect
   m_TagString: Untagged
@@ -14545,13 +14546,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4021103657954561961}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 75ff49d3c96db4fe7bbf94738b75f02a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  cleanupTime: 0.75
+  cleanupTime: 0.5
 --- !u!114 &1268956518070630442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14582,9 +14583,9 @@ MonoBehaviour:
   SyncPositionX: 1
   SyncPositionY: 1
   SyncPositionZ: 1
-  SyncRotAngleX: 1
-  SyncRotAngleY: 1
-  SyncRotAngleZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 0
+  SyncRotAngleZ: 0
   SyncScaleX: 0
   SyncScaleY: 0
   SyncScaleZ: 0
@@ -14598,6 +14599,20 @@ MonoBehaviour:
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &-4465104385592050245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4021103657954561961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ff49d3c96db4fe7bbf94738b75f02a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  cleanupTime: 1
 --- !u!1 &4311522845078898388
 GameObject:
   m_ObjectHideFlags: 0
