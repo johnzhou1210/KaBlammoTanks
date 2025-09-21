@@ -2070,7 +2070,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -45.665283, y: 0, z: 0, w: 0}
+  m_margin: {x: -45.665283, y: 0, z: -296.12747, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2713,7 +2713,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 35.52803, y: 0, z: -92.62455, w: 0}
+  m_margin: {x: -178.83388, y: 0, z: -92.62455, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -5879,6 +5879,8 @@ MonoBehaviour:
   hosteeHealthText: {fileID: 2137131380}
   hostFractionLine: {fileID: 1806542051}
   hosteeFractionLine: {fileID: 2141368597}
+  hostNameText: {fileID: 339794140}
+  hosteeNameText: {fileID: 567859732}
   hostHealthFill: {fileID: 940379638}
   hosteeHealthFill: {fileID: 915282918}
 --- !u!225 &1052846832

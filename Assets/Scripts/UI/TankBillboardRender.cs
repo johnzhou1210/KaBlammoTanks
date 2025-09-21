@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using DG.Tweening;
 using KBCore.Refs;
 using TMPro;
@@ -9,20 +10,36 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class TankBillboardRender : MonoBehaviour {
-    [SerializeField] TextMeshProUGUI hostHealthText, hosteeHealthText, hostFractionLine, hosteeFractionLine;
+    [SerializeField] TextMeshProUGUI hostHealthText, hosteeHealthText, hostFractionLine, hosteeFractionLine, hostNameText, hosteeNameText;
     [SerializeField] Image hostHealthFill, hosteeHealthFill;
 
 
     void OnEnable() {
         TankDelegates.OnUpdateTankHealthUI += UpdateHealth;
+        TankDelegates.OnUpdateTankNameUI += UpdateName;
 
         PlayerBattleUIDelegates.GetHealthNumberUIPosition = GetHealthNumberUIPosition;
     }
 
     void OnDisable() {
         TankDelegates.OnUpdateTankHealthUI -= UpdateHealth;
+        TankDelegates.OnUpdateTankNameUI -= UpdateName;
     }
 
+    private void UpdateName(ulong id, string newName) {
+        string newNameRichText = FormatDisplayName(id > 0, newName);
+        (id > 0 ? hosteeNameText : hostNameText).SetText(newNameRichText);
+    }
+
+    private string FormatDisplayName(bool isHostee, string nonFormattedName) {
+        string[] firstLast = nonFormattedName.Split('\n');
+        string[] wordsFirst = firstLast[0].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        string[] wordsLast = firstLast[1].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        string adjective = string.Join(" ", wordsFirst.Select(word => $"<size={64}><color={(isHostee ? "#ff8080" : "#8080ff")}>{word[0]}</size>{word.Substring(1)}</color>"));
+        string noun = string.Join(" ", wordsLast.Select(word => $"<size={64}><color={(isHostee ? "#ff3434" : "#0037e7")}>{word[0]}</size>{word.Substring(1)}</color>"));
+        return adjective + " " + noun;
+    }
+    
     private void UpdateHealth(ulong id, int newHealth, int newMaxHealth) {
         Debug.Log($"UpdateHealth: {id}, {newHealth}, {newMaxHealth}");
         

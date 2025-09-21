@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AllAmmo:
   - AmmoData: {fileID: 11400000, guid: d476cb18b785c49919eea656bc5fa551, type: 2}
-    Weight: 2
+    Weight: 3
   - AmmoData: {fileID: 11400000, guid: d3dc7d6fbd6004a618f5f13ff41d4577, type: 2}
-    Weight: 3
+    Weight: 5
   - AmmoData: {fileID: 11400000, guid: ef713840ada89482ea515583ec3dcedf, type: 2}
-    Weight: 3
+    Weight: 5
   - AmmoData: {fileID: 11400000, guid: a993158dd4c364181a7bf7969fdf7ea6, type: 2}
     Weight: 1
   - AmmoData: {fileID: 11400000, guid: bb046ae5377bb42f3b3672428cce8dda, type: 2}
-    Weight: 3
+    Weight: 5
   - AmmoData: {fileID: 11400000, guid: eb958da1cd5e54fa1a3cdaaf9022e427, type: 2}
-    Weight: 3
+    Weight: 5
   - AmmoData: {fileID: 11400000, guid: dadbfc093b43fd8d6bb7b1eb1d2c703a, type: 2}
-    Weight: 3
+    Weight: 5
   - AmmoData: {fileID: 11400000, guid: c6390cf82a7034072a4588c5236978e6, type: 2}
-    Weight: 3
+    Weight: 5

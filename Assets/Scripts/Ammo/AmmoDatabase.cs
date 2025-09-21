@@ -10,11 +10,12 @@ public class AmmoDatabase : ScriptableObject {
 
     private Dictionary<string, AmmoData> lookup;
 
-    private void Awake() {
+    private void OnEnable() {
         lookup = new Dictionary<string, AmmoData>();
         foreach (var ammo in AllAmmo) {
             lookup[ammo.AmmoData.AmmoName] = ammo.AmmoData;
         }
+        Debug.LogWarning($"Lookup loaded with {lookup.Count} ammo.");
     }
 
     public AmmoData GetAmmo(string ammoName) {

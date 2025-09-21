@@ -50,7 +50,7 @@ public class BezierProjectile : NetworkBehaviour {
         _speed.Value = _totalLength.Value / duration;
         // Base speed based on arc length and duration
         // Increase speed as tank is alive longer
-        float speedMultiplier = 1f + Mathf.Sqrt(secondsTankAlive / 2500f); // adjust divisor to control curve
+        float speedMultiplier = 1f + Mathf.Sqrt(secondsTankAlive / 5000f); // adjust divisor to control curve
         _speed.Value = _speed.Value * speedMultiplier;
 
         _distanceTraveled.Value = 0f;

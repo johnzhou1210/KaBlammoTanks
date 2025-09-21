@@ -26,10 +26,7 @@ public class GameStartManager : MonoBehaviour {
             NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
             Debug.Log("Unsubscribed to network manager events via GameStartManager OnDisable");
         }
-
     }
-
-  
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
         if (GameSessionManager.Instance.GameSessionType == GameSessionType.SINGLEPLAYER) {
@@ -37,7 +34,6 @@ public class GameStartManager : MonoBehaviour {
             response.CreatePlayerObject = true;
             return;
         }
-        
         int currentPlayers = NetworkManager.Singleton.ConnectedClients.Count;
         if (currentPlayers >= 2) {
             Debug.Log($"Rejecting connection from {request.ClientNetworkId}, server full.");

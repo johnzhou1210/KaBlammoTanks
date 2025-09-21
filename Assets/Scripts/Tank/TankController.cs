@@ -39,25 +39,37 @@ public class TankController : NetworkBehaviour {
         }
         if (IsServer) {
             Debug.Log("Initialized Tank Health Values");
-            TankMaxHealth.Value = 100;
+            TankMaxHealth.Value = 512;
             TankHealth.Value = TankMaxHealth.Value;
         }
-        StartCoroutine(InitialHealthUIUpdateWhenReady());
+        StartCoroutine(InitialHealthAndNameUIUpdateWhenReady());
     }
-    private IEnumerator InitialHealthUIUpdateWhenReady() {
-        yield return new WaitUntil((() => TankMaxHealth.Value > 0));
-        TankDelegates.InvokeOnUpdateTankHealthUI(EnemyAI ? 1 : OwnerClientId, TankHealth.Value, TankMaxHealth.Value);
-    }
+    
     private void OnDisable() {
         if (!EnemyAI) {
             TankDelegates.OnTakeDamage -= TakeDamage;
         }
         TankBattleDelegates.OnInitTanks -= InitTank;
     }
+
+    [ClientRpc]
+    private void UpdateAllTanksNameUIClientRpc(string hostName, string hosteeName) {
+        TankDelegates.InvokeOnUpdateTankNameUI(0, hostName);
+        TankDelegates.InvokeOnUpdateTankNameUI(TankDelegates.GetHosteeId?.Invoke() ?? 1, hosteeName);
+    }
+    
+    private IEnumerator InitialHealthAndNameUIUpdateWhenReady() {
+        yield return new WaitUntil((() => TankMaxHealth.Value > 0));
+        if (IsServer) {
+            UpdateAllTanksNameUIClientRpc(QuickUtils.GetRandomName(), QuickUtils.GetRandomName());
+        }
+        TankDelegates.InvokeOnUpdateTankHealthUI(EnemyAI ? 1 : OwnerClientId, TankHealth.Value, TankMaxHealth.Value);
+    }
+    
     private IEnumerator EnemyAICoroutine() {
         Debug.LogWarning("STARTED ENEMY AI COROUTINE");
         while (TankHealth.Value > 0) {
-            yield return new WaitForSeconds(Random.Range(0.125f, 3f));
+            yield return new WaitForSeconds(Random.Range(0.1f, 2.5f));
             if (TankHealth.Value <= 0) yield break;
             // Look up ammo from database
             AmmoData ammoData = _ammoDatabase.GetRandomAmmoWeighted();
@@ -86,6 +98,7 @@ public class TankController : NetworkBehaviour {
     }
     private void FireProjectile(AmmoRequest request, ulong senderClientId, bool isUpperCannon) {
         // Look up ammo from database
+        print($"{_ammoDatabase} {request.AmmoName}");
         AmmoData ammoData = _ammoDatabase.GetAmmo(request.AmmoName);
         if (ammoData == null) {
             Debug.LogWarning("Invalid ammo name: " + request.AmmoName);

@@ -32,4 +32,8 @@ public class QuickUtils
         }
         return false;
     }
+
+    public static string GetRandomName() {
+        return Choice(TankNameBank.Adjectives) + "\n" + Choice(TankNameBank.Nouns);
+    }
 }
